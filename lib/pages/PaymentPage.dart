@@ -3,32 +3,35 @@ import 'dart:developer';
 
 import 'package:atompaymentdemo/controller/tapcontroller.dart';
 import 'package:atompaynetznonaes/atompaynetznonaes.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:webview_flutter/webview_flutter.dart';
 
-class WebViewContainer extends StatefulWidget {
+@RoutePage()
+class PaymentPage extends StatefulWidget {
   final url;
   final resHashKey;
-  const WebViewContainer(this.url, this.resHashKey, {super.key});
+  const PaymentPage(this.url, this.resHashKey, {super.key});
   @override
   createState() => _WebViewContainerState(url, resHashKey);
 }
 
-class _WebViewContainerState extends State<WebViewContainer> {
+class _WebViewContainerState extends State<PaymentPage> {
   final _url;
   final _resHashKey;
   final _key = UniqueKey();
   late WebViewController _controller;
-  bool? ispageloaded;
+
   _WebViewContainerState(this._url, this._resHashKey);
   @override
   Widget build(BuildContext context) {
     GetxTapController gcontroller = Get.put(GetxTapController());
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
           elevation: 0,
           toolbarHeight: 2,
@@ -58,7 +61,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
                       final response =
                           await _controller.runJavascriptReturningResult(
                               "(function() { let htmlH5 = document.getElementsByTagName('h5')[0].innerHTML; return htmlH5; })();");
-                      log(response);
+                      log('Response :$response');
 
                       List responseArray = [];
                       var responseMap = {};
@@ -111,11 +114,11 @@ class _WebViewContainerState extends State<WebViewContainer> {
                   gestureNavigationEnabled: true,
                 ),
                 if (gcontroller.isloading)
-                  const Center(
-                    child: Text(
-                      'Please wait...',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                  Center(
+                    child: SizedBox(
+                        height: 160,
+                        width: 160,
+                        child: Image.asset('assets/images/processing.gif')),
                   )
               ]))
             ],
@@ -123,48 +126,3 @@ class _WebViewContainerState extends State<WebViewContainer> {
         }));
   }
 }
-
-// class MyWebView extends StatefulWidget {
-//   @override
-//   _MyWebViewState createState() => _MyWebViewState();
-// }
-
-// class _MyWebViewState extends State<MyWebView> {
-//   final Completer<WebViewController> _controller =
-//       Completer<WebViewController>();
-
-//   bool _isLoading = true;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Web View with Progress Indicator'),
-//       ),
-//       body: Stack(
-//         children: [
-//           WebView(
-//             initialUrl: 'https://example.com', // Replace with your URL
-//             onWebViewCreated: (WebViewController webViewController) {
-//               _controller.complete(webViewController);
-//             },
-//             onPageStarted: (String url) {
-//               setState(() {
-//                 _isLoading = true;
-//               });
-//             },
-//             onPageFinished: (String url) {
-//               setState(() {
-//                 _isLoading = false;
-//               });
-//             },
-//           ),
-//           if (_isLoading)
-//             Center(
-//               child: CircularProgressIndicator(),
-//             ),
-//         ],
-//       ),
-//     );
-//   }
-// }

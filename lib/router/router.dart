@@ -9,11 +9,16 @@ class AppRouter extends $AppRouter {
         //HomeScreen is generated as HomeRoute because
         //of the replaceInRouteName property
         AutoRoute(
+          initial: true,
           path: '/',
-          page: HomePage.page,
+          page: DashBoardPage.page,
         ),
         AutoRoute(
-          path: '/dashboard',
+          path: '/paymentpage',
+          page: PaymentPage.page,
+        ),
+        AutoRoute(
+          path: '/paymentpage',
           page: HomePage.page,
         ),
       ];
