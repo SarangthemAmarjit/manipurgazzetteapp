@@ -87,29 +87,41 @@ class DashBoardPage extends StatelessWidget {
                         Text(
                           'Welcome',
                           style: TextStyle(
-                              fontSize: width / 15,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 3,
-                              color: Colors.blue),
+                            fontSize: width / 15,
+                            fontWeight: FontWeight.bold,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 1
+                              ..color = Colors.blue,
+                            letterSpacing: 6,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Text(
                             'to',
                             style: TextStyle(
-                                fontSize: width / 15,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 3,
-                                color: Colors.blue),
+                              fontSize: width / 15,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 3,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 1
+                                ..color = Colors.blue,
+                            ),
                           ),
                         ),
                         Text(
                           'Manipur E-Gazette',
                           style: TextStyle(
-                              fontSize: width / 14,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 5,
-                              color: Colors.blue),
+                            fontSize: width / 14,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 5,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 1
+                              ..color = Colors.blue,
+                          ),
                         ),
                       ],
                     )),
