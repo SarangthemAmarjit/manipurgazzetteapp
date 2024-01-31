@@ -13,9 +13,10 @@ class DashBoardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: SizedBox(
-              height: 50, child: Image.asset('assets/images/kanglasa.png')),
+          padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
+          child: Image.asset(
+            'assets/images/kanglasa.png',
+          ),
         ),
         backgroundColor: Colors.white,
         title: const Row(
