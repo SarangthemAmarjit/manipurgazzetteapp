@@ -18,8 +18,12 @@ class AppRouter extends $AppRouter {
           page: PaymentPage.page,
         ),
         AutoRoute(
-          path: '/paymentpage',
+          path: '/homepage',
           page: HomePage.page,
+        ),
+        AutoRoute(
+          path: '/datagrid',
+          page: MyDataGrid.page,
         ),
       ];
 }

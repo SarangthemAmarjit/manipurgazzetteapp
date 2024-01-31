@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:atompaymentdemo/pages/homepage.dart';
 import 'package:atompaymentdemo/router/router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
