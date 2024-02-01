@@ -166,7 +166,7 @@ class DashBoardPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        context.router.push(const MyDataGrid());
+                        context.router.push(const SearchPage());
                       },
                       child: Card(
                           shape: RoundedRectangleBorder(
