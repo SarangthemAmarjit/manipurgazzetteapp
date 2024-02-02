@@ -21,6 +21,7 @@ class AppRouter extends $AppRouter {
           path: '/homepage',
           page: HomePage.page,
         ),
-     
+
+        AutoRoute(path: '/searchpage', page: SearchPage.page),
       ];
 }
