@@ -14,7 +14,7 @@ class DashBoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GetxTapController gcontroller = Get.put(GetxTapController());
+    GetxTapController gcontroller = Get.put(GetxTapController(context: context));
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 

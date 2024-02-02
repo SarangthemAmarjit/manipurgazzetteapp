@@ -13,6 +13,9 @@ import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
 class GetxTapController extends GetxController {
+  final BuildContext context;
+
+  GetxTapController({required this.context});
   //table
   EmployeeDataSource? _employeeDataSource;
 
@@ -73,7 +76,8 @@ class GetxTapController extends GetxController {
         alldata[i]['designation'],
       ));
     }
-    _employeeDataSource = EmployeeDataSource(employees: _employees);
+    _employeeDataSource =
+        EmployeeDataSource(employees: _employees, context: context);
     update();
   }
 

@@ -27,7 +27,7 @@ class _WebViewContainerState extends State<PaymentPage> {
   _WebViewContainerState(this._url, this._resHashKey);
   @override
   Widget build(BuildContext context) {
-    GetxTapController gcontroller = Get.put(GetxTapController());
+    GetxTapController gcontroller = Get.put(GetxTapController(context: context));
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

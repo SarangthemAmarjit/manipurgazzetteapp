@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:atompaymentdemo/constant/constant.dart';
 import 'package:atompaymentdemo/controller/tapcontroller.dart';
-import 'package:atompaymentdemo/widget/datefieldwidget%20copy.dart';
-import 'package:atompaymentdemo/widget/datefieldwidget.dart';
+import 'package:atompaymentdemo/router/router.gr.dart';
+import 'package:atompaymentdemo/widget/datefieldwidgetPublishFrom.dart';
+import 'package:atompaymentdemo/widget/datefieldPublishTill.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +36,8 @@ class _MyDataGridState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    GetxTapController gcontroller = Get.put(GetxTapController());
+    GetxTapController gcontroller =
+        Get.put(GetxTapController(context: context));
 
     return Scaffold(
       appBar: AppBar(
@@ -695,14 +697,16 @@ class _MyDataGridState extends State<SearchPage> {
 }
 
 class EmployeeDataSource extends DataGridSource {
-  EmployeeDataSource({required List<Employee> employees}) {
+  final BuildContext context;
+  EmployeeDataSource(
+      {required this.context, required List<Employee> employees}) {
     dataGridRows = employees
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
               DataGridCell<int>(columnName: 'id', value: dataGridRow.id),
               DataGridCell<String>(columnName: 'name', value: dataGridRow.name),
               DataGridCell<String>(
                   columnName: 'designation', value: dataGridRow.designation),
-              const DataGridCell<Widget>(columnName: 'salary', value: null),
+              DataGridCell<int>(columnName: 'salary', value: dataGridRow.id),
             ]))
         .toList();
   }
@@ -713,7 +717,9 @@ class EmployeeDataSource extends DataGridSource {
   List<DataGridRow> get rows => dataGridRows;
 
   @override
-  DataGridRowAdapter? buildRow(DataGridRow row) {
+  DataGridRowAdapter? buildRow(
+    DataGridRow row,
+  ) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -723,7 +729,12 @@ class EmployeeDataSource extends DataGridSource {
               : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: dataGridCell.columnName == 'salary'
-              ? TextButton(onPressed: () {}, child: const Text('View Gazette'))
+              ? TextButton(
+                  onPressed: () {
+                    log(dataGridCell.value.toString());
+                    context.router.push(const BillingPage());
+                  },
+                  child: const Text('View Gazette'))
               : Text(
                   dataGridCell.value.toString(),
                   overflow: TextOverflow.ellipsis,
