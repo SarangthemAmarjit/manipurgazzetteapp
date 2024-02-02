@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:atompaymentdemo/constant/constant.dart';
 import 'package:atompaymentdemo/controller/tapcontroller.dart';
+import 'package:atompaymentdemo/widget/datefieldwidget%20copy.dart';
 import 'package:atompaymentdemo/widget/datefieldwidget.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -95,85 +96,90 @@ class _MyDataGridState extends State<SearchPage> {
                                   void Function(void Function()) setState) {
                                 return AlertDialog(
                                   actions: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.grey,
-                                                side: const BorderSide(
-                                                    color: Colors.red)),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              setState(() {
-                                                // _namefieldcontroller.clear();
-                                                // publishfromdate = '';
-
-                                                // dropdownvalue1 = null;
-                                                // dropdownvalue2 = null;
-                                                // _position = null;
-                                              });
-                                            },
-                                            child: const Text("Cancel")),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10),
-                                          child: ElevatedButton(
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 19),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Colors.blue),
-                                              onPressed: () async {
-                                                // EasyLoading.show(status: 'Adding..');
-                                                // if (_namefieldcontroller.text.isEmpty ||
-                                                //     dropdownvalue11 == null ||
-                                                //     dropdownvalue22 == null ||
-                                                //     datetime.isEmpty ||
-                                                //     profileimage.isEmpty ||
-                                                //     finallocation == null) {
-                                                //   EasyLoading.dismiss();
-                                                //   context.router.pop();
-                                                //   CustomSnackBar(
-                                                //       context,
-                                                //       Text(
-                                                //         'All Fields Are Mandatory',
-                                                //         style:
-                                                //       ),
-                                                //       Colors.red);
-                                                // } else {
-                                                //   await ServiceApi()
-                                                //       .create_employee(
-                                                //           name: _namefieldcontroller.text,
-                                                //           desId: dropdownvalue11!,
-                                                //           depId: dropdownvalue22!,
-                                                //           dob: datetime,
-                                                //           token: finaltoken,
-                                                //           image: profileimage,
-                                                //           location: finallocation!)
-                                                //       .whenComplete(() {
-                                                //     getdata2().whenComplete(() {
-                                                //       _namefieldcontroller.clear();
-                                                //       all_desid = [];
-                                                //       all_depid = [];
-                                                //       all_dep = [];
-                                                //       all_des = [];
-                                                //       _position = null;
-                                                //       publishfromdate = '';
+                                                  backgroundColor: Colors.grey,
+                                                  side: const BorderSide(
+                                                      color: Colors.red)),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                setState(() {
+                                                  // _namefieldcontroller.clear();
+                                                  // publishfromdate = '';
 
-                                                //       dropdownvalue1 = null;
-                                                //       dropdownvalue2 = null;
-                                                //       setState(() {});
-
-                                                //       getcreate_status();
-                                                //       getdata();
-                                                //       EasyLoading.dismiss();
-                                                //       context.router.pop();
-                                                //     });
-                                                //   });
-                                                //   log(create_statuscode.toString());
-                                                // }
+                                                  // dropdownvalue1 = null;
+                                                  // dropdownvalue2 = null;
+                                                  // _position = null;
+                                                });
                                               },
-                                              child: const Text("Search")),
-                                        )
-                                      ],
+                                              child: const Text("Cancel")),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.blue),
+                                                onPressed: () async {
+                                                  // EasyLoading.show(status: 'Adding..');
+                                                  // if (_namefieldcontroller.text.isEmpty ||
+                                                  //     dropdownvalue11 == null ||
+                                                  //     dropdownvalue22 == null ||
+                                                  //     datetime.isEmpty ||
+                                                  //     profileimage.isEmpty ||
+                                                  //     finallocation == null) {
+                                                  //   EasyLoading.dismiss();
+                                                  //   context.router.pop();
+                                                  //   CustomSnackBar(
+                                                  //       context,
+                                                  //       Text(
+                                                  //         'All Fields Are Mandatory',
+                                                  //         style:
+                                                  //       ),
+                                                  //       Colors.red);
+                                                  // } else {
+                                                  //   await ServiceApi()
+                                                  //       .create_employee(
+                                                  //           name: _namefieldcontroller.text,
+                                                  //           desId: dropdownvalue11!,
+                                                  //           depId: dropdownvalue22!,
+                                                  //           dob: datetime,
+                                                  //           token: finaltoken,
+                                                  //           image: profileimage,
+                                                  //           location: finallocation!)
+                                                  //       .whenComplete(() {
+                                                  //     getdata2().whenComplete(() {
+                                                  //       _namefieldcontroller.clear();
+                                                  //       all_desid = [];
+                                                  //       all_depid = [];
+                                                  //       all_dep = [];
+                                                  //       all_des = [];
+                                                  //       _position = null;
+                                                  //       publishfromdate = '';
+
+                                                  //       dropdownvalue1 = null;
+                                                  //       dropdownvalue2 = null;
+                                                  //       setState(() {});
+
+                                                  //       getcreate_status();
+                                                  //       getdata();
+                                                  //       EasyLoading.dismiss();
+                                                  //       context.router.pop();
+                                                  //     });
+                                                  //   });
+                                                  //   log(create_statuscode.toString());
+                                                  // }
+                                                },
+                                                child: const Text("Search")),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ],
                                   title: Row(
@@ -307,113 +313,129 @@ class _MyDataGridState extends State<SearchPage> {
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 13),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                      color: Colors.grey)),
-                                              child: DropdownSearch<String>(
-                                                popupProps: PopupProps.menu(
-                                                  searchFieldProps: const TextFieldProps(
-                                                      decoration: InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          constraints:
-                                                              BoxConstraints(
-                                                                  maxHeight:
-                                                                      40))),
-                                                  constraints:
-                                                      BoxConstraints.tight(Size(
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                          160)),
-                                                  showSearchBox: true,
-                                                  showSelectedItems: true,
-                                                ),
-                                                items: const [
-                                                  'Ordinary',
-                                                  'Extra-Ordinary'
-                                                ],
-                                                dropdownDecoratorProps:
-                                                    const DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    labelText: "Gazette Type :",
-                                                    hintText:
-                                                        "Search Gazette Type",
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 4),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
+                                                child: DropdownSearch<String>(
+                                                  popupProps: PopupProps.menu(
+                                                    searchFieldProps: const TextFieldProps(
+                                                        decoration: InputDecoration(
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                            constraints:
+                                                                BoxConstraints(
+                                                                    maxHeight:
+                                                                        40))),
+                                                    constraints:
+                                                        BoxConstraints.tight(
+                                                            Size(
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                160)),
+                                                    showSearchBox: true,
+                                                    showSelectedItems: true,
                                                   ),
+                                                  items: const [
+                                                    'Ordinary',
+                                                    'Extra-Ordinary'
+                                                  ],
+                                                  dropdownDecoratorProps:
+                                                      const DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      labelText:
+                                                          "Gazette Type :",
+                                                      hintText:
+                                                          "Search Gazette Type",
+                                                    ),
+                                                  ),
+                                                  // onChanged: (String? newValue) {
+                                                  //   setState(() {
+                                                  //     dropdownvalue1 = newValue as String;
+                                                  //   });
+                                                  //   int ind = all_des.indexOf(dropdownvalue1!);
+                                                  //   dropdownvalue11 = all_desid[ind];
+                                                  // },
                                                 ),
-                                                // onChanged: (String? newValue) {
-                                                //   setState(() {
-                                                //     dropdownvalue1 = newValue as String;
-                                                //   });
-                                                //   int ind = all_des.indexOf(dropdownvalue1!);
-                                                //   dropdownvalue11 = all_desid[ind];
-                                                // },
                                               ),
                                             ),
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 13),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                      color: Colors.grey)),
-                                              child: DropdownSearch<String>(
-                                                popupProps: PopupProps.menu(
-                                                  fit: FlexFit.tight,
-                                                  searchFieldProps: const TextFieldProps(
-                                                      decoration: InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          constraints:
-                                                              BoxConstraints(
-                                                                  maxHeight:
-                                                                      40))),
-                                                  constraints:
-                                                      BoxConstraints.tight(Size(
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                          200)),
-                                                  showSearchBox: true,
-                                                  showSelectedItems: true,
-                                                ),
-                                                items: const [
-                                                  'Govt to Citizen',
-                                                  'Govt to Employee',
-                                                  'Govt to Govt',
-                                                ],
-                                                dropdownDecoratorProps:
-                                                    const DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    labelText: "Category :",
-                                                    hintText: "Select Category",
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 4),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
+                                                child: DropdownSearch<String>(
+                                                  popupProps: PopupProps.menu(
+                                                    fit: FlexFit.tight,
+                                                    searchFieldProps: const TextFieldProps(
+                                                        decoration: InputDecoration(
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                            constraints:
+                                                                BoxConstraints(
+                                                                    maxHeight:
+                                                                        40))),
+                                                    constraints:
+                                                        BoxConstraints.tight(
+                                                            Size(
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                200)),
+                                                    showSearchBox: true,
+                                                    showSelectedItems: true,
                                                   ),
+                                                  items: const [
+                                                    'Govt to Citizen',
+                                                    'Govt to Employee',
+                                                    'Govt to Govt',
+                                                  ],
+                                                  dropdownDecoratorProps:
+                                                      const DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      labelText: "Category :",
+                                                      hintText:
+                                                          "Select Category",
+                                                    ),
+                                                  ),
+                                                  // onChanged: (String? newValue) {
+                                                  //   setState(() {
+                                                  //     dropdownvalue2 = newValue as String;
+                                                  //   });
+                                                  //   int ind = all_dep.indexOf(dropdownvalue2!);
+                                                  //   dropdownvalue22 = all_depid[ind];
+                                                  // },
                                                 ),
-                                                // onChanged: (String? newValue) {
-                                                //   setState(() {
-                                                //     dropdownvalue2 = newValue as String;
-                                                //   });
-                                                //   int ind = all_dep.indexOf(dropdownvalue2!);
-                                                //   dropdownvalue22 = all_depid[ind];
-                                                // },
                                               ),
                                             ),
                                             const SizedBox(
@@ -445,9 +467,8 @@ class _MyDataGridState extends State<SearchPage> {
                                                                     .circular(
                                                                         7)),
                                                         height: 50,
-                                                        child: DateFieldWidget(
-                                                            ispublishfrom:
-                                                                true)),
+                                                        child:
+                                                            DateFieldWidgetpublishFrom()),
                                                   ),
                                                 ),
                                               ],
@@ -481,9 +502,8 @@ class _MyDataGridState extends State<SearchPage> {
                                                                     .circular(
                                                                         7)),
                                                         height: 50,
-                                                        child: DateFieldWidget(
-                                                            ispublishfrom:
-                                                                false)),
+                                                        child:
+                                                            DateFieldWidgetpublishTill()),
                                                   ),
                                                 ),
                                               ],
@@ -491,57 +511,64 @@ class _MyDataGridState extends State<SearchPage> {
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 13),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                      color: Colors.grey)),
-                                              child: DropdownSearch<String>(
-                                                popupProps: PopupProps.menu(
-                                                  fit: FlexFit.tight,
-                                                  searchFieldProps: const TextFieldProps(
-                                                      decoration: InputDecoration(
-                                                          border:
-                                                              OutlineInputBorder(),
-                                                          constraints:
-                                                              BoxConstraints(
-                                                                  maxHeight:
-                                                                      40))),
-                                                  constraints:
-                                                      BoxConstraints.tight(Size(
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                          250)),
-                                                  showSearchBox: true,
-                                                  showSelectedItems: true,
-                                                ),
-                                                items: const [
-                                                  'Govt to Citizen',
-                                                  'Govt to Employee',
-                                                  'Govt to Govt',
-                                                ],
-                                                dropdownDecoratorProps:
-                                                    const DropDownDecoratorProps(
-                                                  dropdownSearchDecoration:
-                                                      InputDecoration(
-                                                    labelText: "Department :",
-                                                    hintText:
-                                                        "Select Department",
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 4),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    border: Border.all(
+                                                        color: Colors.grey)),
+                                                child: DropdownSearch<String>(
+                                                  popupProps: PopupProps.menu(
+                                                    fit: FlexFit.tight,
+                                                    searchFieldProps: const TextFieldProps(
+                                                        decoration: InputDecoration(
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                            constraints:
+                                                                BoxConstraints(
+                                                                    maxHeight:
+                                                                        40))),
+                                                    constraints:
+                                                        BoxConstraints.tight(
+                                                            Size(
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                250)),
+                                                    showSearchBox: true,
+                                                    showSelectedItems: true,
                                                   ),
+                                                  items: const [
+                                                    'Govt to Citizen',
+                                                    'Govt to Employee',
+                                                    'Govt to Govt',
+                                                  ],
+                                                  dropdownDecoratorProps:
+                                                      const DropDownDecoratorProps(
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      labelText: "Department :",
+                                                      hintText:
+                                                          "Select Department",
+                                                    ),
+                                                  ),
+                                                  // onChanged: (String? newValue) {
+                                                  //   setState(() {
+                                                  //     dropdownvalue2 = newValue as String;
+                                                  //   });
+                                                  //   int ind = all_dep.indexOf(dropdownvalue2!);
+                                                  //   dropdownvalue22 = all_depid[ind];
+                                                  // },
                                                 ),
-                                                // onChanged: (String? newValue) {
-                                                //   setState(() {
-                                                //     dropdownvalue2 = newValue as String;
-                                                //   });
-                                                //   int ind = all_dep.indexOf(dropdownvalue2!);
-                                                //   dropdownvalue22 = all_depid[ind];
-                                                // },
                                               ),
                                             ),
                                           ],

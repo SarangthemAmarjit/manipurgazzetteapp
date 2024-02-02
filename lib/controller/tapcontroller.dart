@@ -27,8 +27,8 @@ class GetxTapController extends GetxController {
   DateTime _publishTillinitialdate = DateTime.now();
 
 //PublishFrom
-  final TextEditingController _publishfromcontroller =
-      TextEditingController(text: '1-1-1950');
+  TextEditingController _publishfromcontroller = TextEditingController();
+
   String _publishfromdate = '01-01-1950';
 
   DateTime _publishfrominitialdate = DateTime(1950, 01, 01);
@@ -99,16 +99,16 @@ class GetxTapController extends GetxController {
     int day = now.day;
     int month = now.month;
     int year = now.year;
-
+    _publishfromcontroller = TextEditingController(text: '1-1-1950');
     _publishtillcontroller = TextEditingController(text: '$day-$month-$year');
     _publishTilldate = '$day-$month-$year';
     update();
   }
 
   void iconbuttondatepickerpublishtill({required DateTime value}) {
+    log('iconbuttondatepickerpublishtill');
     _publishtillcontroller.text = "${value.day}-${value.month}-${value.year}";
     _publishTillinitialdate = value;
-
     update();
   }
 

@@ -8,8 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 
-class DateFieldWidgetpublishTill extends StatelessWidget {
-  DateFieldWidgetpublishTill({super.key});
+class DateFieldWidgetpublishFrom extends StatelessWidget {
+  DateFieldWidgetpublishFrom({
+    super.key,
+  });
 
   var format = DateFormat("dd-MM-yyyy");
   DateTime? firstdate = DateTime(1950, 01, 01);
@@ -24,15 +26,14 @@ class DateFieldWidgetpublishTill extends StatelessWidget {
       return DateTimeField(
         style: TextStyle(fontSize: screenWidth < 400 ? textSize : 15),
         textAlign: TextAlign.center,
-        autocorrect: true,
         resetIcon: const Icon(Icons.restore),
-        controller: gcontroller.publishtillcontroller,
+        controller: gcontroller.publishfromcontroller,
         decoration: InputDecoration(
             prefixIcon: IconButton(
               onPressed: () async {
                 return showDatePicker(
                         context: context,
-                        initialDate: gcontroller.publishTillinitialdate,
+                        initialDate: gcontroller.publishFrominitialdate,
                         firstDate: firstdate!,
                         lastDate: lastdate!,
                         // helpText: "SELECT DATE OF BIRTH",
@@ -44,7 +45,7 @@ class DateFieldWidgetpublishTill extends StatelessWidget {
                         errorInvalidText: "Date Out of Range")
                     // ignore: void_checks
                     .then((value) {
-                  gcontroller.iconbuttondatepickerpublishtill(value: value!);
+                  gcontroller.iconbuttondatepickerpublishfrom(value: value!);
 
                   return value;
                 });
@@ -56,7 +57,7 @@ class DateFieldWidgetpublishTill extends StatelessWidget {
         onShowPicker: (context, currentValue) {
           return showDatePicker(
                   context: context,
-                  initialDate: gcontroller.publishTillinitialdate,
+                  initialDate: gcontroller.publishFrominitialdate,
                   firstDate: firstdate!,
                   lastDate: lastdate!,
                   // helpText: "SELECT DATE OF BIRTH",
@@ -67,7 +68,7 @@ class DateFieldWidgetpublishTill extends StatelessWidget {
                   errorFormatText: "Enter a Valid Date",
                   errorInvalidText: "Date Out of Range")
               .then((value) {
-            gcontroller.iconbuttondatepickerpublishtill(value: value!);
+            gcontroller.iconbuttondatepickerpublishfrom(value: value!);
 
             return value;
           });
