@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:atompaymentdemo/constant/constant.dart';
+import 'package:atompaymentdemo/model/searchmodel.dart';
 import 'package:atompaymentdemo/pages/searchpage.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,12 @@ class GetxTapController extends GetxController {
 
   //DateField
 
+
+  //POSTAL ADRRESS
+final TextEditingController  _billingnamecontroller = TextEditingController();
+final TextEditingController  _billingaddresscontroller = TextEditingController();
+final TextEditingController  _billingpincodecontroller = TextEditingController();
+
 //PublishTill
   TextEditingController _publishtillcontroller = TextEditingController();
   String _publishTilldate = '';
@@ -39,11 +46,21 @@ class GetxTapController extends GetxController {
   //
 
   bool _isloading = true;
-
+  
+  bool _ischecked = false;
   File? _imagefile;
 
   TextEditingController get publishtillcontroller => _publishtillcontroller;
   TextEditingController get publishfromcontroller => _publishfromcontroller;
+
+  
+  TextEditingController get billingnamecontroller => _billingnamecontroller;
+  TextEditingController get billingaddresscontroller => _billingaddresscontroller;
+   TextEditingController get billingpincodecontroller => _billingpincodecontroller;
+
+
+AllSearchResultData? allsearchdata;
+var isDataLoading = false.obs;
   String get publishTilldate => _publishTilldate;
   String get publishFromdate => _publishfromdate;
   DateTime get publishTillinitialdate => _publishTillinitialdate;
@@ -51,6 +68,7 @@ class GetxTapController extends GetxController {
 
   EmployeeDataSource get employeeDataSource => _employeeDataSource!;
   bool get isloading => _isloading;
+  bool get ischecked => _ischecked;
   File? get imagefile => _imagefile;
 
   @override
@@ -65,6 +83,57 @@ class GetxTapController extends GetxController {
   void onwebviewcreated() {
     _isloading = true;
     update();
+  }
+
+  //getSearchData
+
+
+    Future getsearchdata({required String searchtext}) async {
+    if (allsearchdata == null) {
+      isDataLoading(true);
+    }
+    try {
+      final queryParameters = {
+        "text": searchtext,
+      };
+      final response = await http.get(
+        Uri.http('10.10.1.139:8099', '/api/gazettes/text',
+            queryParameters),
+      );
+
+      if (response.statusCode == 200) {
+
+        var users = allSearchResultDataFromJson(response.body);
+
+        if (allsearchdata == null) {
+          // allsearchdata = users;
+          // _latestfeeddata = allsearchdata!.feeds.last;
+
+          update();
+        } else {
+          if (users == allsearchdata) {
+            log('Data Already same');
+          } else {
+            isDataLoading(true);
+            // allsearchdata = users;
+            // _latestfeeddata = allsearchdata!.feeds.last;
+
+            update();
+          }
+        }
+      } else {
+        print('Failedrerer to Getdata.');
+        _isserverok = false;
+        update();
+      }
+      return null;
+    } catch (e) {
+      _isserverok = false;
+      update();
+      print(e.toString());
+    } finally {
+      isDataLoading(false);
+    }
   }
 
   //getTabledata
@@ -163,5 +232,21 @@ class GetxTapController extends GetxController {
   void onwebviewcreatedfinish() {
     _isloading = false;
     update();
+  }
+
+  void setcheckbox({required bool value,required String name,required String address,required String pincode}){
+_ischecked = value;
+if(value){
+  _billingnamecontroller.text = name;
+    _billingaddresscontroller.text = address;
+      _billingpincodecontroller.text = pincode;
+      update();
+}else{
+  _billingnamecontroller.clear();
+    _billingaddresscontroller.clear();
+      _billingpincodecontroller.clear();
+      update();
+}
+update();
   }
 }

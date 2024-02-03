@@ -92,6 +92,9 @@ class _WebViewContainerState extends State<PaymentPage> {
                         if (responseMap['f_code'] == 'success_00' ||
                             responseMap['f_code'] == 'Ok') {
                           transactionResult = "success";
+
+
+                          
                         } else if (responseMap['f_code'] == 'C_06' ||
                             responseMap['f_code'] == 'C') {
                           transactionResult = "cancelled";

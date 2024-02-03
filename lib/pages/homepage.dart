@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
   final date =
       '12/06/2022 16:50:00'; //mandatory //current transaction date should be matching like this
   final txnid = '123456'; //mandatory // this should be unique each time
-  final custacc = '0'; //mandatory
+  final custacc = '0123456789'; //mandatory
   final clientcode = "NAVIN"; //mandatory
   final udf9 =
       "testdata1,testdata2,testdata3"; //optional, you can send comma seperated data here

@@ -107,7 +107,7 @@ class _MyDataGridState extends State<SearchPage> {
                                           ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                   backgroundColor: Colors.grey,
-                                                  side: const BorderSide(
+                                                  side:  const BorderSide(
                                                       color: Colors.red)),
                                               onPressed: () {
                                                 Navigator.pop(context);
@@ -120,10 +120,10 @@ class _MyDataGridState extends State<SearchPage> {
                                                   // _position = null;
                                                 });
                                               },
-                                              child: const Text("Cancel")),
+                                              child:  const Text("Cancel")),
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(left: 10),
+                                                 const EdgeInsets.only(left: 10),
                                             child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                     backgroundColor:
