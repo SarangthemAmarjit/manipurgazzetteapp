@@ -33,7 +33,9 @@ class _MyDataGridState extends State<SearchPage> {
   var format = DateFormat("dd-MM-yyyy");
   DateTime? firstdate = DateTime(1950, 01, 01);
   DateTime? lastdate = DateTime.now();
+  final int _rowsPerPage = 10;
 
+  final double _dataPagerHeight = 60.0;
   @override
   Widget build(BuildContext context) {
     GetxTapController gcontroller =
@@ -67,548 +69,602 @@ class _MyDataGridState extends State<SearchPage> {
             padding: const EdgeInsets.only(right: 15, left: 15, top: 15),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      children: [
-                        Text(
-                          'Search Result :',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17),
-                        ),
-                        Text(
-                          ' 34 Record Found',
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (cnt) {
-                            return StatefulBuilder(
-                              builder: (BuildContext context,
-                                  void Function(void Function()) setState) {
-                                return AlertDialog(
-                                  actions: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 19),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Colors.grey,
-                                                  side:  const BorderSide(
-                                                      color: Colors.red)),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                setState(() {
-                                                  // _namefieldcontroller.clear();
-                                                  // publishfromdate = '';
-
-                                                  // dropdownvalue1 = null;
-                                                  // dropdownvalue2 = null;
-                                                  // _position = null;
-                                                });
-                                              },
-                                              child:  const Text("Cancel")),
+                Expanded(
+                  flex: 10,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Row(
+                            children: [
+                              Text(
+                                'Search Result :',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17),
+                              ),
+                              Text(
+                                ' 34 Record Found',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (cnt) {
+                                  return StatefulBuilder(
+                                    builder: (BuildContext context,
+                                        void Function(void Function())
+                                            setState) {
+                                      return AlertDialog(
+                                        actions: [
                                           Padding(
-                                            padding:
-                                                 const EdgeInsets.only(left: 10),
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.blue),
-                                                onPressed: () async {
-                                                  // EasyLoading.show(status: 'Adding..');
-                                                  // if (_namefieldcontroller.text.isEmpty ||
-                                                  //     dropdownvalue11 == null ||
-                                                  //     dropdownvalue22 == null ||
-                                                  //     datetime.isEmpty ||
-                                                  //     profileimage.isEmpty ||
-                                                  //     finallocation == null) {
-                                                  //   EasyLoading.dismiss();
-                                                  //   context.router.pop();
-                                                  //   CustomSnackBar(
-                                                  //       context,
-                                                  //       Text(
-                                                  //         'All Fields Are Mandatory',
-                                                  //         style:
-                                                  //       ),
-                                                  //       Colors.red);
-                                                  // } else {
-                                                  //   await ServiceApi()
-                                                  //       .create_employee(
-                                                  //           name: _namefieldcontroller.text,
-                                                  //           desId: dropdownvalue11!,
-                                                  //           depId: dropdownvalue22!,
-                                                  //           dob: datetime,
-                                                  //           token: finaltoken,
-                                                  //           image: profileimage,
-                                                  //           location: finallocation!)
-                                                  //       .whenComplete(() {
-                                                  //     getdata2().whenComplete(() {
-                                                  //       _namefieldcontroller.clear();
-                                                  //       all_desid = [];
-                                                  //       all_depid = [];
-                                                  //       all_dep = [];
-                                                  //       all_des = [];
-                                                  //       _position = null;
-                                                  //       publishfromdate = '';
+                                            padding: const EdgeInsets.only(
+                                                right: 19),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.grey,
+                                                            side:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .red)),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      setState(() {
+                                                        // _namefieldcontroller.clear();
+                                                        // publishfromdate = '';
 
-                                                  //       dropdownvalue1 = null;
-                                                  //       dropdownvalue2 = null;
-                                                  //       setState(() {});
+                                                        // dropdownvalue1 = null;
+                                                        // dropdownvalue2 = null;
+                                                        // _position = null;
+                                                      });
+                                                    },
+                                                    child:
+                                                        const Text("Cancel")),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              backgroundColor:
+                                                                  Colors.blue),
+                                                      onPressed: () async {
+                                                        // EasyLoading.show(status: 'Adding..');
+                                                        // if (_namefieldcontroller.text.isEmpty ||
+                                                        //     dropdownvalue11 == null ||
+                                                        //     dropdownvalue22 == null ||
+                                                        //     datetime.isEmpty ||
+                                                        //     profileimage.isEmpty ||
+                                                        //     finallocation == null) {
+                                                        //   EasyLoading.dismiss();
+                                                        //   context.router.pop();
+                                                        //   CustomSnackBar(
+                                                        //       context,
+                                                        //       Text(
+                                                        //         'All Fields Are Mandatory',
+                                                        //         style:
+                                                        //       ),
+                                                        //       Colors.red);
+                                                        // } else {
+                                                        //   await ServiceApi()
+                                                        //       .create_employee(
+                                                        //           name: _namefieldcontroller.text,
+                                                        //           desId: dropdownvalue11!,
+                                                        //           depId: dropdownvalue22!,
+                                                        //           dob: datetime,
+                                                        //           token: finaltoken,
+                                                        //           image: profileimage,
+                                                        //           location: finallocation!)
+                                                        //       .whenComplete(() {
+                                                        //     getdata2().whenComplete(() {
+                                                        //       _namefieldcontroller.clear();
+                                                        //       all_desid = [];
+                                                        //       all_depid = [];
+                                                        //       all_dep = [];
+                                                        //       all_des = [];
+                                                        //       _position = null;
+                                                        //       publishfromdate = '';
 
-                                                  //       getcreate_status();
-                                                  //       getdata();
-                                                  //       EasyLoading.dismiss();
-                                                  //       context.router.pop();
-                                                  //     });
-                                                  //   });
-                                                  //   log(create_statuscode.toString());
-                                                  // }
-                                                },
-                                                child: const Text("Search")),
-                                          )
+                                                        //       dropdownvalue1 = null;
+                                                        //       dropdownvalue2 = null;
+                                                        //       setState(() {});
+
+                                                        //       getcreate_status();
+                                                        //       getdata();
+                                                        //       EasyLoading.dismiss();
+                                                        //       context.router.pop();
+                                                        //     });
+                                                        //   });
+                                                        //   log(create_statuscode.toString());
+                                                        // }
+                                                      },
+                                                      child:
+                                                          const Text("Search")),
+                                                )
+                                              ],
+                                            ),
+                                          ),
                                         ],
-                                      ),
-                                    ),
-                                  ],
-                                  title: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        "View Gazettes",
-                                      ),
-                                      GestureDetector(
-                                          onTap: () {},
-                                          child: const Icon(
-                                              Icons.restore_outlined))
-                                    ],
-                                  ),
-                                  content: SingleChildScrollView(
-                                    child: Form(
-                                      child: SizedBox(
-                                        height: 460,
-                                        child: Column(
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  'All :',
-                                                ),
-                                                const SizedBox(
-                                                  width: 30,
-                                                ),
-                                                Expanded(
-                                                  child: Card(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: const Color
-                                                              .fromARGB(255,
-                                                              253, 253, 252),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(7)),
-                                                      height: 43,
-                                                      child: TextFormField(
-                                                        onChanged: ((value) {}),
-                                                        decoration: InputDecoration(
-                                                            contentPadding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 7,
-                                                                    left: 10),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            7)),
-                                                            hintText:
-                                                                'Type To Search',
-                                                            hintStyle:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .grey)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                            const Text(
+                                              "View Gazettes",
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  'Search By Title :',
-                                                ),
-                                                const SizedBox(
-                                                  width: 30,
-                                                ),
-                                                Expanded(
-                                                  child: Card(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: const Color
-                                                              .fromARGB(255,
-                                                              253, 253, 252),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(7)),
-                                                      height: 43,
-                                                      child: TextFormField(
-                                                        onChanged: ((value) {}),
-                                                        decoration: InputDecoration(
-                                                            contentPadding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    top: 7,
-                                                                    left: 10),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            7)),
-                                                            hintText:
-                                                                'Type To Search',
-                                                            hintStyle:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .grey)),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 4),
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                        color: Colors.grey)),
-                                                child: DropdownSearch<String>(
-                                                  popupProps: PopupProps.menu(
-                                                    searchFieldProps: const TextFieldProps(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            constraints:
-                                                                BoxConstraints(
-                                                                    maxHeight:
-                                                                        40))),
-                                                    constraints:
-                                                        BoxConstraints.tight(
-                                                            Size(
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                                160)),
-                                                    showSearchBox: true,
-                                                    showSelectedItems: true,
-                                                  ),
-                                                  items: const [
-                                                    'Ordinary',
-                                                    'Extra-Ordinary'
-                                                  ],
-                                                  dropdownDecoratorProps:
-                                                      const DropDownDecoratorProps(
-                                                    dropdownSearchDecoration:
-                                                        InputDecoration(
-                                                      labelText:
-                                                          "Gazette Type :",
-                                                      hintText:
-                                                          "Search Gazette Type",
-                                                    ),
-                                                  ),
-                                                  // onChanged: (String? newValue) {
-                                                  //   setState(() {
-                                                  //     dropdownvalue1 = newValue as String;
-                                                  //   });
-                                                  //   int ind = all_des.indexOf(dropdownvalue1!);
-                                                  //   dropdownvalue11 = all_desid[ind];
-                                                  // },
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 4),
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                        color: Colors.grey)),
-                                                child: DropdownSearch<String>(
-                                                  popupProps: PopupProps.menu(
-                                                    fit: FlexFit.tight,
-                                                    searchFieldProps: const TextFieldProps(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            constraints:
-                                                                BoxConstraints(
-                                                                    maxHeight:
-                                                                        40))),
-                                                    constraints:
-                                                        BoxConstraints.tight(
-                                                            Size(
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                                200)),
-                                                    showSearchBox: true,
-                                                    showSelectedItems: true,
-                                                  ),
-                                                  items: const [
-                                                    'Govt to Citizen',
-                                                    'Govt to Employee',
-                                                    'Govt to Govt',
-                                                  ],
-                                                  dropdownDecoratorProps:
-                                                      const DropDownDecoratorProps(
-                                                    dropdownSearchDecoration:
-                                                        InputDecoration(
-                                                      labelText: "Category :",
-                                                      hintText:
-                                                          "Select Category",
-                                                    ),
-                                                  ),
-                                                  // onChanged: (String? newValue) {
-                                                  //   setState(() {
-                                                  //     dropdownvalue2 = newValue as String;
-                                                  //   });
-                                                  //   int ind = all_dep.indexOf(dropdownvalue2!);
-                                                  //   dropdownvalue22 = all_depid[ind];
-                                                  // },
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  'Published From :',
-                                                ),
-                                                Expanded(
-                                                  child: Card(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                    child: Container(
-                                                        decoration: BoxDecoration(
-                                                            color: const Color
-                                                                .fromARGB(255,
-                                                                253, 253, 252),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                        height: 50,
-                                                        child:
-                                                            DateFieldWidgetpublishFrom()),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Text(
-                                                  'Published Till :',
-                                                ),
-                                                Expanded(
-                                                  child: Card(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                    child: Container(
-                                                        decoration: BoxDecoration(
-                                                            color: const Color
-                                                                .fromARGB(255,
-                                                                253, 253, 252),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7)),
-                                                        height: 50,
-                                                        child:
-                                                            DateFieldWidgetpublishTill()),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 4),
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    border: Border.all(
-                                                        color: Colors.grey)),
-                                                child: DropdownSearch<String>(
-                                                  popupProps: PopupProps.menu(
-                                                    fit: FlexFit.tight,
-                                                    searchFieldProps: const TextFieldProps(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            constraints:
-                                                                BoxConstraints(
-                                                                    maxHeight:
-                                                                        40))),
-                                                    constraints:
-                                                        BoxConstraints.tight(
-                                                            Size(
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                                250)),
-                                                    showSearchBox: true,
-                                                    showSelectedItems: true,
-                                                  ),
-                                                  items: const [
-                                                    'Govt to Citizen',
-                                                    'Govt to Employee',
-                                                    'Govt to Govt',
-                                                  ],
-                                                  dropdownDecoratorProps:
-                                                      const DropDownDecoratorProps(
-                                                    dropdownSearchDecoration:
-                                                        InputDecoration(
-                                                      labelText: "Department :",
-                                                      hintText:
-                                                          "Select Department",
-                                                    ),
-                                                  ),
-                                                  // onChanged: (String? newValue) {
-                                                  //   setState(() {
-                                                  //     dropdownvalue2 = newValue as String;
-                                                  //   });
-                                                  //   int ind = all_dep.indexOf(dropdownvalue2!);
-                                                  //   dropdownvalue22 = all_depid[ind];
-                                                  // },
-                                                ),
-                                              ),
-                                            ),
+                                            GestureDetector(
+                                                onTap: () {},
+                                                child: const Icon(
+                                                    Icons.restore_outlined))
                                           ],
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.filter_alt_rounded,
-                            color: Colors.blue,
+                                        content: SingleChildScrollView(
+                                          child: Form(
+                                            child: SizedBox(
+                                              height: 460,
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        'All :',
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 30,
+                                                      ),
+                                                      Expanded(
+                                                        child: Card(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          7)),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                color: const Color
+                                                                    .fromARGB(
+                                                                    255,
+                                                                    253,
+                                                                    253,
+                                                                    252),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7)),
+                                                            height: 43,
+                                                            child:
+                                                                TextFormField(
+                                                              onChanged:
+                                                                  ((value) {}),
+                                                              decoration: InputDecoration(
+                                                                  contentPadding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              7,
+                                                                          left:
+                                                                              10),
+                                                                  border: OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              7)),
+                                                                  hintText:
+                                                                      'Type To Search',
+                                                                  hintStyle: const TextStyle(
+                                                                      color: Colors
+                                                                          .grey)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        'Search By Title :',
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 30,
+                                                      ),
+                                                      Expanded(
+                                                        child: Card(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          7)),
+                                                          child: Container(
+                                                            decoration: BoxDecoration(
+                                                                color: const Color
+                                                                    .fromARGB(
+                                                                    255,
+                                                                    253,
+                                                                    253,
+                                                                    252),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7)),
+                                                            height: 43,
+                                                            child:
+                                                                TextFormField(
+                                                              onChanged:
+                                                                  ((value) {}),
+                                                              decoration: InputDecoration(
+                                                                  contentPadding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          top:
+                                                                              7,
+                                                                          left:
+                                                                              10),
+                                                                  border: OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              7)),
+                                                                  hintText:
+                                                                      'Type To Search',
+                                                                  hintStyle: const TextStyle(
+                                                                      color: Colors
+                                                                          .grey)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 4),
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 15),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey)),
+                                                      child: DropdownSearch<
+                                                          String>(
+                                                        popupProps:
+                                                            PopupProps.menu(
+                                                          searchFieldProps: const TextFieldProps(
+                                                              decoration: InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  constraints:
+                                                                      BoxConstraints(
+                                                                          maxHeight:
+                                                                              40))),
+                                                          constraints: BoxConstraints
+                                                              .tight(Size(
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  160)),
+                                                          showSearchBox: true,
+                                                          showSelectedItems:
+                                                              true,
+                                                        ),
+                                                        items: const [
+                                                          'Ordinary',
+                                                          'Extra-Ordinary'
+                                                        ],
+                                                        dropdownDecoratorProps:
+                                                            const DropDownDecoratorProps(
+                                                          dropdownSearchDecoration:
+                                                              InputDecoration(
+                                                            labelText:
+                                                                "Gazette Type :",
+                                                            hintText:
+                                                                "Search Gazette Type",
+                                                          ),
+                                                        ),
+                                                        // onChanged: (String? newValue) {
+                                                        //   setState(() {
+                                                        //     dropdownvalue1 = newValue as String;
+                                                        //   });
+                                                        //   int ind = all_des.indexOf(dropdownvalue1!);
+                                                        //   dropdownvalue11 = all_desid[ind];
+                                                        // },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 4),
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 15),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey)),
+                                                      child: DropdownSearch<
+                                                          String>(
+                                                        popupProps:
+                                                            PopupProps.menu(
+                                                          fit: FlexFit.tight,
+                                                          searchFieldProps: const TextFieldProps(
+                                                              decoration: InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  constraints:
+                                                                      BoxConstraints(
+                                                                          maxHeight:
+                                                                              40))),
+                                                          constraints: BoxConstraints
+                                                              .tight(Size(
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  200)),
+                                                          showSearchBox: true,
+                                                          showSelectedItems:
+                                                              true,
+                                                        ),
+                                                        items: const [
+                                                          'Govt to Citizen',
+                                                          'Govt to Employee',
+                                                          'Govt to Govt',
+                                                        ],
+                                                        dropdownDecoratorProps:
+                                                            const DropDownDecoratorProps(
+                                                          dropdownSearchDecoration:
+                                                              InputDecoration(
+                                                            labelText:
+                                                                "Category :",
+                                                            hintText:
+                                                                "Select Category",
+                                                          ),
+                                                        ),
+                                                        // onChanged: (String? newValue) {
+                                                        //   setState(() {
+                                                        //     dropdownvalue2 = newValue as String;
+                                                        //   });
+                                                        //   int ind = all_dep.indexOf(dropdownvalue2!);
+                                                        //   dropdownvalue22 = all_depid[ind];
+                                                        // },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        'Published From :',
+                                                      ),
+                                                      Expanded(
+                                                        child: Card(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          7)),
+                                                          child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      253,
+                                                                      253,
+                                                                      252),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              7)),
+                                                              height: 50,
+                                                              child:
+                                                                  DateFieldWidgetpublishFrom()),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const Text(
+                                                        'Published Till :',
+                                                      ),
+                                                      Expanded(
+                                                        child: Card(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          7)),
+                                                          child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  color: const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      253,
+                                                                      253,
+                                                                      252),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              7)),
+                                                              height: 50,
+                                                              child:
+                                                                  DateFieldWidgetpublishTill()),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 4),
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 15),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey)),
+                                                      child: DropdownSearch<
+                                                          String>(
+                                                        popupProps:
+                                                            PopupProps.menu(
+                                                          fit: FlexFit.tight,
+                                                          searchFieldProps: const TextFieldProps(
+                                                              decoration: InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  constraints:
+                                                                      BoxConstraints(
+                                                                          maxHeight:
+                                                                              40))),
+                                                          constraints: BoxConstraints
+                                                              .tight(Size(
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  250)),
+                                                          showSearchBox: true,
+                                                          showSelectedItems:
+                                                              true,
+                                                        ),
+                                                        items: const [
+                                                          'Govt to Citizen',
+                                                          'Govt to Employee',
+                                                          'Govt to Govt',
+                                                        ],
+                                                        dropdownDecoratorProps:
+                                                            const DropDownDecoratorProps(
+                                                          dropdownSearchDecoration:
+                                                              InputDecoration(
+                                                            labelText:
+                                                                "Department :",
+                                                            hintText:
+                                                                "Select Department",
+                                                          ),
+                                                        ),
+                                                        // onChanged: (String? newValue) {
+                                                        //   setState(() {
+                                                        //     dropdownvalue2 = newValue as String;
+                                                        //   });
+                                                        //   int ind = all_dep.indexOf(dropdownvalue2!);
+                                                        //   dropdownvalue22 = all_depid[ind];
+                                                        // },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.filter_alt_rounded,
+                                  color: Colors.blue,
+                                ),
+                                Text('Filter'),
+                              ],
+                            ),
                           ),
-                          Text('Filter'),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SfDataGridTheme(
-                  data: SfDataGridThemeData(
-                    headerColor: Colors.green[50],
-                    gridLineColor: Colors.grey,
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
-                  child: Expanded(
+                ),
+                Expanded(
+                  flex: 160,
+                  child: SfDataGridTheme(
+                    data: SfDataGridThemeData(
+                      headerColor: Colors.green[50],
+                      gridLineColor: Colors.grey,
+                    ),
                     child: Card(
                       color: Colors.white,
                       elevation: 10,
                       child: SfDataGrid(
+                        // onQueryRowHeight: (details) {
+                        //   return details
+                        //       .getIntrinsicRowHeight(details.rowIndex);
+                        // },
+
+                        horizontalScrollPhysics:
+                            const NeverScrollableScrollPhysics(),
                         columnWidthMode: ColumnWidthMode.lastColumnFill,
                         columnSizer: ColumnSizer(),
                         gridLinesVisibility: GridLinesVisibility.both,
@@ -616,21 +672,23 @@ class _MyDataGridState extends State<SearchPage> {
                         source: gcontroller.employeeDataSource,
                         columns: <GridColumn>[
                           GridColumn(
-                              columnName: 'id',
+                              columnWidthMode: ColumnWidthMode.fitByCellValue,
+                              columnName: 'gazettenumber',
                               label: Container(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 padding: const EdgeInsets.all(8.0),
                                 child: const Text(
                                   'Gazette No',
                                   overflow: TextOverflow.visible,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: 'KulimPark',
                                   ),
                                 ),
                               )),
                           GridColumn(
-                              columnWidthMode: ColumnWidthMode.fill,
-                              columnName: 'name',
+                              maximumWidth: 140,
+                              columnName: 'title',
                               label: Container(
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(8.0),
@@ -643,20 +701,23 @@ class _MyDataGridState extends State<SearchPage> {
                                 ),
                               )),
                           GridColumn(
-                              columnName: 'designation',
+                              minimumWidth: 60,
+                              columnWidthMode: ColumnWidthMode.fitByCellValue,
+                              columnName: 'totalpage',
                               label: Container(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.center,
                                 padding: const EdgeInsets.all(8.0),
                                 child: const Text(
                                   'Total Pages',
-                                  overflow: TextOverflow.ellipsis,
+                                  overflow: TextOverflow.visible,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontFamily: 'KulimPark',
                                   ),
                                 ),
                               )),
                           GridColumn(
-                              columnName: 'salary',
+                              columnName: 'gazetid',
                               label: Container(
                                 alignment: Alignment.center,
                                 padding: const EdgeInsets.all(8.0),
@@ -673,6 +734,29 @@ class _MyDataGridState extends State<SearchPage> {
                     ),
                   ),
                 ),
+                Expanded(
+                  flex: 15,
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      height: _dataPagerHeight,
+                      child: Center(
+                        child: SfDataPager(
+                          lastPageItemVisible: true,
+                          firstPageItemVisible: true,
+                          nextPageItemVisible: true,
+                          previousPageItemVisible: true,
+                          visibleItemsCount: 5,
+                          onPageNavigationStart: (int pageIndex) {
+                            gcontroller.handlePageChange(pageIndex);
+                          },
+                          delegate: gcontroller.employeeDataSource,
+                          pageCount:
+                              (gcontroller.employee.length / _rowsPerPage) + 1,
+                          direction: Axis.horizontal,
+                        ),
+                      )),
+                )
               ],
             ),
           ),
@@ -702,11 +786,15 @@ class EmployeeDataSource extends DataGridSource {
       {required this.context, required List<Employee> employees}) {
     dataGridRows = employees
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
-              DataGridCell<int>(columnName: 'id', value: dataGridRow.id),
-              DataGridCell<String>(columnName: 'name', value: dataGridRow.name),
               DataGridCell<String>(
-                  columnName: 'designation', value: dataGridRow.designation),
-              DataGridCell<int>(columnName: 'salary', value: dataGridRow.id),
+                  columnName: 'gazettenumber',
+                  value: dataGridRow.gazettenumber),
+              DataGridCell<String>(
+                  columnName: 'title', value: dataGridRow.title),
+              DataGridCell<int>(
+                  columnName: 'totalpage', value: dataGridRow.totalpage),
+              DataGridCell<int>(
+                  columnName: 'gazetid', value: dataGridRow.gazetid),
             ]))
         .toList();
   }
@@ -723,24 +811,30 @@ class EmployeeDataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
-          alignment: (dataGridCell.columnName == 'id' ||
-                  dataGridCell.columnName == 'salary')
+          alignment: (dataGridCell.columnName == 'gazettenumber' ||
+                  dataGridCell.columnName == 'gazetid')
               ? Alignment.center
               : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: dataGridCell.columnName == 'salary'
+          child: dataGridCell.columnName == 'gazetid'
               ? TextButton(
                   onPressed: () {
                     log(dataGridCell.value.toString());
                     context.router.push(const BillingPage());
                   },
                   child: const Text('View Gazette'))
-              : Text(
-                  dataGridCell.value.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontFamily: 'KulimPark',
+              : Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    dataGridCell.value.toString(),
+                    maxLines: 4,
+                    textAlign: dataGridCell.columnName == 'title'
+                        ? TextAlign.left
+                        : TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontFamily: 'KulimPark',
+                    ),
                   ),
                 ));
     }).toList());
@@ -748,12 +842,14 @@ class EmployeeDataSource extends DataGridSource {
 }
 
 class Employee {
-  Employee(
-    this.id,
-    this.name,
-    this.designation,
-  );
-  final int id;
-  final String name;
-  final String designation;
+  Employee({
+    required this.gazettenumber,
+    required this.title,
+    required this.totalpage,
+    required this.gazetid,
+  });
+  final String gazettenumber;
+  final String title;
+  final int totalpage;
+  final int gazetid;
 }

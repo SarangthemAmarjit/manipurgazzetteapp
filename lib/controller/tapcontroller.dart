@@ -22,13 +22,15 @@ class GetxTapController extends GetxController {
 
   final List<Employee> _employees = <Employee>[];
 
+  List<Employee> get employee => _employees;
   //DateField
 
-
   //POSTAL ADRRESS
-final TextEditingController  _billingnamecontroller = TextEditingController();
-final TextEditingController  _billingaddresscontroller = TextEditingController();
-final TextEditingController  _billingpincodecontroller = TextEditingController();
+  final TextEditingController _billingnamecontroller = TextEditingController();
+  final TextEditingController _billingaddresscontroller =
+      TextEditingController();
+  final TextEditingController _billingpincodecontroller =
+      TextEditingController();
 
 //PublishTill
   TextEditingController _publishtillcontroller = TextEditingController();
@@ -45,22 +47,29 @@ final TextEditingController  _billingpincodecontroller = TextEditingController()
 
   //
 
+  String _billingdropdownvalue = '';
+  String _postaldropdownvalue = '';
+
+  String get billingdropdownvalue => _billingdropdownvalue;
+  String get postaldropdownvalue => _postaldropdownvalue;
+
   bool _isloading = true;
-  
+
   bool _ischecked = false;
   File? _imagefile;
 
   TextEditingController get publishtillcontroller => _publishtillcontroller;
   TextEditingController get publishfromcontroller => _publishfromcontroller;
 
-  
   TextEditingController get billingnamecontroller => _billingnamecontroller;
-  TextEditingController get billingaddresscontroller => _billingaddresscontroller;
-   TextEditingController get billingpincodecontroller => _billingpincodecontroller;
+  TextEditingController get billingaddresscontroller =>
+      _billingaddresscontroller;
+  TextEditingController get billingpincodecontroller =>
+      _billingpincodecontroller;
 
-
-AllSearchResultData? allsearchdata;
-var isDataLoading = false.obs;
+  List<AllSearchResultData> _allsearchdata = [];
+  List<AllSearchResultData> get allsearchdata => _allsearchdata;
+  var isDataLoading = false.obs;
   String get publishTilldate => _publishTilldate;
   String get publishFromdate => _publishfromdate;
   DateTime get publishTillinitialdate => _publishTillinitialdate;
@@ -87,48 +96,38 @@ var isDataLoading = false.obs;
 
   //getSearchData
 
+  Future getsearchdata({required String searchtext}) async {
+    isDataLoading(true);
 
-    Future getsearchdata({required String searchtext}) async {
-    if (allsearchdata == null) {
-      isDataLoading(true);
-    }
     try {
       final queryParameters = {
         "text": searchtext,
       };
       final response = await http.get(
-        Uri.http('10.10.1.139:8099', '/api/gazettes/text',
-            queryParameters),
+        Uri.http('10.10.1.139:8099', '/api/gazettes/text', queryParameters),
       );
 
       if (response.statusCode == 200) {
-
         var users = allSearchResultDataFromJson(response.body);
-
-        if (allsearchdata == null) {
-          // allsearchdata = users;
-          // _latestfeeddata = allsearchdata!.feeds.last;
-
-          update();
-        } else {
-          if (users == allsearchdata) {
-            log('Data Already same');
-          } else {
-            isDataLoading(true);
-            // allsearchdata = users;
-            // _latestfeeddata = allsearchdata!.feeds.last;
-
-            update();
-          }
+        _allsearchdata = users;
+        for (int i = 0; i < _allsearchdata.length; i++) {
+          _employees.add(Employee(
+              gazettenumber: _allsearchdata[i].gazetteno,
+              title: _allsearchdata[i].title,
+              totalpage: _allsearchdata[i].totalpages,
+              gazetid: _allsearchdata[i].gazetteId));
         }
+        _employeeDataSource =
+            EmployeeDataSource(employees: _employees, context: context);
+        update();
+        update();
       } else {
         print('Failedrerer to Getdata.');
-        _isserverok = false;
-        update();
+        //  _isserverok = false;
       }
       return null;
     } catch (e) {
-      _isserverok = false;
+      // _isserverok = false;
       update();
       print(e.toString());
     } finally {
@@ -140,14 +139,39 @@ var isDataLoading = false.obs;
   getEmployeeData() {
     for (int i = 0; i < alldata.length; i++) {
       _employees.add(Employee(
-        alldata[i]['id'],
-        alldata[i]['name'],
-        alldata[i]['designation'],
-      ));
+          gazettenumber: alldata[i]['gazettenumber'],
+          title: alldata[i]['title'],
+          totalpage: alldata[i]['totalpages'],
+          gazetid: alldata[i]['gazetteid']));
     }
     _employeeDataSource =
         EmployeeDataSource(employees: _employees, context: context);
     update();
+  }
+
+  Future<bool> handlePageChange(int newPageIndex) async {
+    int startIndex = newPageIndex * 10;
+    int endIndex = startIndex + 10;
+    log('startIndex ${startIndex.toString()}');
+    log('endIndex ${endIndex.toString()}');
+    if (startIndex < _employees.length && endIndex <= _employees.length) {
+      _employeeDataSource = EmployeeDataSource(
+          employees:
+              _employees.getRange(startIndex, endIndex).toList(growable: false),
+          context: context);
+      update();
+    } else if (endIndex > _employees.length) {
+      _employeeDataSource = EmployeeDataSource(
+          employees: _employees
+              .getRange(startIndex, _employees.length)
+              .toList(growable: false),
+          context: context);
+      update();
+    } else {
+      _employeeDataSource = null;
+    }
+
+    return true;
   }
 
 //PUBLISHFROM FUNCTIONS
@@ -234,19 +258,30 @@ var isDataLoading = false.obs;
     update();
   }
 
-  void setcheckbox({required bool value,required String name,required String address,required String pincode}){
-_ischecked = value;
-if(value){
-  _billingnamecontroller.text = name;
-    _billingaddresscontroller.text = address;
+  void setcheckbox(
+      {required bool value,
+      required String name,
+      required String address,
+      required String pincode}) {
+    _ischecked = value;
+    if (value) {
+      _billingnamecontroller.text = name;
+      _billingaddresscontroller.text = address;
+      _billingdropdownvalue = _postaldropdownvalue;
       _billingpincodecontroller.text = pincode;
       update();
-}else{
-  _billingnamecontroller.clear();
-    _billingaddresscontroller.clear();
+    } else {
+      _billingnamecontroller.clear();
+      _billingaddresscontroller.clear();
+      _billingdropdownvalue = '';
       _billingpincodecontroller.clear();
       update();
-}
-update();
+    }
+    update();
+  }
+
+  void getpostaldropdownvalue({required String value}) {
+    _postaldropdownvalue = value;
+    update();
   }
 }

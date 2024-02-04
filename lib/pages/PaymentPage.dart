@@ -27,7 +27,8 @@ class _WebViewContainerState extends State<PaymentPage> {
   _WebViewContainerState(this._url, this._resHashKey);
   @override
   Widget build(BuildContext context) {
-    GetxTapController gcontroller = Get.put(GetxTapController(context: context));
+    GetxTapController gcontroller =
+        Get.put(GetxTapController(context: context));
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -54,7 +55,7 @@ class _WebViewContainerState extends State<PaymentPage> {
                   },
                   initialUrl: _url,
                   onPageFinished: (String url) async {
-                    log('finish');
+                    log('finish $url');
                     gcontroller.onwebviewcreatedfinish();
                     if (url.contains('/mobilesdk/param')) {
                       // print('onPageFinished blocking navigation to $url}');
@@ -92,9 +93,6 @@ class _WebViewContainerState extends State<PaymentPage> {
                         if (responseMap['f_code'] == 'success_00' ||
                             responseMap['f_code'] == 'Ok') {
                           transactionResult = "success";
-
-
-                          
                         } else if (responseMap['f_code'] == 'C_06' ||
                             responseMap['f_code'] == 'C') {
                           transactionResult = "cancelled";
