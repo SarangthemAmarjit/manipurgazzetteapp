@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:atompaymentdemo/pages/homepage.dart';
 import 'package:atompaymentdemo/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       routerConfig: _appRouter.config(),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+       builder: EasyLoading.init(),
       theme: ThemeData(
         fontFamily: 'KulimPark',
         useMaterial3: false,

@@ -22,9 +22,9 @@ class HomePage extends StatelessWidget {
       '12/06/2022 16:50:00'; //mandatory //current transaction date should be matching like this
   final txnid = '123456'; //mandatory // this should be unique each time
   final custacc = '0123456789'; //mandatory
-  final clientcode = "NAVIN"; //mandatory
+  final clientcode = "01950075"; //mandatory
   final udf9 =
-      "testdata1,testdata2,testdata3"; //optional, you can send comma seperated data here
+      "9399"; //optional, you can send comma seperated data here
   final mode = 'uat'; //mandatory // change to live for production
 
   const HomePage({Key? key}) : super(key: key);

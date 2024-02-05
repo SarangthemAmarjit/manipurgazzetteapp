@@ -46,6 +46,7 @@ dependencies:
   syncfusion_flutter_datagrid: ^24.1.47
   dropdown_search: ^5.0.6
   datetime_picker_formfield: ^2.0.1
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   flutter_test:

@@ -21,7 +21,7 @@ class AllSearchResultData {
     final int departmentid;
     final String category;
     final String gazettetype;
-    final dynamic printingpress;
+    final String printingpress;
     final int totalpages;
     final String gazettedoc;
     final String enteredby;
@@ -62,16 +62,16 @@ class AllSearchResultData {
         publicationdate: Entereddt.fromJson(json["Publicationdate"]),
         notificationdate: Entereddt.fromJson(json["Notificationdate"]),
         departmentid: json["Departmentid"],
-        category: json["Category"],
+        category: json["Category"]??'',
         gazettetype: json["Gazettetype"],
-        printingpress: json["Printingpress"],
+        printingpress: json["Printingpress"]??'',
         totalpages: json["Totalpages"],
         gazettedoc: json["Gazettedoc"],
         enteredby: json["Enteredby"],
         entereddt: Entereddt.fromJson(json["Entereddt"]),
         bundlename: json["Bundlename"],
-        allSearchResultDatumPart: json["Part"],
-        gazettepart: json["Gazettepart"],
+        allSearchResultDatumPart: json["Part"]??'',
+        gazettepart: json["Gazettepart"]??'',
     );
 
     Map<String, dynamic> toJson() => {
