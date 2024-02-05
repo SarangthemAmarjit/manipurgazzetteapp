@@ -10,14 +10,15 @@ import 'package:get/get.dart';
 
 @RoutePage()
 class DashBoardPage extends StatelessWidget {
-   DashBoardPage({super.key});
+  DashBoardPage({super.key});
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-TextEditingController searchcontroller = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController searchcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    GetxTapController gcontroller = Get.put(GetxTapController(context: context));
+    GetxTapController gcontroller =
+        Get.put(GetxTapController(context: context));
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -154,43 +155,60 @@ TextEditingController searchcontroller = TextEditingController();
                                 color: const Color.fromARGB(255, 253, 253, 252),
                                 borderRadius: BorderRadius.circular(7)),
                             height: 43,
-                            child: TextFormField(
-                          
-                    
-                              controller: searchcontroller,
-                              onChanged: ((value) {
-                   
-                         gcontroller.validateInput(value);
-                           
-                              }),
-                              decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(top: 7),
-                                  prefixIcon: const Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(7)),
-                                  hintText: 'Search Gazette',
-                                  hintStyle: const TextStyle(color: Colors.grey)),
+                            child: Focus(
+                              onFocusChange: (value) {
+                                gcontroller.onfocuschange(
+                                    value: value,
+                                    searchtext: searchcontroller.text);
+                              },
+                              child: TextFormField(
+                                controller: searchcontroller,
+                                onChanged: ((value) {
+                                  gcontroller.validateInput(value);
+                                }),
+                                decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(top: 7),
+                                    prefixIcon: const Icon(Icons.search),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(7)),
+                                    hintText: 'Search Gazette',
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey)),
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                       const SizedBox(height: 8),
-            if (gcontroller.validationError != null)
-              Text(
-                gcontroller.validationError!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            const SizedBox(height: 16),
+                    const SizedBox(height: 8),
+                    if (gcontroller.validationError != null)
+                      Card(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(9)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Text(
+                              gcontroller.validationError!,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 16),
                     GestureDetector(
                       onTap: () {
-
-                           if (gcontroller.validationError==null) {
-                    // Form is valid, proceed with your logic
-                       gcontroller.getsearchdata(value: searchcontroller.text);
-                        context.router.push(const SearchPage());
-                  }
-                    
+                        gcontroller.validateInput(searchcontroller.text);
+                        if (gcontroller.validationError == null) {
+                          // Form is valid, proceed with your logic
+                          gcontroller.getsearchdata(
+                              value: searchcontroller.text);
+                          context.router.push(const SearchPage());
+                        }
                       },
                       child: Card(
                           shape: RoundedRectangleBorder(

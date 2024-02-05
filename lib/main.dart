@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       routerConfig: _appRouter.config(),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-       builder: EasyLoading.init(),
+      builder: EasyLoading.init(),
       theme: ThemeData(
         fontFamily: 'KulimPark',
         useMaterial3: false,

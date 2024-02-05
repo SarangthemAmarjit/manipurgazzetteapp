@@ -24,7 +24,7 @@ class GetxTapController extends GetxController {
   final List<Employee> _employees = <Employee>[];
 
   String? _validationError;
-  String?get validationError=>_validationError;
+  String? get validationError => _validationError;
 
   List<Employee> get employee => _employees;
   //DateField
@@ -50,7 +50,7 @@ class GetxTapController extends GetxController {
   DateTime _publishfrominitialdate = DateTime(1950, 01, 01);
 
   //
-String searchtextvalue = '';
+  String searchtextvalue = '';
 
   String _billingdropdownvalue = '';
   String _postaldropdownvalue = '';
@@ -59,7 +59,7 @@ String searchtextvalue = '';
   String get postaldropdownvalue => _postaldropdownvalue;
 
   bool _isloading = true;
-  bool _isdataempty=false;
+  bool _isdataempty = false;
 
   bool _ischecked = false;
   File? _imagefile;
@@ -84,15 +84,19 @@ String searchtextvalue = '';
 
   EmployeeDataSource? get employeeDataSource => _employeeDataSource;
   bool get isloading => _isloading;
-    bool get isdataempty => _isdataempty;
+  bool get isdataempty => _isdataempty;
   bool get ischecked => _ischecked;
   File? get imagefile => _imagefile;
+
+  //
+  bool _isfocusontextfield = false;
+  bool get isfocusontextfield => _isfocusontextfield;
 
   @override
   Future<void> onInit() async {
     super.onInit();
     gettodaydate();
-  
+
     await downloadAndSaveGif(
         'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/bg.gif?alt=media&token=d7769401-361c-4ab1-9a2a-cb74fdcb26d5');
   }
@@ -102,49 +106,52 @@ String searchtextvalue = '';
     update();
   }
 
- 
-
   void validateInput(String value) {
     // Reset previous validation error
 
-      _validationError = null;
-      update();
-   
+    _validationError = null;
+    update();
 
     // Check for null or empty string
     if (value.isEmpty) {
-
-        _validationError = 'Search Field Cannot be Empty';
-             update();
+      _validationError = 'Search Field Cannot be Empty';
+      update();
 
       return;
     }
 
     // Check for length between 5 and 15 characters
     if (value.length < 5 || value.length > 15) {
-
-        _validationError = 'Enter characters between 5 to 15';
-             update();
+      _validationError = 'Enter characters between 5 to 15';
+      update();
 
       return;
     }
 
     // Check for special characters or white spaces
     if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
-
-        _validationError = 'Avoid special characters and white spaces';
-             update();
-      }
-      return;
+      _validationError = 'Avoid special characters and white spaces';
+      update();
     }
+    return;
+  }
 
-  
+  void onfocuschange({required bool value, required String searchtext}) {
+    _isfocusontextfield = value;
+    update();
+    if (_isfocusontextfield == false) {
+      if (searchtext.isEmpty) {
+        _validationError = null;
+        update();
+      }
+    }
+  }
 
   //getSearchData
 
   Future getsearchdata({required String value}) async {
-searchtextvalue = value;
-update();
+    searchtextvalue = value;
+    update();
 
     isDataLoading(true);
 
@@ -155,21 +162,21 @@ update();
       final response = await http.get(
         Uri.http('10.10.1.139:8099', '/api/gazettes/text', queryParameters),
       );
-log(response.statusCode.toString());
+      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         log(response.body);
         var users = allSearchResultDataFromJson(response.body);
-        if(users.isEmpty){
-            isDataLoading(false);
-            _isdataempty = true;
+        if (users.isEmpty) {
+          isDataLoading(false);
+          _isdataempty = true;
           EasyLoading.showError('Record Not Found');
         }
         _allsearchdata = users;
 
         update();
         log('users$users');
-     getEmployeeData();
-    isDataLoading(false);
+        getEmployeeData();
+        isDataLoading(false);
       } else {
         print('Failedrerer to Getdata.');
         //  _isserverok = false;
@@ -179,21 +186,21 @@ log(response.statusCode.toString());
       // _isserverok = false;
 
       print(e.toString());
-    } 
+    }
   }
 
   //getTabledata
   getEmployeeData() {
-   for (int i = 0; i < _allsearchdata.length; i++) {
-          _employees.add(Employee(
-              gazettenumber: _allsearchdata[i].gazetteno,
-              title: _allsearchdata[i].title,
-              totalpage: _allsearchdata[i].totalpages,
-              gazetid: _allsearchdata[i].gazetteId));
-        }
-        _employeeDataSource =
-            EmployeeDataSource(employees: _employees, context: context);
-        update();
+    for (int i = 0; i < _allsearchdata.length; i++) {
+      _employees.add(Employee(
+          gazettenumber: _allsearchdata[i].gazetteno,
+          title: _allsearchdata[i].title,
+          totalpage: _allsearchdata[i].totalpages,
+          gazetid: _allsearchdata[i].gazetteId));
+    }
+    _employeeDataSource =
+        EmployeeDataSource(employees: _employees, context: context);
+    update();
   }
 
   Future<bool> handlePageChange(int newPageIndex) async {
@@ -331,6 +338,4 @@ log(response.statusCode.toString());
     _postaldropdownvalue = value;
     update();
   }
-
- 
 }
