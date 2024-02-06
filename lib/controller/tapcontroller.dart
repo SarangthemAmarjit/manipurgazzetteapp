@@ -304,7 +304,42 @@ class GetxTapController extends GetxController {
 
         update();
         log('users$users');
-        getEmployeeData();
+      
+        isDataLoading(false);
+      } else {
+        print('Failedrerer to Getdata.');
+        //  _isserverok = false;
+      }
+      return null;
+    } catch (e) {
+      // _isserverok = false;
+
+      print(e.toString());
+    }
+  }
+
+//getGaZette Details
+
+
+  Future getGazetteDetails({required int gazetteid,}) async {
+
+
+    isDataLoading(true);
+
+    try {
+    
+      final response = await http.get(
+        Uri.parse('http://10.10.1.96/api/gazettes/$gazetteid'),
+      );
+    
+      if (response.statusCode == 200) {
+
+        var users = allSearchResultDataFromJson(response.body);
+   
+        _allsearchdata = users;
+
+        update();
+     
         isDataLoading(false);
       } else {
         print('Failedrerer to Getdata.');

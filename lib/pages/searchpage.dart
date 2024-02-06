@@ -18,9 +18,9 @@ import 'package:intl/intl.dart';
 
 @RoutePage()
 class SearchPage extends StatelessWidget {
-   SearchPage({super.key});
+  SearchPage({super.key});
 
- String? _errorgazettetype;
+  String? _errorgazettetype;
 
   String? _errortitletext;
 
@@ -39,7 +39,7 @@ class SearchPage extends StatelessWidget {
   TextEditingController gazettcontroller = TextEditingController();
 
   int? departmentdropdownid;
-  String gazettetypename='';
+  String gazettetypename = '';
   String categoryname = '';
 
   final double _dataPagerHeight = 60.0;
@@ -111,7 +111,6 @@ class SearchPage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-
                                           showDialog(
                                             context: context,
                                             builder: (cnt) {
@@ -166,14 +165,17 @@ class SearchPage extends StatelessWidget {
                                                                               .blue),
                                                                       onPressed:
                                                                           () {
-                                                                      
-
                                                                         if (_formKey
                                                                             .currentState!
                                                                             .validate()) {
-
-                                                                              gcontroller.getFilterData(title: titlecontoller.text, gazettetype: gazettetypename,category: categoryname, deptid: departmentdropdownid);
-                                                                              context.router.pop();
+                                                                          gcontroller.getFilterData(
+                                                                              title: titlecontoller.text,
+                                                                              gazettetype: gazettetypename,
+                                                                              category: categoryname,
+                                                                              deptid: departmentdropdownid);
+                                                                          context
+                                                                              .router
+                                                                              .pop();
                                                                           // Do something with the validated form data
                                                                           print(
                                                                               'Form is valid');
@@ -310,7 +312,6 @@ class SearchPage extends StatelessWidget {
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
-                                                        
                                                             Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
@@ -340,7 +341,8 @@ class SearchPage extends StatelessWidget {
                                                                               BorderRadius.circular(7)),
                                                                       child:
                                                                           TextFormField(
-                                                                            onChanged: gcontroller.validatetitle,
+                                                                        onChanged:
+                                                                            gcontroller.validatetitle,
                                                                         controller:
                                                                             titlecontoller,
                                                                         validator:
@@ -351,8 +353,6 @@ class SearchPage extends StatelessWidget {
                                                                           }
                                                                           return null;
                                                                         },
-
-
                                                                         decoration: InputDecoration(
                                                                             contentPadding:
                                                                                 const EdgeInsets.only(top: 7, left: 10),
@@ -368,7 +368,6 @@ class SearchPage extends StatelessWidget {
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
-                                                   
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -394,7 +393,10 @@ class SearchPage extends StatelessWidget {
                                                                             .grey)),
                                                                 child:
                                                                     DropdownSearch<
-                                                                        String>(autoValidateMode: AutovalidateMode.onUserInteraction,
+                                                                        String>(
+                                                                  autoValidateMode:
+                                                                      AutovalidateMode
+                                                                          .onUserInteraction,
                                                                   validator:
                                                                       (value) {
                                                                     if (value ==
@@ -440,11 +442,14 @@ class SearchPage extends StatelessWidget {
                                                                           "Search Gazette Type",
                                                                     ),
                                                                   ),
-                                                                  onChanged: (String? newValue) {
-                                                                   setState(() {
-                                                                   gazettetypename = newValue!;
+                                                                  onChanged:
+                                                                      (String?
+                                                                          newValue) {
+                                                                    setState(
+                                                                        () {
+                                                                      gazettetypename =
+                                                                          newValue!;
                                                                     });
-                                                               
                                                                   },
                                                                 ),
                                                               ),
@@ -510,11 +515,14 @@ class SearchPage extends StatelessWidget {
                                                                           "Select Category",
                                                                     ),
                                                                   ),
-                                                                  onChanged: (String? newValue) {
-                                                                    setState(() {
-                                                                   categoryname = newValue!;
+                                                                  onChanged:
+                                                                      (String?
+                                                                          newValue) {
+                                                                    setState(
+                                                                        () {
+                                                                      categoryname =
+                                                                          newValue!;
                                                                     });
-                                                                 
                                                                   },
                                                                 ),
                                                               ),
@@ -625,7 +633,8 @@ class SearchPage extends StatelessWidget {
                                                                     showSelectedItems:
                                                                         true,
                                                                   ),
-                                                                  items: gcontroller.alldepartmentlist,
+                                                                  items: gcontroller
+                                                                      .alldepartmentlist,
                                                                   dropdownDecoratorProps:
                                                                       const DropDownDecoratorProps(
                                                                     dropdownSearchDecoration:
@@ -636,15 +645,20 @@ class SearchPage extends StatelessWidget {
                                                                           "Select Department",
                                                                     ),
                                                                   ),
-                                                                  onChanged: (String? newValue) {
-
-                                                             int index =    gcontroller.alldepartmentlist.indexOf(newValue!);
-                                                             setState((){
-                                                              departmentdropdownid = gcontroller.alldepartment[index].id;
-                                                             });
-
-
-       
+                                                                  onChanged:
+                                                                      (String?
+                                                                          newValue) {
+                                                                    int index = gcontroller
+                                                                        .alldepartmentlist
+                                                                        .indexOf(
+                                                                            newValue!);
+                                                                    setState(
+                                                                        () {
+                                                                      departmentdropdownid = gcontroller
+                                                                          .alldepartment[
+                                                                              index]
+                                                                          .id;
+                                                                    });
                                                                   },
                                                                 ),
                                                               ),
@@ -689,9 +703,9 @@ class SearchPage extends StatelessWidget {
                                       child: Card(
                                         color: Colors.white,
                                         elevation: 10,
-                                        child: SfDataGrid( 
+                                        child: SfDataGrid(
                                           allowPullToRefresh: true,
-                                    
+
                                           // onQueryRowHeight: (details) {
                                           //   return details
                                           //       .getIntrinsicRowHeight(details.rowIndex);
@@ -699,8 +713,8 @@ class SearchPage extends StatelessWidget {
 
                                           horizontalScrollPhysics:
                                               const NeverScrollableScrollPhysics(),
-                                    
-                                      rowHeight: 55,
+
+                                          rowHeight: 55,
                                           gridLinesVisibility:
                                               GridLinesVisibility.both,
                                           headerGridLinesVisibility:
@@ -708,8 +722,8 @@ class SearchPage extends StatelessWidget {
                                           source:
                                               gcontroller.employeeDataSource!,
                                           columns: <GridColumn>[
-                                            GridColumn(maximumWidth: 70,
-                                                
+                                            GridColumn(
+                                                maximumWidth: 70,
                                                 columnName: 'gazettenumber',
                                                 label: Container(
                                                   alignment: Alignment.center,
@@ -726,8 +740,8 @@ class SearchPage extends StatelessWidget {
                                                   ),
                                                 )),
                                             GridColumn(
-                                              columnWidthMode: ColumnWidthMode.lastColumnFill,
-                                            
+                                                columnWidthMode: ColumnWidthMode
+                                                    .lastColumnFill,
                                                 columnName: 'title',
                                                 label: Container(
                                                   alignment: Alignment.center,
@@ -761,7 +775,8 @@ class SearchPage extends StatelessWidget {
                                                     ),
                                                   ),
                                                 )),
-                                            GridColumn( minimumWidth: 100,
+                                            GridColumn(
+                                                minimumWidth: 100,
                                                 columnName: 'gazetid',
                                                 label: Container(
                                                   alignment: Alignment.center,
@@ -798,10 +813,9 @@ class SearchPage extends StatelessWidget {
                                             previousPageItemVisible: true,
                                             visibleItemsCount: 5,
                                             onRowsPerPageChanged: (value) {
-                                               gcontroller
+                                              gcontroller
                                                   .handlePageChange(value!);
                                             },
-                                     
                                             delegate:
                                                 gcontroller.employeeDataSource!,
                                             pageCount: gcontroller.allsearchdata
@@ -834,8 +848,7 @@ class EmployeeDataSource extends DataGridSource {
   EmployeeDataSource(
       {required this.context, required List<Employee> employees}) {
     dataGridRows = employees
-        .map<DataGridRow>((dataGridRow) => DataGridRow(
-          cells: [
+        .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
               DataGridCell<String>(
                   columnName: 'gazettenumber',
                   value: dataGridRow.gazettenumber),
@@ -858,6 +871,8 @@ class EmployeeDataSource extends DataGridSource {
   DataGridRowAdapter? buildRow(
     DataGridRow row,
   ) {
+    GetxTapController gcontroller =
+        Get.put(GetxTapController(context: context));
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       return Container(
@@ -865,14 +880,18 @@ class EmployeeDataSource extends DataGridSource {
                   dataGridCell.columnName == 'gazetid')
               ? Alignment.center
               : Alignment.centerLeft,
-    
           child: dataGridCell.columnName == 'gazetid'
               ? TextButton(
                   onPressed: () {
-                    log(dataGridCell.value.toString());
+                    gcontroller.getGazetteDetails(
+                        gazetteid: dataGridCell.value);
+
                     context.router.push(const BillingPage());
                   },
-                  child: const Text('View Gazette',textAlign: TextAlign.center,))
+                  child: const Text(
+                    'View Gazette',
+                    textAlign: TextAlign.center,
+                  ))
               : Align(
                   alignment: Alignment.center,
                   child: Text(
