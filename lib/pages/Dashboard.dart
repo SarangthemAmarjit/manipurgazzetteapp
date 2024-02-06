@@ -202,14 +202,15 @@ class DashBoardPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     GestureDetector(
                       onTap: () {
-                        context.router.push(const SearchPage());
-                        // gcontroller.validateInput(searchcontroller.text);
-                        // if (gcontroller.validationError == null) {
-                        //   // Form is valid, proceed with your logic
-                        //   gcontroller.getsearchdata(
-                        //       value: searchcontroller.text);
-                        //   context.router.push(const SearchPage());
-                        // }
+             
+                        gcontroller.validateInput(searchcontroller.text);
+                        if (gcontroller.validationError == null) {
+                          // Form is valid, proceed with your logic
+                          gcontroller.getsearchdata(
+                              value: searchcontroller.text);
+                          context.router.push(const SearchPage());
+                               gcontroller.getDeapartment();
+                        }
                       },
                       child: Card(
                           shape: RoundedRectangleBorder(

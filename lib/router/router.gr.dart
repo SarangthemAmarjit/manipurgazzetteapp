@@ -53,7 +53,7 @@ abstract class $AppRouter extends _i6.RootStackRouter {
     SearchPage.name: (routeData) {
       return _i6.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i5.SearchPage(),
+        child:  _i5.SearchPage(),
       );
     },
   };

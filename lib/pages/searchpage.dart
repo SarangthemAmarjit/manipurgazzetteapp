@@ -17,30 +17,33 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
 @RoutePage()
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class SearchPage extends StatelessWidget {
+   SearchPage({super.key});
 
-  @override
-  _MyDataGridState createState() => _MyDataGridState();
-}
-
-class _MyDataGridState extends State<SearchPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
+ String? _errorgazettetype;
 
   String? _errortitletext;
+
   var format = DateFormat("dd-MM-yyyy");
+
   DateTime? firstdate = DateTime(1950, 01, 01);
+
   DateTime? lastdate = DateTime.now();
-  final int _rowsPerPage = 10;
+
+  final int _rowsPerPage = 15;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController titlecontoller = TextEditingController();
 
   TextEditingController gazettcontroller = TextEditingController();
 
+  int? departmentdropdownid;
+  String gazettetypename='';
+  String categoryname = '';
+
   final double _dataPagerHeight = 60.0;
+
   @override
   Widget build(BuildContext context) {
     GetxTapController gcontroller =
@@ -73,7 +76,7 @@ class _MyDataGridState extends State<SearchPage> {
           () => gcontroller.isDataLoading.value
               ? const Center(child: CircularProgressIndicator())
               : gcontroller.isdataempty
-                  ? Center(child: Image.asset('assets/images/norecord.png'))
+                  ? const Center(child: SizedBox())
                   : SafeArea(
                       child: Padding(
                         padding:
@@ -108,6 +111,7 @@ class _MyDataGridState extends State<SearchPage> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
+
                                           showDialog(
                                             context: context,
                                             builder: (cnt) {
@@ -162,31 +166,18 @@ class _MyDataGridState extends State<SearchPage> {
                                                                               .blue),
                                                                       onPressed:
                                                                           () {
-                                                                        if (titlecontoller
-                                                                            .text
-                                                                            .isEmpty) {
-                                                                          setState(
-                                                                              () {
-                                                                            _errortitletext =
-                                                                                'Title is required';
-                                                                          });
+                                                                      
 
-                                                                          log('Empty');
-                                                                        } else {
-                                                                          setState(
-                                                                              () {
-                                                                            _errortitletext =
-                                                                                null;
-                                                                          });
+                                                                        if (_formKey
+                                                                            .currentState!
+                                                                            .validate()) {
+
+                                                                              gcontroller.getFilterData(title: titlecontoller.text, gazettetype: gazettetypename,category: categoryname, deptid: departmentdropdownid);
+                                                                              context.router.pop();
+                                                                          // Do something with the validated form data
+                                                                          print(
+                                                                              'Form is valid');
                                                                         }
-
-                                                                        // if (_formKey
-                                                                        //     .currentState!
-                                                                        //     .validate()) {
-                                                                        //   // Do something with the validated form data
-                                                                        //   print(
-                                                                        //       'Form is valid');
-                                                                        // }
                                                                         // EasyLoading.show(status: 'Adding..');
                                                                         // if (_namefieldcontroller.text.isEmpty ||
                                                                         //     dropdownvalue11 == null ||
@@ -319,20 +310,7 @@ class _MyDataGridState extends State<SearchPage> {
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
-                                                            _errortitletext !=
-                                                                    null
-                                                                ? Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerRight,
-                                                                    child: Text(
-                                                                      _errortitletext!,
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              Colors.red),
-                                                                    ),
-                                                                  )
-                                                                : const SizedBox(),
+                                                        
                                                             Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
@@ -362,18 +340,18 @@ class _MyDataGridState extends State<SearchPage> {
                                                                               BorderRadius.circular(7)),
                                                                       child:
                                                                           TextFormField(
+                                                                            onChanged: gcontroller.validatetitle,
                                                                         controller:
                                                                             titlecontoller,
-                                                                        // validator:
-                                                                        //     (value) {
-                                                                        //   if (value == null ||
-                                                                        //       value.isEmpty) {
-                                                                        //     return 'Please enter the title';
-                                                                        //   }
-                                                                        //   return null;
-                                                                        // },
-                                                                        onChanged:
-                                                                            gcontroller.validatetitle,
+                                                                        validator:
+                                                                            (value) {
+                                                                          if (value == null ||
+                                                                              value.isEmpty) {
+                                                                            return 'Please enter the title';
+                                                                          }
+                                                                          return null;
+                                                                        },
+
 
                                                                         decoration: InputDecoration(
                                                                             contentPadding:
@@ -390,6 +368,7 @@ class _MyDataGridState extends State<SearchPage> {
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
+                                                   
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -415,17 +394,17 @@ class _MyDataGridState extends State<SearchPage> {
                                                                             .grey)),
                                                                 child:
                                                                     DropdownSearch<
-                                                                        String>(
-                                                                  // validator:
-                                                                  //     (value) {
-                                                                  //   if (value ==
-                                                                  //           null ||
-                                                                  //       value
-                                                                  //           .isEmpty) {
-                                                                  //     return 'Please select the Gazette Type';
-                                                                  //   }
-                                                                  //   return null;
-                                                                  // },
+                                                                        String>(autoValidateMode: AutovalidateMode.onUserInteraction,
+                                                                  validator:
+                                                                      (value) {
+                                                                    if (value ==
+                                                                            null ||
+                                                                        value
+                                                                            .isEmpty) {
+                                                                      return 'Please select the Gazette Type';
+                                                                    }
+                                                                    return null;
+                                                                  },
                                                                   popupProps:
                                                                       PopupProps
                                                                           .menu(
@@ -461,13 +440,12 @@ class _MyDataGridState extends State<SearchPage> {
                                                                           "Search Gazette Type",
                                                                     ),
                                                                   ),
-                                                                  // onChanged: (String? newValue) {
-                                                                  //   setState(() {
-                                                                  //     dropdownvalue1 = newValue as String;
-                                                                  //   });
-                                                                  //   int ind = all_des.indexOf(dropdownvalue1!);
-                                                                  //   dropdownvalue11 = all_desid[ind];
-                                                                  // },
+                                                                  onChanged: (String? newValue) {
+                                                                   setState(() {
+                                                                   gazettetypename = newValue!;
+                                                                    });
+                                                               
+                                                                  },
                                                                 ),
                                                               ),
                                                             ),
@@ -532,13 +510,12 @@ class _MyDataGridState extends State<SearchPage> {
                                                                           "Select Category",
                                                                     ),
                                                                   ),
-                                                                  // onChanged: (String? newValue) {
-                                                                  //   setState(() {
-                                                                  //     dropdownvalue2 = newValue as String;
-                                                                  //   });
-                                                                  //   int ind = all_dep.indexOf(dropdownvalue2!);
-                                                                  //   dropdownvalue22 = all_depid[ind];
-                                                                  // },
+                                                                  onChanged: (String? newValue) {
+                                                                    setState(() {
+                                                                   categoryname = newValue!;
+                                                                    });
+                                                                 
+                                                                  },
                                                                 ),
                                                               ),
                                                             ),
@@ -648,11 +625,7 @@ class _MyDataGridState extends State<SearchPage> {
                                                                     showSelectedItems:
                                                                         true,
                                                                   ),
-                                                                  items: const [
-                                                                    'Govt to Citizen',
-                                                                    'Govt to Employee',
-                                                                    'Govt to Govt',
-                                                                  ],
+                                                                  items: gcontroller.alldepartmentlist,
                                                                   dropdownDecoratorProps:
                                                                       const DropDownDecoratorProps(
                                                                     dropdownSearchDecoration:
@@ -663,13 +636,16 @@ class _MyDataGridState extends State<SearchPage> {
                                                                           "Select Department",
                                                                     ),
                                                                   ),
-                                                                  // onChanged: (String? newValue) {
-                                                                  //   setState(() {
-                                                                  //     dropdownvalue2 = newValue as String;
-                                                                  //   });
-                                                                  //   int ind = all_dep.indexOf(dropdownvalue2!);
-                                                                  //   dropdownvalue22 = all_depid[ind];
-                                                                  // },
+                                                                  onChanged: (String? newValue) {
+
+                                                             int index =    gcontroller.alldepartmentlist.indexOf(newValue!);
+                                                             setState((){
+                                                              departmentdropdownid = gcontroller.alldepartment[index].id;
+                                                             });
+
+
+       
+                                                                  },
                                                                 ),
                                                               ),
                                                             ),
@@ -713,7 +689,9 @@ class _MyDataGridState extends State<SearchPage> {
                                       child: Card(
                                         color: Colors.white,
                                         elevation: 10,
-                                        child: SfDataGrid(
+                                        child: SfDataGrid( 
+                                          allowPullToRefresh: true,
+                                    
                                           // onQueryRowHeight: (details) {
                                           //   return details
                                           //       .getIntrinsicRowHeight(details.rowIndex);
@@ -721,9 +699,8 @@ class _MyDataGridState extends State<SearchPage> {
 
                                           horizontalScrollPhysics:
                                               const NeverScrollableScrollPhysics(),
-                                          columnWidthMode:
-                                              ColumnWidthMode.lastColumnFill,
-                                          columnSizer: ColumnSizer(),
+                                    
+                                      rowHeight: 55,
                                           gridLinesVisibility:
                                               GridLinesVisibility.both,
                                           headerGridLinesVisibility:
@@ -731,9 +708,8 @@ class _MyDataGridState extends State<SearchPage> {
                                           source:
                                               gcontroller.employeeDataSource!,
                                           columns: <GridColumn>[
-                                            GridColumn(
-                                                columnWidthMode: ColumnWidthMode
-                                                    .fitByCellValue,
+                                            GridColumn(maximumWidth: 70,
+                                                
                                                 columnName: 'gazettenumber',
                                                 label: Container(
                                                   alignment: Alignment.center,
@@ -750,7 +726,8 @@ class _MyDataGridState extends State<SearchPage> {
                                                   ),
                                                 )),
                                             GridColumn(
-                                                maximumWidth: 140,
+                                              columnWidthMode: ColumnWidthMode.lastColumnFill,
+                                            
                                                 columnName: 'title',
                                                 label: Container(
                                                   alignment: Alignment.center,
@@ -784,7 +761,7 @@ class _MyDataGridState extends State<SearchPage> {
                                                     ),
                                                   ),
                                                 )),
-                                            GridColumn(
+                                            GridColumn( minimumWidth: 100,
                                                 columnName: 'gazetid',
                                                 label: Container(
                                                   alignment: Alignment.center,
@@ -820,11 +797,11 @@ class _MyDataGridState extends State<SearchPage> {
                                             nextPageItemVisible: true,
                                             previousPageItemVisible: true,
                                             visibleItemsCount: 5,
-                                            onPageNavigationStart:
-                                                (int pageIndex) {
-                                              gcontroller
-                                                  .handlePageChange(pageIndex);
+                                            onRowsPerPageChanged: (value) {
+                                               gcontroller
+                                                  .handlePageChange(value!);
                                             },
+                                     
                                             delegate:
                                                 gcontroller.employeeDataSource!,
                                             pageCount: gcontroller.allsearchdata
@@ -850,20 +827,6 @@ class _MyDataGridState extends State<SearchPage> {
       }),
     );
   }
-
-  // List<Map<String, dynamic>> getEmployeeData(int count) {
-  //   List<Map<String, dynamic>> employeeData = [];
-  //   for (int i = 1; i <= count; i++) {
-  //     employeeData.add({
-  //       'id': 1000 + i,
-  //       'name': 'Employee $i',
-  //       'designation': 'Designation $i',
-  //       'salary': 50000 + i * 1000,
-  //     });
-  //   }
-
-  //   return employeeData;
-  // }
 }
 
 class EmployeeDataSource extends DataGridSource {
@@ -871,7 +834,8 @@ class EmployeeDataSource extends DataGridSource {
   EmployeeDataSource(
       {required this.context, required List<Employee> employees}) {
     dataGridRows = employees
-        .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
+        .map<DataGridRow>((dataGridRow) => DataGridRow(
+          cells: [
               DataGridCell<String>(
                   columnName: 'gazettenumber',
                   value: dataGridRow.gazettenumber),
@@ -901,23 +865,23 @@ class EmployeeDataSource extends DataGridSource {
                   dataGridCell.columnName == 'gazetid')
               ? Alignment.center
               : Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+    
           child: dataGridCell.columnName == 'gazetid'
               ? TextButton(
                   onPressed: () {
                     log(dataGridCell.value.toString());
                     context.router.push(const BillingPage());
                   },
-                  child: const Text('View Gazette'))
+                  child: const Text('View Gazette',textAlign: TextAlign.center,))
               : Align(
                   alignment: Alignment.center,
                   child: Text(
                     dataGridCell.value.toString(),
-                    maxLines: 4,
+                    maxLines: 3,
                     textAlign: dataGridCell.columnName == 'title'
                         ? TextAlign.left
                         : TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.visible,
                     style: const TextStyle(
                       fontFamily: 'KulimPark',
                     ),

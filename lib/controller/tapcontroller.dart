@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:atompaymentdemo/constant/constant.dart';
+import 'package:atompaymentdemo/model/departmentmodel.dart';
 import 'package:atompaymentdemo/model/searchmodel.dart';
 import 'package:atompaymentdemo/pages/searchpage.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -31,6 +33,9 @@ class GetxTapController extends GetxController {
 
   String? _errorgazettetype;
   String? get errorgazettetype => _errorgazettetype;
+
+    final List<String> _alldepartmentlist=[];
+  List<String> get alldepartmentlist => _alldepartmentlist;
 
   List<Employee> get employee => _employees;
   //DateField
@@ -81,6 +86,11 @@ class GetxTapController extends GetxController {
 
   List<AllSearchResultData> _allsearchdata = [];
   List<AllSearchResultData> get allsearchdata => _allsearchdata;
+
+  //Department
+    List<AllDepartment> _alldepartment= [];
+  List<AllDepartment> get alldepartment => _alldepartment;
+  //
   var isDataLoading = false.obs;
 
   String get publishTilldate => _publishTilldate;
@@ -196,7 +206,28 @@ class GetxTapController extends GetxController {
         if (users.isEmpty) {
           isDataLoading(false);
           _isdataempty = true;
-          EasyLoading.showError('Record Not Found');
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: (context), builder: (BuildContext context) {  
+            return AlertDialog(
+                      title: const Text('Search Result'),
+                      content: const Row(
+                        children: [
+                          Icon(Icons.warning,color: Colors.red,),SizedBox(width: 10,),
+                          Text('No Record Found'),
+                        ],
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                           context.router.pop().whenComplete(() => context.router.pop());
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+          },
+        );
         }
         _allsearchdata = users;
 
@@ -216,6 +247,80 @@ class GetxTapController extends GetxController {
     }
   }
 
+
+//getFilterData
+
+  Future getFilterData({required String title,required String gazettetype,required String category,required int? deptid,}) async {
+
+
+    isDataLoading(true);
+
+    try {
+      final queryParameters = {
+        "title": title,
+        "gazettetype":gazettetype,
+         "startDate":_publishfromcontroller.text,
+          "endDate":_publishtillcontroller.text,
+           "category":category,
+            "departmentid":deptid??'',
+
+
+
+      };
+      final response = await http.get(
+        Uri.http('10.10.1.139:8099', '/api/gazettes/search', queryParameters),
+      );
+      log(response.statusCode.toString());
+      if (response.statusCode == 200) {
+        log(response.body);
+        var users = allSearchResultDataFromJson(response.body);
+        if (users.isEmpty) {
+          isDataLoading(false);
+          _isdataempty = true;
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: (context), builder: (BuildContext context) {  
+            return AlertDialog(
+                      title: const Text('Search Result'),
+                      content: const Row(
+                        children: [
+                          Icon(Icons.warning,color: Colors.red,),SizedBox(width: 10,),
+                          Text('No Record Found'),
+                        ],
+                      ),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                           context.router.pop().whenComplete(() => context.router.pop());
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+          },
+        );
+        }
+        _allsearchdata = users;
+
+        update();
+        log('users$users');
+        getEmployeeData();
+        isDataLoading(false);
+      } else {
+        print('Failedrerer to Getdata.');
+        //  _isserverok = false;
+      }
+      return null;
+    } catch (e) {
+      // _isserverok = false;
+
+      print(e.toString());
+    }
+  }
+
+
+
+
   //getTabledata
   getEmployeeData() {
     for (int i = 0; i < _allsearchdata.length; i++) {
@@ -230,11 +335,48 @@ class GetxTapController extends GetxController {
     update();
   }
 
+  getDeapartment()async{
+  try {
+    
+      final response = await http.get(
+        Uri.parse('http://10.10.1.139:8099/api/Departments'),
+      );
+  
+      if (response.statusCode == 200) {
+        log(response.body);
+        var users = allDepartmentFromJson(response.body);
+      
+        _alldepartment = users;
+
+for (var element in _alldepartment) { 
+  if(_alldepartmentlist.contains(element.name)){
+    log('Already Exist');
+  }else{
+  _alldepartmentlist.add(element.name);
+  }
+  
+
+}
+        update();
+        log('users$users');
+   
+      } else {
+        print('Failedrerer to Getdata.');
+        //  _isserverok = false;
+      }
+      return null;
+    } catch (e) {
+      // _isserverok = false;
+
+      print(e.toString());
+    }
+  }
+
   Future<bool> handlePageChange(int newPageIndex) async {
-    int startIndex = newPageIndex * 10;
-    int endIndex = startIndex + 10;
-    log('startIndex ${startIndex.toString()}');
-    log('endIndex ${endIndex.toString()}');
+    int startIndex = newPageIndex * 15;
+    int endIndex = startIndex + 15;
+    log('pageindex ${newPageIndex.toString()}');
+   
     if (startIndex < _employees.length && endIndex <= _employees.length) {
       _employeeDataSource = EmployeeDataSource(
           employees:
