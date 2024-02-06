@@ -1,55 +1,81 @@
 import 'package:flutter/material.dart';
 
+class MyForm extends StatefulWidget {
+  const MyForm({super.key});
 
-class CheckFocusPage extends StatefulWidget {
   @override
-  _CheckFocusPageState createState() => _CheckFocusPageState();
+  _MyFormState createState() => _MyFormState();
 }
 
-class _CheckFocusPageState extends State<CheckFocusPage> {
-  FocusNode _focusNode = FocusNode();
-  bool isTextFieldFocused = false;
+class _MyFormState extends State<MyForm> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  String? _emailErrorText;
+
+  void _validateEmail(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        _emailErrorText = 'Email is required';
+      });
+    } else if (!isEmailValid(value)) {
+      setState(() {
+        _emailErrorText = 'Enter a valid email address';
+      });
+    } else {
+      setState(() {
+        _emailErrorText = null;
+      });
+    }
+  }
+
+  bool isEmailValid(String email) {
+    // Basic email validation using regex
+    // You can implement more complex validation if needed
+    return RegExp(r'^[\w-\.]+@[a-zA-Z]+\.[a-zA-Z]{2,}$').hasMatch(email);
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      // Form is valid, proceed with your logic here
+      // For this example, we will simply print the email
+      print('Email: ${_emailController.text}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Focus(
-            onFocusChange: (hasFocus) {
-              setState(() {
-                isTextFieldFocused = hasFocus;
-              });
-            },
-            child: TextField(
-              focusNode: _focusNode,
-              decoration: InputDecoration(
-                labelText: 'Enter text',
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('TextField Validation'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _emailErrorText != null
+                  ? Text(
+                      _emailErrorText!,
+                      style: const TextStyle(color: Colors.red),
+                    )
+                  : const SizedBox(),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                onChanged: _validateEmail,
               ),
-            ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _validateEmail(_emailController.text);
+                },
+                child: const Text('Submit'),
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          Text(
-            isTextFieldFocused ? 'TextField is focused' : 'TextField is not focused',
-            style: TextStyle(
-              color: isTextFieldFocused ? Colors.green : Colors.red,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              // Toggle focus programmatically
-              if (_focusNode.hasFocus) {
-                _focusNode.unfocus();
-              } else {
-                _focusNode.requestFocus();
-              }
-            },
-            child: Text('Toggle Focus'),
-          ),
-        ],
+        ),
       ),
     );
   }

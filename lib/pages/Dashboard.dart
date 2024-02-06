@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 class DashBoardPage extends StatelessWidget {
   DashBoardPage({super.key});
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+ 
   TextEditingController searchcontroller = TextEditingController();
 
   @override
@@ -202,13 +202,14 @@ class DashBoardPage extends StatelessWidget {
                     const SizedBox(height: 16),
                     GestureDetector(
                       onTap: () {
-                        gcontroller.validateInput(searchcontroller.text);
-                        if (gcontroller.validationError == null) {
-                          // Form is valid, proceed with your logic
-                          gcontroller.getsearchdata(
-                              value: searchcontroller.text);
-                          context.router.push(const SearchPage());
-                        }
+                        context.router.push(const SearchPage());
+                        // gcontroller.validateInput(searchcontroller.text);
+                        // if (gcontroller.validationError == null) {
+                        //   // Form is valid, proceed with your logic
+                        //   gcontroller.getsearchdata(
+                        //       value: searchcontroller.text);
+                        //   context.router.push(const SearchPage());
+                        // }
                       },
                       child: Card(
                           shape: RoundedRectangleBorder(

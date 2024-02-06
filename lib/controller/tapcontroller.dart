@@ -26,6 +26,12 @@ class GetxTapController extends GetxController {
   String? _validationError;
   String? get validationError => _validationError;
 
+  String? _errortitletext;
+  String? get errortitletext => _errortitletext;
+
+  String? _errorgazettetype;
+  String? get errorgazettetype => _errorgazettetype;
+
   List<Employee> get employee => _employees;
   //DateField
 
@@ -134,6 +140,27 @@ class GetxTapController extends GetxController {
       update();
     }
     return;
+  }
+
+  void validatetitle(String value) {
+    if (value.isEmpty) {
+      _errortitletext = 'Title is required';
+      log('Empty');
+      update();
+    } else {
+      _errortitletext = null;
+      update();
+    }
+  }
+
+  void validategazette(String value) {
+    if (value.isEmpty) {
+      _errortitletext = 'Please select the Gazette Type';
+      update();
+    } else {
+      _errortitletext = null;
+      update();
+    }
   }
 
   void onfocuschange({required bool value, required String searchtext}) {
