@@ -75,7 +75,10 @@ class SearchPage extends StatelessWidget {
         return Obx(
           () => gcontroller.isDataLoading.value
               ? const Center(child: CircularProgressIndicator())
-              : gcontroller.isdataempty
+              : gcontroller.isserverok?
+              
+              
+               gcontroller.isdataempty
                   ? const Center(child: SizedBox())
                   : SafeArea(
                       child: Padding(
@@ -84,7 +87,7 @@ class SearchPage extends StatelessWidget {
                         child: Column(
                           children: [
                             Expanded(
-                              flex: 10,
+                              flex: 12,
                               child: Column(
                                 children: [
                                   Row(
@@ -145,7 +148,7 @@ class SearchPage extends StatelessWidget {
                                                                   setState(() {
                                                                     // _namefieldcontroller.clear();
                                                                     // publishfromdate = '';
-
+                        
                                                                     // dropdownvalue1 = null;
                                                                     // dropdownvalue2 = null;
                                                                     // _position = null;
@@ -215,11 +218,11 @@ class SearchPage extends StatelessWidget {
                                                                         //       all_des = [];
                                                                         //       _position = null;
                                                                         //       publishfromdate = '';
-
+                        
                                                                         //       dropdownvalue1 = null;
                                                                         //       dropdownvalue2 = null;
                                                                         //       setState(() {});
-
+                        
                                                                         //       getcreate_status();
                                                                         //       getdata();
                                                                         //       EasyLoading.dismiss();
@@ -705,15 +708,15 @@ class SearchPage extends StatelessWidget {
                                         elevation: 10,
                                         child: SfDataGrid(
                                           allowPullToRefresh: true,
-
+                        
                                           // onQueryRowHeight: (details) {
                                           //   return details
                                           //       .getIntrinsicRowHeight(details.rowIndex);
                                           // },
-
+                        
                                           horizontalScrollPhysics:
                                               const NeverScrollableScrollPhysics(),
-
+                        
                                           rowHeight: 55,
                                           gridLinesVisibility:
                                               GridLinesVisibility.both,
@@ -836,7 +839,7 @@ class SearchPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),
+                    ):Center(child: SizedBox(height: 170,child: Image.asset('assets/images/servererror.png'),),),
         );
       }),
     );

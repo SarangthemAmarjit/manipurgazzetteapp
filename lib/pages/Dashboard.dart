@@ -209,7 +209,9 @@ class DashBoardPage extends StatelessWidget {
                           gcontroller.getsearchdata(
                               value: searchcontroller.text);
                           context.router.push(const SearchPage());
-                               gcontroller.getDeapartment();
+                             
+gcontroller.getDeapartment();
+                              
                         }
                       },
                       child: Card(

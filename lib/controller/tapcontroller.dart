@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:atompaymentdemo/constant/constant.dart';
 import 'package:atompaymentdemo/model/departmentmodel.dart';
+import 'package:atompaymentdemo/model/gazettedetails.dart';
 import 'package:atompaymentdemo/model/searchmodel.dart';
 import 'package:atompaymentdemo/pages/searchpage.dart';
 import 'package:auto_route/auto_route.dart';
@@ -59,6 +60,14 @@ class GetxTapController extends GetxController {
   String _publishfromdate = '01-01-1950';
 
   DateTime _publishfrominitialdate = DateTime(1950, 01, 01);
+
+  //Gazette Details
+  GazetteDetails? _gazettedetails;
+  GazetteDetails get gazettedetails=>_gazettedetails!;
+
+  //Server Error
+   bool _isserverok = true;
+   bool get isserverok =>_isserverok;
 
   //
   String searchtextvalue = '';
@@ -199,9 +208,9 @@ class GetxTapController extends GetxController {
       final response = await http.get(
         Uri.http('10.10.1.139:8099', '/api/gazettes/text', queryParameters),
       );
-      log(response.statusCode.toString());
+ 
       if (response.statusCode == 200) {
-        log(response.body);
+      
         var users = allSearchResultDataFromJson(response.body);
         if (users.isEmpty) {
           isDataLoading(false);
@@ -232,16 +241,22 @@ class GetxTapController extends GetxController {
         _allsearchdata = users;
 
         update();
-        log('users$users');
+  
         getEmployeeData();
         isDataLoading(false);
       } else {
         print('Failedrerer to Getdata.');
-        //  _isserverok = false;
+            isDataLoading(false);
+            _isserverok = false;
+            update();
+
       }
       return null;
     } catch (e) {
-      // _isserverok = false;
+          isDataLoading(false);
+   _isserverok = false;
+            update();
+
 
       print(e.toString());
     }
@@ -270,9 +285,9 @@ class GetxTapController extends GetxController {
       final response = await http.get(
         Uri.http('10.10.1.139:8099', '/api/gazettes/search', queryParameters),
       );
-      log(response.statusCode.toString());
+    
       if (response.statusCode == 200) {
-        log(response.body);
+      
         var users = allSearchResultDataFromJson(response.body);
         if (users.isEmpty) {
           isDataLoading(false);
@@ -334,9 +349,10 @@ class GetxTapController extends GetxController {
     
       if (response.statusCode == 200) {
 
-        var users = allSearchResultDataFromJson(response.body);
+        var users = gazetteDetailsFromJson(response.body);
    
-        _allsearchdata = users;
+        _gazettedetails = users;
+        log(users.title.toString());
 
         update();
      
@@ -378,14 +394,14 @@ class GetxTapController extends GetxController {
       );
   
       if (response.statusCode == 200) {
-        log(response.body);
+      
         var users = allDepartmentFromJson(response.body);
       
         _alldepartment = users;
 
 for (var element in _alldepartment) { 
   if(_alldepartmentlist.contains(element.name)){
-    log('Already Exist');
+
   }else{
   _alldepartmentlist.add(element.name);
   }
