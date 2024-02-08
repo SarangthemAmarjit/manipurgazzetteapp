@@ -182,6 +182,7 @@ class DashBoardPage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
+               
                     if (gcontroller.validationError != null)
                       Card(
                         child: Container(
@@ -208,7 +209,7 @@ class DashBoardPage extends StatelessWidget {
                           // Form is valid, proceed with your logic
                           gcontroller.getsearchdata(
                               value: searchcontroller.text);
-                          context.router.push(const SearchPage());
+                          context.router.push( SearchPage());
                              
 gcontroller.getDeapartment();
                               

@@ -1,129 +1,227 @@
-// ignore: import_of_legacy_library_into_null_safe
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:atompaymentdemo/controller/tapcontroller.dart';
-import 'package:atompaynetznonaes/atompaynetznonaes.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:atompaymentdemo/controller/atom_pay_helper.dart';
+import 'package:atompaymentdemo/pages/successpage.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter/services.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class PaymentPage extends StatefulWidget {
-  final url;
-  final resHashKey;
-  const PaymentPage(this.url, this.resHashKey, {super.key});
+  final mode;
+  final payDetails;
+  final responsehashKey;
+  final responseDecryptionKey;
+
+  const PaymentPage(this.mode, this.payDetails, this.responsehashKey,
+      this.responseDecryptionKey,
+      {super.key});
+
   @override
-  createState() => _WebViewContainerState(url, resHashKey);
+  createState() => _PaymentPageState(
+      mode, payDetails, responsehashKey, responseDecryptionKey);
 }
 
-class _WebViewContainerState extends State<PaymentPage> {
-  final _url;
-  final _resHashKey;
+class _PaymentPageState extends State<PaymentPage> {
+  final mode;
+  final payDetails;
+  final _responsehashKey;
+  final _responseDecryptionKey;
   final _key = UniqueKey();
-  late WebViewController _controller;
+  late InAppWebViewController _controller;
 
-  _WebViewContainerState(this._url, this._resHashKey);
+  final Completer<InAppWebViewController> _controllerCompleter =
+      Completer<InAppWebViewController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // if (Platform.isAndroid) WebView.platform  = SurfaceAndroidViewController();
+  }
+
+  _PaymentPageState(this.mode, this.payDetails, this._responsehashKey,
+      this._responseDecryptionKey);
+
   @override
   Widget build(BuildContext context) {
-    GetxTapController gcontroller =
-        Get.put(GetxTapController(context: context));
-    return Scaffold(
-        backgroundColor: Colors.white,
+    return WillPopScope(
+      onWillPop: () => _handleBackButtonAction(context),
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
           elevation: 0,
           toolbarHeight: 2,
         ),
-        body: GetBuilder<GetxTapController>(builder: (_) {
-          return Column(
-            children: [
-              Expanded(
-                  child: Stack(children: [
-                WebView(
-                  key: _key,
-                  javascriptMode: JavascriptMode.unrestricted,
-                  onWebViewCreated: (controller) {
-                    gcontroller.onwebviewcreated();
-                    _controller = controller;
-                    log('created');
-                  },
-                  onPageStarted: (url) {
-                    log('started');
-                  },
-                  initialUrl: _url,
-                  onPageFinished: (String url) async {
-                    log('finish $url');
-                    gcontroller.onwebviewcreatedfinish();
-                    if (url.contains('/mobilesdk/param')) {
-                      // print('onPageFinished blocking navigation to $url}');
-                      final response =
-                          await _controller.runJavascriptReturningResult(
-                              "(function() { let htmlH5 = document.getElementsByTagName('h5')[0].innerHTML; return htmlH5; })();");
-                      log('Response :$response');
+        body: SafeArea(
+            child: InAppWebView(
+          // initialUrl: 'about:blank',
+          key: UniqueKey(),
+          onWebViewCreated: (InAppWebViewController inAppWebViewController) {
+            _controllerCompleter.future.then((value) => _controller = value);
+            _controllerCompleter.complete(inAppWebViewController);
 
-                      List responseArray = [];
-                      var responseMap = {};
-                      var splitRawResponse = response
-                          .trim()
-                          .split('|')
-                          .map((text) => text)
-                          .toList();
-                      for (var i = 0; i < splitRawResponse.length; i++) {
-                        if (splitRawResponse[i].isNotEmpty &&
-                            splitRawResponse[i].length > 2) {
-                          var splitNewResponse = splitRawResponse[i]
-                              .trim()
-                              .split('=')
-                              .map((text) => text)
-                              .toList();
-                          responseArray.add(splitNewResponse);
-                        }
-                      }
-                      for (var i = 0; i < responseArray.length; i++) {
-                        responseMap[responseArray[i][0]] = responseArray[i][1];
-                      }
-                      var atompaynetznonaes = VerifyTransaction();
-                      var checkFinalTransaction = atompaynetznonaes
-                          .validateSignature(responseMap, _resHashKey);
-                      var transactionResult = "";
-                      if (checkFinalTransaction) {
-                        if (responseMap['f_code'] == 'success_00' ||
-                            responseMap['f_code'] == 'Ok') {
-                          transactionResult = "success";
-                        } else if (responseMap['f_code'] == 'C_06' ||
-                            responseMap['f_code'] == 'C') {
-                          transactionResult = "cancelled";
-                        } else {
-                          transactionResult = "failed";
-                        }
-                      } else {
-                        // ignore: avoid_print
-                        print("signature mismatched");
-                        transactionResult = "failed";
-                      }
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context); // Close current window
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text("Transaction Status = $transactionResult")));
+            debugPrint("payDetails from webview $payDetails");
+            _loadHtmlFromAssets(mode);
+          },
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            String url = navigationAction.request.url.toString();
+            var uri = navigationAction.request.url!;
+            if (url.startsWith("upi://")) {
+              debugPrint("upi url started loading");
+              try {
+                await launchUrl(uri);
+              } catch (e) {
+                _closeWebView(context,
+                    "Transaction Status = cannot open UPI applications");
+                throw 'custom error for UPI Intent';
+              }
+              return NavigationActionPolicy.CANCEL;
+            }
+            return NavigationActionPolicy.ALLOW;
+          },
+
+          onLoadStop: (controller, url) async {
+            debugPrint("onloadstop_url: $url");
+
+            if (url.toString().contains("AIPAYLocalFile")) {
+              debugPrint(" AIPAYLocalFile Now url loaded: $url");
+              await _controller.evaluateJavascript(
+                  source: "${"openPay('" + payDetails}')");
+
+              log('Checking 1 $url');
+            }
+
+            if (url.toString().contains('/mobilesdk/param')) {
+              log('Checking 2');
+              final String response = await _controller.evaluateJavascript(
+                  source: "document.getElementsByTagName('h5')[0].innerHTML");
+              debugPrint("HTML response : $response");
+              var transactionResult = "";
+              if (response.trim().contains("cancelTransaction")) {
+                transactionResult = "Transaction Cancelled!";
+              } else {
+                final split = response.trim().split('|');
+                final Map<int, String> values = {
+                  for (int i = 0; i < split.length; i++) i: split[i]
+                };
+
+                final splitTwo = values[1]!.split('=');
+                const platform = MethodChannel('flutter.dev/NDPSAESLibrary');
+
+                try {
+                  final String result =
+                      await platform.invokeMethod('NDPSAESInit', {
+                    'AES_Method': 'decrypt',
+                    'text': splitTwo[1].toString(),
+                    'encKey': _responseDecryptionKey
+                  });
+                  var respJsonStr = result.toString();
+                  Map<String, dynamic> jsonInput = jsonDecode(respJsonStr);
+                  debugPrint("read full respone : $jsonInput");
+
+                  //calling validateSignature function from atom_pay_helper file
+                  var checkFinalTransaction =
+                      validateSignature(jsonInput, _responsehashKey);
+
+                  if (checkFinalTransaction) {
+                    if (jsonInput["payInstrument"]["responseDetails"]
+                                ["statusCode"] ==
+                            'OTS0000' ||
+                        jsonInput["payInstrument"]["responseDetails"]
+                                ["statusCode"] ==
+                            'OTS0551') {
+                      debugPrint("Transaction success");
+
+                      transactionResult = "Transaction Success";
+                    } else {
+                      debugPrint("Transaction failed");
+                      transactionResult = "Transaction Failed";
                     }
-                  },
-                  gestureNavigationEnabled: true,
-                ),
-                if (gcontroller.isloading)
-                  Center(
-                    child: SizedBox(
-                        height: 160,
-                        width: 160,
-                        child: Image.asset('assets/images/processing.gif')),
-                  )
-              ]))
-            ],
-          );
-        }));
+                  } else {
+                    debugPrint("signature mismatched");
+                    transactionResult = "failed";
+                  }
+                  debugPrint("Transaction Response : $jsonInput");
+                } on PlatformException catch (e) {
+                  debugPrint("Failed to decrypt: '${e.message}'.");
+                }
+              }
+              _closeWebView(context, transactionResult);
+            }
+          },
+        )),
+      ),
+    );
   }
+
+  _loadHtmlFromAssets(mode) async {
+    final localUrl = mode == 'uat'
+        ? "assets/payment/aipay_uat.html"
+        : "assets/payment/aipay_prod.html";
+    String fileText = await rootBundle.loadString(localUrl);
+    _controller.loadUrl(
+        urlRequest: URLRequest(
+            url: WebUri(
+      Uri.dataFromString(
+        fileText,
+        mimeType: 'text/html',
+        encoding: Encoding.getByName('utf-8'),
+      ).toString(),
+    )));
+  }
+
+  _closeWebView(context, transactionResult) {
+    // ignore: use_build_context_synchronously
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (
+          context,
+        ) =>
+                SuccessPage(
+                  transactionstatus: transactionResult,
+                )));
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Transaction Status = $transactionResult")));
+  }
+
+  Future<bool> _handleBackButtonAction(BuildContext context) async {
+    debugPrint("_handleBackButtonAction called");
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Do you want to exit the payment ?'),
+              actions: <Widget>[
+                // ignore: deprecated_member_use
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'),
+                ),
+                // ignore: deprecated_member_use
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).pop(); // Close current window
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Transaction Status = Transaction cancelled")));
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            ));
+    return Future.value(true);
+  }
+
+  ///////////////////////////
 }

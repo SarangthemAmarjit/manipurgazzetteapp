@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:atompaymentdemo/pages/homepage.dart';
 import 'package:atompaymentdemo/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
