@@ -14,13 +14,18 @@ class BillingPage extends StatelessWidget {
   TextEditingController postalnamecontroller = TextEditingController();
   TextEditingController postaladdresscontroller = TextEditingController();
   TextEditingController postalpincodecontroller = TextEditingController();
+   TextEditingController mobilecontroller = TextEditingController();
+    TextEditingController emailcontroller = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     GetxTapController controller = Get.put(GetxTapController(context: context));
-    return Scaffold(
+    return 
+    
+    
+    Scaffold(backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 10, top: 10, bottom: 5),
@@ -43,7 +48,9 @@ class BillingPage extends StatelessWidget {
         ),
       ),
       body: GetBuilder<GetxTapController>(builder: (_) {
-        return Obx(
+        return controller.ispaymentprocessstarted? Center(child: SizedBox(height: 150,width: 150,child: Image.asset('assets/images/processing.gif'),),):
+        
+        Obx(
           () => controller.isDataLoading.value
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
@@ -408,6 +415,116 @@ class BillingPage extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                        Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          'Mobile Number',
+                                          style: TextStyle(fontSize: 16),
+                                        )),
+                                    Expanded(
+                                      flex: 8,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                        elevation: 2,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 253, 253, 252),
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          height: 43,
+                                          child: TextFormField(
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Phone no. is Required.';
+                                              }else   if (value.length != 10) {
+      return 'Mobile number must be 10 digits';
+    }
+                                              // You can add more specific email validation here if needed
+                                              return null;
+                                            },
+                                            controller: mobilecontroller,
+                                            keyboardType: TextInputType.number,
+                                            onChanged: ((value) {}),
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        top: 7, left: 17),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3)),
+                                                hintText: '',
+                                                hintStyle: const TextStyle(
+                                                    color: Colors.grey)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                        Row(
+                                  children: [
+                                    const Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          'Email',
+                                          style: TextStyle(fontSize: 16),
+                                        )),
+                                    Expanded(
+                                      flex: 8,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                        elevation: 2,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 253, 253, 252),
+                                              borderRadius:
+                                                  BorderRadius.circular(3)),
+                                          height: 43,
+                                          child: TextFormField(
+                                            validator: (value) {
+                                                String pattern =
+        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+    RegExp regExp = RegExp(pattern);
+   
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Email is Required';
+                                              }else  if (!regExp.hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+                                              // You can add more specific email validation here if needed
+                                              return null;
+                                            },
+                                            controller: emailcontroller,
+                                            keyboardType: TextInputType.emailAddress,
+                                            onChanged: ((value) {}),
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        top: 7, left: 17),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3)),
+                                                hintText: '',
+                                                hintStyle: const TextStyle(
+                                                    color: Colors.grey)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 Row(
                                   children: [
                                     const Expanded(
@@ -475,7 +592,7 @@ class BillingPage extends StatelessWidget {
                                               address:
                                                   postaladdresscontroller.text,
                                               pincode:
-                                                  postalpincodecontroller.text);
+                                                  postalpincodecontroller.text, mobile: mobilecontroller.text, email: emailcontroller.text);
                                         },
                                       ),
                                     ),
@@ -555,7 +672,7 @@ class BillingPage extends StatelessWidget {
                                   const Expanded(
                                       flex: 2,
                                       child: Text(
-                                        'Postal Address',
+                                        'Billing Address',
                                         style: TextStyle(fontSize: 16),
                                       )),
                                   Expanded(
@@ -669,7 +786,92 @@ class BillingPage extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                     
+                                            Row(
+                                children: [
+                                  const Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        'Mobile Number',
+                                        style: TextStyle(fontSize: 16),
+                                      )),
+                                  Expanded(
+                                    flex: 8,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                                255, 253, 253, 252),
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                        height: 43,
+                                        child: TextFormField(
+                                          controller: controller
+                                              .mobilecontroller,
+                                    
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      top: 7, left: 17),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3)),
+                                              hintText: '',
+                                              hintStyle: const TextStyle(
+                                                  color: Colors.grey)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Row(
+                                children: [
+                                  const Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        'Email',
+                                        style: TextStyle(fontSize: 16),
+                                      )),
+                                  Expanded(
+                                    flex: 8,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)),
+                                      elevation: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                                255, 253, 253, 252),
+                                            borderRadius:
+                                                BorderRadius.circular(3)),
+                                        height: 43,
+                                        child: TextFormField(
+                                          controller: controller
+                                              .emailcontroller,
+                                          onChanged: ((value) {}),
+                                          decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      top: 7, left: 17),
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(3)),
+                                              hintText: '',
+                                              hintStyle: const TextStyle(
+                                                  color: Colors.grey)),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                                                     Row(
                                 children: [
                                   const Expanded(
                                       flex: 2,
@@ -720,7 +922,9 @@ class BillingPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              controller.initNdpsPayment(
+
+                             if(controller.ischecked){
+        controller.initNdpsPayment(
                                 context: context,
                                 responseHashKey: controller.responseHashKey,
                                 responseDecryptionKey:
@@ -730,6 +934,16 @@ class BillingPage extends StatelessWidget {
                                 address: postaladdresscontroller.text,
                                 name: postalnamecontroller.text,
                               );
+                             }else{
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.red,
+              content: Text('Billing Field Cannot be Empty'),
+              duration: Duration(seconds: 5), // Optional duration
+         
+            ));
+                             }
+
+
+                      
                             }
                           },
                           child: Card(

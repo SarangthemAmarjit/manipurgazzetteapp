@@ -10,20 +10,21 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:atompaymentdemo/pages/billingpage.dart' as _i1;
 import 'package:atompaymentdemo/pages/Dashboard.dart' as _i2;
-import 'package:atompaymentdemo/pages/paymentpage.dart' as _i3;
+import 'package:atompaymentdemo/pages/PaymentPage.dart' as _i3;
 import 'package:atompaymentdemo/pages/searchpage.dart' as _i4;
-import 'package:auto_route/auto_route.dart' as _i5;
-import 'package:flutter/material.dart' as _i6;
+import 'package:atompaymentdemo/pages/successpage.dart' as _i5;
+import 'package:auto_route/auto_route.dart' as _i6;
+import 'package:flutter/material.dart' as _i7;
 
-abstract class $AppRouter extends _i5.RootStackRouter {
+abstract class $AppRouter extends _i6.RootStackRouter {
   $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i5.PageFactory> pagesMap = {
+  final Map<String, _i6.PageFactory> pagesMap = {
     BillingPage.name: (routeData) {
       final args = routeData.argsAs<BillingPageArgs>(
           orElse: () => const BillingPageArgs());
-      return _i5.AutoRoutePage<dynamic>(
+      return _i6.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i1.BillingPage(key: args.key),
       );
@@ -31,14 +32,14 @@ abstract class $AppRouter extends _i5.RootStackRouter {
     DashBoardPage.name: (routeData) {
       final args = routeData.argsAs<DashBoardPageArgs>(
           orElse: () => const DashBoardPageArgs());
-      return _i5.AutoRoutePage<dynamic>(
+      return _i6.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i2.DashBoardPage(key: args.key),
       );
     },
     PaymentPage.name: (routeData) {
       final args = routeData.argsAs<PaymentPageArgs>();
-      return _i5.AutoRoutePage<dynamic>(
+      return _i6.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i3.PaymentPage(
           args.mode,
@@ -52,9 +53,20 @@ abstract class $AppRouter extends _i5.RootStackRouter {
     SearchPage.name: (routeData) {
       final args = routeData.argsAs<SearchPageArgs>(
           orElse: () => const SearchPageArgs());
-      return _i5.AutoRoutePage<dynamic>(
+      return _i6.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i4.SearchPage(key: args.key),
+      );
+    },
+    SuccessPage.name: (routeData) {
+      final args = routeData.argsAs<SuccessPageArgs>();
+      return _i6.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i5.SuccessPage(
+          key: args.key,
+          transactionstatus: args.transactionstatus,
+          transactionid: args.transactionid,
+        ),
       );
     },
   };
@@ -62,10 +74,10 @@ abstract class $AppRouter extends _i5.RootStackRouter {
 
 /// generated route for
 /// [_i1.BillingPage]
-class BillingPage extends _i5.PageRouteInfo<BillingPageArgs> {
+class BillingPage extends _i6.PageRouteInfo<BillingPageArgs> {
   BillingPage({
-    _i6.Key? key,
-    List<_i5.PageRouteInfo>? children,
+    _i7.Key? key,
+    List<_i6.PageRouteInfo>? children,
   }) : super(
           BillingPage.name,
           args: BillingPageArgs(key: key),
@@ -74,14 +86,14 @@ class BillingPage extends _i5.PageRouteInfo<BillingPageArgs> {
 
   static const String name = 'BillingPage';
 
-  static const _i5.PageInfo<BillingPageArgs> page =
-      _i5.PageInfo<BillingPageArgs>(name);
+  static const _i6.PageInfo<BillingPageArgs> page =
+      _i6.PageInfo<BillingPageArgs>(name);
 }
 
 class BillingPageArgs {
   const BillingPageArgs({this.key});
 
-  final _i6.Key? key;
+  final _i7.Key? key;
 
   @override
   String toString() {
@@ -91,10 +103,10 @@ class BillingPageArgs {
 
 /// generated route for
 /// [_i2.DashBoardPage]
-class DashBoardPage extends _i5.PageRouteInfo<DashBoardPageArgs> {
+class DashBoardPage extends _i6.PageRouteInfo<DashBoardPageArgs> {
   DashBoardPage({
-    _i6.Key? key,
-    List<_i5.PageRouteInfo>? children,
+    _i7.Key? key,
+    List<_i6.PageRouteInfo>? children,
   }) : super(
           DashBoardPage.name,
           args: DashBoardPageArgs(key: key),
@@ -103,14 +115,14 @@ class DashBoardPage extends _i5.PageRouteInfo<DashBoardPageArgs> {
 
   static const String name = 'DashBoardPage';
 
-  static const _i5.PageInfo<DashBoardPageArgs> page =
-      _i5.PageInfo<DashBoardPageArgs>(name);
+  static const _i6.PageInfo<DashBoardPageArgs> page =
+      _i6.PageInfo<DashBoardPageArgs>(name);
 }
 
 class DashBoardPageArgs {
   const DashBoardPageArgs({this.key});
 
-  final _i6.Key? key;
+  final _i7.Key? key;
 
   @override
   String toString() {
@@ -120,14 +132,14 @@ class DashBoardPageArgs {
 
 /// generated route for
 /// [_i3.PaymentPage]
-class PaymentPage extends _i5.PageRouteInfo<PaymentPageArgs> {
+class PaymentPage extends _i6.PageRouteInfo<PaymentPageArgs> {
   PaymentPage({
     required dynamic mode,
     required dynamic payDetails,
     required dynamic responsehashKey,
     required dynamic responseDecryptionKey,
-    _i6.Key? key,
-    List<_i5.PageRouteInfo>? children,
+    _i7.Key? key,
+    List<_i6.PageRouteInfo>? children,
   }) : super(
           PaymentPage.name,
           args: PaymentPageArgs(
@@ -142,8 +154,8 @@ class PaymentPage extends _i5.PageRouteInfo<PaymentPageArgs> {
 
   static const String name = 'PaymentPage';
 
-  static const _i5.PageInfo<PaymentPageArgs> page =
-      _i5.PageInfo<PaymentPageArgs>(name);
+  static const _i6.PageInfo<PaymentPageArgs> page =
+      _i6.PageInfo<PaymentPageArgs>(name);
 }
 
 class PaymentPageArgs {
@@ -163,7 +175,7 @@ class PaymentPageArgs {
 
   final dynamic responseDecryptionKey;
 
-  final _i6.Key? key;
+  final _i7.Key? key;
 
   @override
   String toString() {
@@ -173,10 +185,10 @@ class PaymentPageArgs {
 
 /// generated route for
 /// [_i4.SearchPage]
-class SearchPage extends _i5.PageRouteInfo<SearchPageArgs> {
+class SearchPage extends _i6.PageRouteInfo<SearchPageArgs> {
   SearchPage({
-    _i6.Key? key,
-    List<_i5.PageRouteInfo>? children,
+    _i7.Key? key,
+    List<_i6.PageRouteInfo>? children,
   }) : super(
           SearchPage.name,
           args: SearchPageArgs(key: key),
@@ -185,17 +197,60 @@ class SearchPage extends _i5.PageRouteInfo<SearchPageArgs> {
 
   static const String name = 'SearchPage';
 
-  static const _i5.PageInfo<SearchPageArgs> page =
-      _i5.PageInfo<SearchPageArgs>(name);
+  static const _i6.PageInfo<SearchPageArgs> page =
+      _i6.PageInfo<SearchPageArgs>(name);
 }
 
 class SearchPageArgs {
   const SearchPageArgs({this.key});
 
-  final _i6.Key? key;
+  final _i7.Key? key;
 
   @override
   String toString() {
     return 'SearchPageArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i5.SuccessPage]
+class SuccessPage extends _i6.PageRouteInfo<SuccessPageArgs> {
+  SuccessPage({
+    _i7.Key? key,
+    required String transactionstatus,
+    required String transactionid,
+    List<_i6.PageRouteInfo>? children,
+  }) : super(
+          SuccessPage.name,
+          args: SuccessPageArgs(
+            key: key,
+            transactionstatus: transactionstatus,
+            transactionid: transactionid,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SuccessPage';
+
+  static const _i6.PageInfo<SuccessPageArgs> page =
+      _i6.PageInfo<SuccessPageArgs>(name);
+}
+
+class SuccessPageArgs {
+  const SuccessPageArgs({
+    this.key,
+    required this.transactionstatus,
+    required this.transactionid,
+  });
+
+  final _i7.Key? key;
+
+  final String transactionstatus;
+
+  final String transactionid;
+
+  @override
+  String toString() {
+    return 'SuccessPageArgs{key: $key, transactionstatus: $transactionstatus, transactionid: $transactionid}';
   }
 }

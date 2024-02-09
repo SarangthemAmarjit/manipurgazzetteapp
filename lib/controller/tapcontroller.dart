@@ -45,12 +45,15 @@ class GetxTapController extends GetxController {
   List<Employee> get employee => _employees;
   //DateField
 
-  //POSTAL ADRRESS
+  //BILLING  ADRRESS
   final TextEditingController _billingnamecontroller = TextEditingController();
   final TextEditingController _billingaddresscontroller =
       TextEditingController();
   final TextEditingController _billingpincodecontroller =
       TextEditingController();
+  final TextEditingController _mobilecontroller = TextEditingController();
+
+  final TextEditingController _emailcontroller = TextEditingController();
 
 //PublishTill
   TextEditingController _publishtillcontroller = TextEditingController();
@@ -96,6 +99,8 @@ class GetxTapController extends GetxController {
       _billingaddresscontroller;
   TextEditingController get billingpincodecontroller =>
       _billingpincodecontroller;
+  TextEditingController get mobilecontroller => _mobilecontroller;
+  TextEditingController get emailcontroller => _emailcontroller;
 
   List<AllSearchResultData> _allsearchdata = [];
   List<AllSearchResultData> get allsearchdata => _allsearchdata;
@@ -121,6 +126,8 @@ class GetxTapController extends GetxController {
   bool _isfocusontextfield = false;
   bool get isfocusontextfield => _isfocusontextfield;
 
+  bool _ispaymentprocessstarted = false;
+  bool get ispaymentprocessstarted => _ispaymentprocessstarted;
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -415,7 +422,6 @@ class GetxTapController extends GetxController {
           }
         }
         update();
-        log('users$users');
       } else {
         print('Failedrerer to Getdata.');
         //  _isserverok = false;
@@ -540,6 +546,8 @@ class GetxTapController extends GetxController {
   void setcheckbox(
       {required bool value,
       required String name,
+      required String mobile,
+      required String email,
       required String address,
       required String pincode}) {
     _ischecked = value;
@@ -548,12 +556,16 @@ class GetxTapController extends GetxController {
       _billingaddresscontroller.text = address;
       _billingdropdownvalue = _postaldropdownvalue;
       _billingpincodecontroller.text = pincode;
+      _mobilecontroller.text = mobile;
+      _emailcontroller.text = email;
       update();
     } else {
       _billingnamecontroller.clear();
       _billingaddresscontroller.clear();
       _billingdropdownvalue = '';
       _billingpincodecontroller.clear();
+      _mobilecontroller.clear();
+      _emailcontroller.clear();
       update();
     }
     update();
@@ -588,8 +600,8 @@ class GetxTapController extends GetxController {
 
   // final String custFirstName = 'test'; //optional
   // final String custLastName = 'user'; //optional
-  final String mobile = '8888888888'; //optional
-  final String email = 'test@gmail.com'; //optional
+  // final String mobile = '8888888888'; //optional
+  // final String email = 'test@gmail.com'; //optional
   // final String address = 'mumbai'; //optional
   final String custacc = '639827'; //optional
   final String udf1 = "udf1"; //optional
@@ -617,6 +629,8 @@ class GetxTapController extends GetxController {
       required String name,
       required String amount,
       required String address}) {
+    _ispaymentprocessstarted = true;
+    update();
     _getEncryptedPayUrl(
         context: context,
         responseHashKey: responseHashKey,
@@ -681,7 +695,7 @@ class GetxTapController extends GetxController {
             final atomTokenId = jsonInput["atomTokenId"].toString();
             debugPrint("atomTokenId: $atomTokenId");
             final String payDetails =
-                '{"atomTokenId" : "$atomTokenId","merchId": "$login","emailId": "$email","mobileNumber":"$mobile", "returnUrl":"$returnUrl"}';
+                '{"atomTokenId" : "$atomTokenId","merchId": "$login","emailId": "${_emailcontroller.text}","mobileNumber":"${_mobilecontroller.text}", "returnUrl":"$returnUrl"}';
             _openNdpsPG(
                 payDetails, context, responseHashKey, responseDecryptionKey);
           } else {
@@ -696,11 +710,16 @@ class GetxTapController extends GetxController {
 
   _openNdpsPG(payDetails, BuildContext context, responseHashKey,
       responseDecryptionKey) {
-    context.router.push(PaymentPage(
-        mode: mode,
-        payDetails: payDetails,
-        responsehashKey: responseHashKey,
-        responseDecryptionKey: responseDecryptionKey));
+    context.router
+        .push(PaymentPage(
+            mode: mode,
+            payDetails: payDetails,
+            responsehashKey: responseHashKey,
+            responseDecryptionKey: responseDecryptionKey))
+        .whenComplete(() {
+      _ispaymentprocessstarted = false;
+      update();
+    });
   }
 
   _getJsonPayloadData(
@@ -712,9 +731,9 @@ class GetxTapController extends GetxController {
     payDetails['custFirstName'] = name;
     payDetails['custLastName'] = '';
     payDetails['amount'] = amount;
-    payDetails['mobile'] = mobile;
+    payDetails['mobile'] = _mobilecontroller.text;
     payDetails['address'] = address;
-    payDetails['email'] = email;
+    payDetails['email'] = _emailcontroller.text;
     payDetails['txnid'] = txnid;
     payDetails['custacc'] = custacc;
     payDetails['requestHashKey'] = requestHashKey;
@@ -734,5 +753,77 @@ class GetxTapController extends GetxController {
     payDetails['udf5'] = udf5;
     String jsonPayLoadData = getRequestJsonData(payDetails);
     return jsonPayLoadData;
+  }
+
+  void sendpaymentinfo({
+    required int gazetteId,
+    required String postalname,
+    required String fulladdress,
+    required String pincode,
+    required String totalprice,
+    required String enteredby,
+    required String remark,
+    required String transactionid,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://10.10.1.139:8099/api/Billings/MakePayment'),
+        body: {
+          "gazetteId": gazetteId,
+          "fullname": postalname,
+          "fulladdress": fulladdress,
+          "district": _postaldropdownvalue,
+          "pincode": pincode,
+          "totalprice": totalprice,
+          "namebill": _billingpincodecontroller.text,
+          "addressbill": _billingaddresscontroller.text,
+          "districtbill": _billingdropdownvalue,
+          "pincodebill": _billingpincodecontroller.text,
+          "enteredby": enteredby,
+          "remark": remark,
+          "transactionid": transactionid
+        },
+      );
+
+      if (response.statusCode == 200) {
+        log('Done Post Successfully');
+      } else {
+        print('Failedrerer to Getdata.');
+        //  _isserverok = false;
+      }
+      return null;
+    } catch (e) {
+      // _isserverok = false;
+
+      print(e.toString());
+    }
+  }
+
+  updatepaymentremark({
+    required String transactionid,
+    required String remark,
+  }) async {
+    try {
+      final queryParameters = {"transacid": transactionid};
+      final response = await http.put(
+        Uri.http(
+            '10.10.1.139:8099', '/Billings/UpdatePayment', queryParameters),
+        body: {
+          "remark": remark,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        log('Done updated Successfully');
+      } else {
+        print('Failedrerer to Getdata.');
+        //  _isserverok = false;
+      }
+      return null;
+    } catch (e) {
+      // _isserverok = false;
+
+      print(e.toString());
+    }
   }
 }

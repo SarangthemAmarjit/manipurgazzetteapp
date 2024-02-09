@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:atompaymentdemo/controller/tapcontroller.dart';
+import 'package:atompaymentdemo/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:atompaymentdemo/controller/atom_pay_helper.dart';
-import 'package:atompaymentdemo/pages/successpage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -50,6 +53,8 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+        GetxTapController gcontroller =
+        Get.put(GetxTapController(context: context));
     return WillPopScope(
       onWillPop: () => _handleBackButtonAction(context),
       child: Scaffold(
@@ -78,8 +83,8 @@ class _PaymentPageState extends State<PaymentPage> {
               try {
                 await launchUrl(uri);
               } catch (e) {
-                _closeWebView(context,
-                    "Transaction Status = cannot open UPI applications");
+                    _closeWebView(context: context, transactionResult: "Transaction Status = cannot open UPI applications", txid: '');
+
                 throw 'custom error for UPI Intent';
               }
               return NavigationActionPolicy.CANCEL;
@@ -104,7 +109,11 @@ class _PaymentPageState extends State<PaymentPage> {
                   source: "document.getElementsByTagName('h5')[0].innerHTML");
               debugPrint("HTML response : $response");
               var transactionResult = "";
+String transactionid = '';
+
+
               if (response.trim().contains("cancelTransaction")) {
+                gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Payment Cancelled');
                 transactionResult = "Transaction Cancelled!";
               } else {
                 final split = response.trim().split('|');
@@ -137,14 +146,18 @@ class _PaymentPageState extends State<PaymentPage> {
                         jsonInput["payInstrument"]["responseDetails"]
                                 ["statusCode"] ==
                             'OTS0551') {
+                                 gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Payment Success');
                       debugPrint("Transaction success");
+                      transactionid =    jsonInput['payInstrument']['merchDetails']['merchTxnId'];
 
                       transactionResult = "Transaction Success";
                     } else {
+                         gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Transaction Fail');
                       debugPrint("Transaction failed");
                       transactionResult = "Transaction Failed";
                     }
                   } else {
+                       gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Payment Fail');
                     debugPrint("signature mismatched");
                     transactionResult = "failed";
                   }
@@ -153,7 +166,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   debugPrint("Failed to decrypt: '${e.message}'.");
                 }
               }
-              _closeWebView(context, transactionResult);
+              _closeWebView(context: context, transactionResult: transactionResult, txid: transactionid);
             }
           },
         )),
@@ -177,17 +190,10 @@ class _PaymentPageState extends State<PaymentPage> {
     )));
   }
 
-  _closeWebView(context, transactionResult) {
+  _closeWebView({required BuildContext context,required String transactionResult,required String txid}) {
     // ignore: use_build_context_synchronously
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (
-          context,
-        ) =>
-                SuccessPage(
-                  transactionstatus: transactionResult,
-                )));
+    context.router.push(SuccessPage(transactionstatus: transactionResult, transactionid: txid));
+   
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Transaction Status = $transactionResult")));
