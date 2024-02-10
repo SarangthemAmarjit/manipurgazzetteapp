@@ -53,7 +53,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-        GetxTapController gcontroller =
+    GetxTapController gcontroller =
         Get.put(GetxTapController(context: context));
     return WillPopScope(
       onWillPop: () => _handleBackButtonAction(context),
@@ -83,7 +83,12 @@ class _PaymentPageState extends State<PaymentPage> {
               try {
                 await launchUrl(uri);
               } catch (e) {
-                    _closeWebView(context: context, transactionResult: "Transaction Status = cannot open UPI applications", txid: '');
+                _closeWebView(
+                    context: context,
+                    transactionResult:
+                        "Transaction Status = cannot open UPI applications",
+                    txid: '',
+                    transstatus: 0);
 
                 throw 'custom error for UPI Intent';
               }
@@ -109,12 +114,15 @@ class _PaymentPageState extends State<PaymentPage> {
                   source: "document.getElementsByTagName('h5')[0].innerHTML");
               debugPrint("HTML response : $response");
               var transactionResult = "";
-String transactionid = '';
-
+              String transactionid = '';
+              int? transactionstatus;
 
               if (response.trim().contains("cancelTransaction")) {
-                gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Payment Cancelled');
+                gcontroller.updatepaymentremark(
+                    transactionid: gcontroller.transacid,
+                    remark: 'Payment Cancelled');
                 transactionResult = "Transaction Cancelled!";
+                transactionstatus = 100;
               } else {
                 final split = response.trim().split('|');
                 final Map<int, String> values = {
@@ -146,18 +154,29 @@ String transactionid = '';
                         jsonInput["payInstrument"]["responseDetails"]
                                 ["statusCode"] ==
                             'OTS0551') {
-                                 gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Payment Success');
+                      gcontroller.updatepaymentremark(
+                          transactionid: transactionid,
+                          remark: 'Payment Success');
                       debugPrint("Transaction success");
-                      transactionid =    jsonInput['payInstrument']['merchDetails']['merchTxnId'];
+                      transactionid = jsonInput['payInstrument']['merchDetails']
+                          ['merchTxnId'];
+                      gcontroller.updatepaymentremark(
+                          transactionid: transactionid,
+                          remark: 'Payment Success');
 
                       transactionResult = "Transaction Success";
+                      transactionstatus = 200;
                     } else {
-                         gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Transaction Fail');
+                      gcontroller.updatepaymentremark(
+                          transactionid: transactionid,
+                          remark: 'Transaction Fail');
                       debugPrint("Transaction failed");
                       transactionResult = "Transaction Failed";
+                      transactionstatus = 300;
                     }
                   } else {
-                       gcontroller.updatepaymentremark(transactionid: transactionid, remark: 'Payment Fail');
+                    gcontroller.updatepaymentremark(
+                        transactionid: transactionid, remark: 'Payment Fail');
                     debugPrint("signature mismatched");
                     transactionResult = "failed";
                   }
@@ -166,7 +185,12 @@ String transactionid = '';
                   debugPrint("Failed to decrypt: '${e.message}'.");
                 }
               }
-              _closeWebView(context: context, transactionResult: transactionResult, txid: transactionid);
+              // ignore: use_build_context_synchronously
+              _closeWebView(
+                  context: context,
+                  transactionResult: transactionResult,
+                  txid: transactionid,
+                  transstatus: transactionstatus!);
             }
           },
         )),
@@ -190,10 +214,17 @@ String transactionid = '';
     )));
   }
 
-  _closeWebView({required BuildContext context,required String transactionResult,required String txid}) {
+  _closeWebView(
+      {required BuildContext context,
+      required String transactionResult,
+      required int transstatus,
+      required String txid}) {
     // ignore: use_build_context_synchronously
-    context.router.push(SuccessPage(transactionstatus: transactionResult, transactionid: txid));
-   
+    context.router.push(SuccessPage(
+        transactionstatus: transactionResult,
+        transactionid: txid,
+        trasactionstatus: transstatus));
+
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Transaction Status = $transactionResult")));

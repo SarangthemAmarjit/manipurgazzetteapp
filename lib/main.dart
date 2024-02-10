@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:atompaymentdemo/pages/successpage.dart';
 import 'package:atompaymentdemo/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,14 +19,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _appRouter.config(),
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       builder: EasyLoading.init(),
       theme: ThemeData(
         fontFamily: 'KulimPark',
         useMaterial3: false,
+      ),
+      home: const SuccessPage(
+        transactionstatus: 'You Payment is Successful!',
+        transactionid: 'GDSKLSLDFR',
+        trasactionstatus: 200,
       ),
     );
   }

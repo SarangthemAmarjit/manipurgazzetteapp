@@ -66,6 +66,7 @@ abstract class $AppRouter extends _i6.RootStackRouter {
           key: args.key,
           transactionstatus: args.transactionstatus,
           transactionid: args.transactionid,
+          trasactionstatus: args.trasactionstatus,
         ),
       );
     },
@@ -219,6 +220,7 @@ class SuccessPage extends _i6.PageRouteInfo<SuccessPageArgs> {
     _i7.Key? key,
     required String transactionstatus,
     required String transactionid,
+    required int trasactionstatus,
     List<_i6.PageRouteInfo>? children,
   }) : super(
           SuccessPage.name,
@@ -226,6 +228,7 @@ class SuccessPage extends _i6.PageRouteInfo<SuccessPageArgs> {
             key: key,
             transactionstatus: transactionstatus,
             transactionid: transactionid,
+            trasactionstatus: trasactionstatus,
           ),
           initialChildren: children,
         );
@@ -241,6 +244,7 @@ class SuccessPageArgs {
     this.key,
     required this.transactionstatus,
     required this.transactionid,
+    required this.trasactionstatus,
   });
 
   final _i7.Key? key;
@@ -249,8 +253,10 @@ class SuccessPageArgs {
 
   final String transactionid;
 
+  final int trasactionstatus;
+
   @override
   String toString() {
-    return 'SuccessPageArgs{key: $key, transactionstatus: $transactionstatus, transactionid: $transactionid}';
+    return 'SuccessPageArgs{key: $key, transactionstatus: $transactionstatus, transactionid: $transactionid, trasactionstatus: $trasactionstatus}';
   }
 }

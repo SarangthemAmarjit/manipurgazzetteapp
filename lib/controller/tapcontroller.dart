@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as math;
 import 'package:atompaymentdemo/constant/constant.dart';
 import 'package:atompaymentdemo/controller/atom_pay_helper.dart';
 import 'package:atompaymentdemo/model/departmentmodel.dart';
@@ -38,6 +39,9 @@ class GetxTapController extends GetxController {
 
   String? _errorgazettetype;
   String? get errorgazettetype => _errorgazettetype;
+
+  String _transacid = '';
+  String get transacid => _transacid;
 
   final List<String> _alldepartmentlist = [];
   List<String> get alldepartmentlist => _alldepartmentlist;
@@ -125,6 +129,9 @@ class GetxTapController extends GetxController {
   //
   bool _isfocusontextfield = false;
   bool get isfocusontextfield => _isfocusontextfield;
+
+  bool? _isdownloadedfile;
+  bool? get isdownloadedfile => _isdownloadedfile;
 
   bool _ispaymentprocessstarted = false;
   bool get ispaymentprocessstarted => _ispaymentprocessstarted;
@@ -588,8 +595,8 @@ class GetxTapController extends GetxController {
       'A4476C2062FFA58980DC8F79EB6A799E'; //mandatory
   final String responseDecryptionKey =
       '75AEF0FA1B94B3C10D4F5B268F757F11'; //mandatory
-  final String txnid =
-      'test240223'; // mandatory // this should be unique each time
+  // final String txnid =
+  //     'test240223'; // mandatory // this should be unique each time
   final String clientcode = "NAVIN"; //mandatory
   final String txncurr = "INR"; //mandatory
   final String mccCode = "5499"; //mandatory
@@ -629,6 +636,7 @@ class GetxTapController extends GetxController {
       required String name,
       required String amount,
       required String address}) {
+    gettransactionid();
     _ispaymentprocessstarted = true;
     update();
     _getEncryptedPayUrl(
@@ -734,7 +742,7 @@ class GetxTapController extends GetxController {
     payDetails['mobile'] = _mobilecontroller.text;
     payDetails['address'] = address;
     payDetails['email'] = _emailcontroller.text;
-    payDetails['txnid'] = txnid;
+    payDetails['txnid'] = _transacid;
     payDetails['custacc'] = custacc;
     payDetails['requestHashKey'] = requestHashKey;
     payDetails['responseHashKey'] = responseHashKey;
@@ -821,6 +829,60 @@ class GetxTapController extends GetxController {
       }
       return null;
     } catch (e) {
+      // _isserverok = false;
+
+      print(e.toString());
+    }
+  }
+
+  /// GENERATE RANDOM TRANSACTION ID
+
+  void gettransactionid() {
+    String generateRandomString(int length) {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      final random = math.Random();
+      return List.generate(
+              length, (index) => characters[random.nextInt(characters.length)])
+          .join();
+    }
+
+    _transacid = generateRandomString(10);
+    update();
+    print(_transacid);
+  }
+
+  getDownloadfile({required String trnxid}) async {
+    _isdownloadedfile = false;
+    update();
+    try {
+      final response = await http.get(
+        Uri.parse('http://10.10.1.139:8099/api/gazettes/download/$trnxid'),
+      );
+
+      if (response.statusCode == 200) {
+        _isdownloadedfile = true;
+        // ignore: use_build_context_synchronously
+        update();
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Downloaded File Successfully')));
+      } else {
+        _isdownloadedfile = null;
+        update();
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Downloaded Fail Newtwork Error')));
+        print('Failedrerer to Getdata.');
+        //  _isserverok = false;
+      }
+      return null;
+    } catch (e) {
+      _isdownloadedfile = null;
+      update();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Downloaded Fail Newtwork Error')));
       // _isserverok = false;
 
       print(e.toString());

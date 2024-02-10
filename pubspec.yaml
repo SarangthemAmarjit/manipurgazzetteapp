@@ -48,6 +48,7 @@ dependencies:
   datetime_picker_formfield: ^2.0.1
   flutter_easyloading: ^3.0.5
   url_launcher: ^6.2.4
+  gif: ^2.3.0
 
 dev_dependencies:
   flutter_test:
