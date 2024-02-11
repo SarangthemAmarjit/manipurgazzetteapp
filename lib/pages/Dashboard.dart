@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 class DashBoardPage extends StatelessWidget {
   DashBoardPage({super.key});
 
- 
   TextEditingController searchcontroller = TextEditingController();
 
   @override
@@ -22,7 +21,7 @@ class DashBoardPage extends StatelessWidget {
         Get.put(GetxTapController(context: context));
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-       Future<bool> showExitPopup() async {
+    Future<bool> showExitPopup() async {
       return await showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -43,7 +42,8 @@ class DashBoardPage extends StatelessWidget {
           false;
     }
 
-    return WillPopScope(onWillPop: showExitPopup,
+    return WillPopScope(
+      onWillPop: showExitPopup,
       child: Scaffold(
         appBar: AppBar(
           leading: Padding(
@@ -106,7 +106,7 @@ class DashBoardPage extends StatelessWidget {
                       const SizedBox(
                         height: 100,
                       ),
-      
+
                       Center(
                           child: Column(
                         children: [
@@ -164,7 +164,7 @@ class DashBoardPage extends StatelessWidget {
                           ],
                         ),
                       ),
-      
+
                       const SizedBox(height: 16.0),
                       Column(
                         children: [
@@ -174,7 +174,8 @@ class DashBoardPage extends StatelessWidget {
                             elevation: 10,
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 253, 253, 252),
+                                  color:
+                                      const Color.fromARGB(255, 253, 253, 252),
                                   borderRadius: BorderRadius.circular(7)),
                               height: 43,
                               child: Focus(
@@ -193,7 +194,8 @@ class DashBoardPage extends StatelessWidget {
                                           const EdgeInsets.only(top: 7),
                                       prefixIcon: const Icon(Icons.search),
                                       border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(7)),
+                                          borderRadius:
+                                              BorderRadius.circular(7)),
                                       hintText: 'Search Gazette',
                                       hintStyle:
                                           const TextStyle(color: Colors.grey)),
@@ -204,7 +206,7 @@ class DashBoardPage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 8),
-                 
+
                       if (gcontroller.validationError != null)
                         Card(
                           child: Container(
@@ -225,16 +227,14 @@ class DashBoardPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       GestureDetector(
                         onTap: () {
-               
                           gcontroller.validateInput(searchcontroller.text);
                           if (gcontroller.validationError == null) {
                             // Form is valid, proceed with your logic
                             gcontroller.getsearchdata(
                                 value: searchcontroller.text);
-                            context.router.push( SearchPage());
-                               
-      gcontroller.getDeapartment();
-                                
+                            context.router.push(SearchPage());
+
+                            gcontroller.getDeapartment();
                           }
                         },
                         child: Card(
@@ -255,7 +255,7 @@ class DashBoardPage extends StatelessWidget {
                                 ),
                               ),
                             )
-      
+
                             // ElevatedButton(
                             //     onPressed: () {},
                             //     child: const Padding(
