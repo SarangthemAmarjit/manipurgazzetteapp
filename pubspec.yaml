@@ -49,6 +49,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   url_launcher: ^6.2.4
   gif: ^2.3.0
+  permission_handler: ^11.2.1
 
 dev_dependencies:
   flutter_test:

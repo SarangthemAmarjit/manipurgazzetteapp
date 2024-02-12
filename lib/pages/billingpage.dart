@@ -160,7 +160,7 @@ class BillingPage extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${controller.gazettedetails.notificationdate.day}-${month[controller.gazettedetails.notificationdate.month]}-${controller.gazettedetails.notificationdate.year}    ',
+                                          '${controller.gazettedetails.notificationdate.day}-${month[controller.gazettedetails.notificationdate.month-1]}-${controller.gazettedetails.notificationdate.year}    ',
                                       style: const TextStyle(
                                         color: Colors.blue,
                                       ),
@@ -173,7 +173,7 @@ class BillingPage extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${controller.gazettedetails.publicationdate.day}-${month[controller.gazettedetails.publicationdate.month]}-${controller.gazettedetails.publicationdate.year}    ',
+                                          '${controller.gazettedetails.publicationdate.day}-${month[controller.gazettedetails.publicationdate.month-1]}-${controller.gazettedetails.publicationdate.year}    ',
                                       style: const TextStyle(
                                         color: Colors.blue,
                                       ),
@@ -993,6 +993,19 @@ class BillingPage extends StatelessWidget {
                                 onTap: () {
                                   if (_formKey.currentState!.validate()) {
                                     if (controller.ischecked) {
+                                         controller.sendpaymentinfo(
+                                          gazetteId: controller
+                                              .gazettedetails.gazetteId,
+                                          postalname: postalnamecontroller.text,
+                                          fulladdress:
+                                              postaladdresscontroller.text,
+                                          pincode: postalpincodecontroller.text,
+                                          totalprice: controller
+                                              .gazettedetails.price.toInt()
+                                              ,
+                                          enteredby: postalnamecontroller.text,
+                                          remark: 'Initiated',
+                                        );
                                       controller.initNdpsPayment(
                                         context: context,
                                         responseHashKey:
@@ -1004,19 +1017,7 @@ class BillingPage extends StatelessWidget {
                                         address: postaladdresscontroller.text,
                                         name: postalnamecontroller.text,
                                       );
-                                      controller.sendpaymentinfo(
-                                          gazetteId: controller
-                                              .gazettedetails.gazetteId,
-                                          postalname: postalnamecontroller.text,
-                                          fulladdress:
-                                              postaladdresscontroller.text,
-                                          pincode: postalpincodecontroller.text,
-                                          totalprice: controller
-                                              .gazettedetails.price
-                                              .toString(),
-                                          enteredby: postalnamecontroller.text,
-                                          remark: 'Payment Initiated',
-                                          transactionid: controller.transacid);
+                                   
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(

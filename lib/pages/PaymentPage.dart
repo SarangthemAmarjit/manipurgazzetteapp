@@ -120,7 +120,7 @@ class _PaymentPageState extends State<PaymentPage> {
               if (response.trim().contains("cancelTransaction")) {
                 gcontroller.updatepaymentremark(
                     transactionid: gcontroller.transacid,
-                    remark: 'Payment Cancelled');
+                    remark: 'Cancelled');
                 transactionResult = "Transaction Cancelled!";
                 transactionstatus = 100;
               } else {
@@ -154,29 +154,27 @@ class _PaymentPageState extends State<PaymentPage> {
                         jsonInput["payInstrument"]["responseDetails"]
                                 ["statusCode"] ==
                             'OTS0551') {
-                      gcontroller.updatepaymentremark(
-                          transactionid: transactionid,
-                          remark: 'Payment Success');
+                    
                       debugPrint("Transaction success");
                       transactionid = jsonInput['payInstrument']['merchDetails']
                           ['merchTxnId'];
                       gcontroller.updatepaymentremark(
                           transactionid: transactionid,
-                          remark: 'Payment Success');
+                          remark: 'Success');
 
                       transactionResult = "Transaction Success";
                       transactionstatus = 200;
                     } else {
                       gcontroller.updatepaymentremark(
                           transactionid: transactionid,
-                          remark: 'Transaction Fail');
+                          remark: 'Failed');
                       debugPrint("Transaction failed");
                       transactionResult = "Transaction Failed";
                       transactionstatus = 300;
                     }
                   } else {
                     gcontroller.updatepaymentremark(
-                        transactionid: transactionid, remark: 'Payment Fail');
+                        transactionid: transactionid, remark: 'Failed');
                     debugPrint("signature mismatched");
                     transactionResult = "failed";
                   }

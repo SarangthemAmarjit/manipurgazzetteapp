@@ -17,10 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+
 import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class GetxTapController extends GetxController {
   final BuildContext context;
@@ -373,7 +375,7 @@ class GetxTapController extends GetxController {
 
     try {
       final response = await http.get(
-        Uri.parse('http://10.10.1.96/api/gazettes/$gazetteid'),
+        Uri.parse('http://10.10.1.139:8099/api/gazettes/$gazetteid'),
       );
 
       if (response.statusCode == 200) {
@@ -636,7 +638,7 @@ class GetxTapController extends GetxController {
       required String name,
       required String amount,
       required String address}) {
-    gettransactionid();
+
     _ispaymentprocessstarted = true;
     update();
     _getEncryptedPayUrl(
@@ -768,29 +770,33 @@ class GetxTapController extends GetxController {
     required String postalname,
     required String fulladdress,
     required String pincode,
-    required String totalprice,
+    required int totalprice,
     required String enteredby,
     required String remark,
-    required String transactionid,
+
   }) async {
+    gettransactionid();
+    log('1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111');
     try {
       final response = await http.post(
-        Uri.parse('http://10.10.1.139:8099/api/Billings/MakePayment'),
-        body: {
+        Uri.parse('http://10.10.1.139:8099/api/Billings/MakePayment'),   headers: {
+        'Content-Type': 'application/json', // Set the Content-Type header
+      },
+        body: jsonEncode({
           "gazetteId": gazetteId,
           "fullname": postalname,
           "fulladdress": fulladdress,
           "district": _postaldropdownvalue,
           "pincode": pincode,
-          "totalprice": totalprice,
-          "namebill": _billingpincodecontroller.text,
+          "totalprice":totalprice,
+          "namebill": _billingnamecontroller.text,
           "addressbill": _billingaddresscontroller.text,
           "districtbill": _billingdropdownvalue,
           "pincodebill": _billingpincodecontroller.text,
           "enteredby": enteredby,
           "remark": remark,
-          "transactionid": transactionid
-        },
+          "transactionid": _transacid
+        },)
       );
 
       if (response.statusCode == 200) {
@@ -803,37 +809,68 @@ class GetxTapController extends GetxController {
     } catch (e) {
       // _isserverok = false;
 
-      print(e.toString());
+      log( 'init log $e');
     }
   }
 
-  updatepaymentremark({
-    required String transactionid,
-    required String remark,
-  }) async {
-    try {
-      final queryParameters = {"transacid": transactionid};
-      final response = await http.put(
-        Uri.http(
-            '10.10.1.139:8099', '/Billings/UpdatePayment', queryParameters),
-        body: {
-          "remark": remark,
-        },
-      );
+  // updatepaymentremark({
+  //   required String transactionid,
+  //   required String remark,
+  // }) async {
+  //   try {
+  //     final queryParameters = {"transacid": transactionid};
+  //     final response = await http.put(
+  //       Uri.http(
+  //           '10.10.1.139:8099', '/Billings/UpdatePayment', queryParameters), headers: {
+  //       'Content-Type': 'application/json', // Set the Content-Type header
+  //     },
+  //       body: jsonEncode({
+  //         "remark": remark,
+  //       }),
+  //     );
 
-      if (response.statusCode == 200) {
-        log('Done updated Successfully');
-      } else {
-        print('Failedrerer to Getdata.');
-        //  _isserverok = false;
-      }
-      return null;
-    } catch (e) {
-      // _isserverok = false;
+  //     if (response.statusCode == 200) {
+  //       log('Done updated Successfully');
+  //     } else {
+  //       print('Failedrerer to Getdata.');
+  //       //  _isserverok = false;
+  //     }
+  //     return null;
+  //   } catch (e) {
+  //     // _isserverok = false;
 
-      print(e.toString());
+  //     print(e.toString());
+  //   }
+  // }
+updatepaymentremark({
+  required String transactionid,
+  required String remark,
+}) async {
+  try {
+    final queryParameters = {"transacid": transactionid};
+    final response = await http.put(
+      Uri.http(
+        '10.10.1.139:8099', // host and port
+        '/api/Billings/UpdatePayment', // path
+        queryParameters, // query parameters
+      ),
+      headers: {
+        'Content-Type': 'application/json', // Set the Content-Type header
+      },
+      body: jsonEncode({
+        "remark": remark,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Done updated Successfully');
+    } else {
+      print('Failed to update data.');
     }
+  } catch (e) {
+    print(e.toString());
   }
+}
 
   /// GENERATE RANDOM TRANSACTION ID
 
@@ -852,17 +889,36 @@ class GetxTapController extends GetxController {
   }
 
   getDownloadfile({required String trnxid}) async {
+    requestStoragePermission();
     _isdownloadedfile = false;
     update();
+
     try {
+       final queryParameters = {"transacId": trnxid};
       final response = await http.get(
-        Uri.parse('http://10.10.1.139:8099/api/gazettes/download/$trnxid'),
+           Uri.http(
+        '10.10.1.139:8099', // host and port
+        '/api/gazettes/download', // path
+        queryParameters, // query parameters
+      ),
       );
 
       if (response.statusCode == 200) {
+        final directory = await getDownloadsDirectory();
+        
+
+      const filePath = 'storage/emulated/0/Download/downloaded_file.pdf';
+
+      // Write the file to the document directory
+      File file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+      print('File downloaded to: $filePath');
+ 
+
         _isdownloadedfile = true;
         // ignore: use_build_context_synchronously
         update();
+
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.green,
             content: Text('Downloaded File Successfully')));
@@ -888,4 +944,16 @@ class GetxTapController extends GetxController {
       print(e.toString());
     }
   }
+
+  Future<void> requestStoragePermission() async {
+  PermissionStatus status = await Permission.storage.request();
+  if (status.isGranted) {
+    print("Storage permission granted");
+  } else if (status.isDenied) {
+    print("Storage permission denied");
+  } else if (status.isPermanentlyDenied) {
+    print("Storage permission permanently denied");
+    // Consider showing a dialog or opening the app settings to enable the permission
+  }
+}
 }
