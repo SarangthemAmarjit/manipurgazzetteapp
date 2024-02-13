@@ -10,6 +10,7 @@ import 'package:atompaymentdemo/model/gazettedetails.dart';
 import 'package:atompaymentdemo/model/searchmodel.dart';
 import 'package:atompaymentdemo/pages/searchpage.dart';
 import 'package:atompaymentdemo/router/router.gr.dart';
+import 'package:atompaymentdemo/sevices/localnotification.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -888,10 +889,11 @@ updatepaymentremark({
     print(_transacid);
   }
 
-  getDownloadfile({required String trnxid}) async {
-    requestStoragePermission();
+  Downloadfile({required String trnxid}) async {
+ 
     _isdownloadedfile = false;
     update();
+
 
     try {
        final queryParameters = {"transacId": trnxid};
@@ -904,14 +906,16 @@ updatepaymentremark({
       );
 
       if (response.statusCode == 200) {
-        final directory = await getDownloadsDirectory();
+  
         
 
       const filePath = 'storage/emulated/0/Download/downloaded_file.pdf';
 
       // Write the file to the document directory
       File file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
+      await file.writeAsBytes(response.bodyBytes).whenComplete(() {
+       NotificationService().showDownloadNotification(payLoad: filePath);
+      });
       print('File downloaded to: $filePath');
  
 
@@ -945,14 +949,21 @@ updatepaymentremark({
     }
   }
 
-  Future<void> requestStoragePermission() async {
+  getDownloadfile({required String trnxid}) async {
   PermissionStatus status = await Permission.storage.request();
   if (status.isGranted) {
     print("Storage permission granted");
+    Downloadfile(trnxid: trnxid);
   } else if (status.isDenied) {
     print("Storage permission denied");
+       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Error Storage Permission Denied')));
   } else if (status.isPermanentlyDenied) {
     print("Storage permission permanently denied");
+           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Error Storage Permission Denied permanently')));
     // Consider showing a dialog or opening the app settings to enable the permission
   }
 }
