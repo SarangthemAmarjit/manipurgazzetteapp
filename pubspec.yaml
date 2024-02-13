@@ -51,7 +51,9 @@ dependencies:
   gif: ^2.3.0
   permission_handler: ^11.2.1
   flutter_local_notifications: ^16.3.2
-  open_file: ^3.3.2
+
+  device_info_plus: ^9.1.2
+  open_file_plus: ^3.4.1
 
 dev_dependencies:
   flutter_test:

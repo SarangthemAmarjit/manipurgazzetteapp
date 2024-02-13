@@ -67,41 +67,43 @@ class SuccessPage extends StatelessWidget {
                     trasactionstatus == 200
                         ? Column(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                      'Your Gazzette File is Generated :'),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      gcontroller.getDownloadfile(
-                                          trnxid: transactionid);
-                                    },
-                                    //              child: const SizedBox(
-                                    //   height: 20,
-                                    //   child: SizedBox(
-                                    //       width: 20, child: CircularProgressIndicator()),
-                                    // ),
-                                    child: SizedBox(
-                                      height: 20,
-                                      child: gcontroller.isdownloadedfile ==
-                                              null
-                                          ? Image.asset(
-                                              'assets/images/download.gif',
-                                            )
-                                          : gcontroller.isdownloadedfile!
-                                              ? Image.asset(
-                                                  'assets/images/check.gif')
-                                              : const SizedBox(
-                                                  width: 20,
-                                                  child:
-                                                      CircularProgressIndicator()),
+                              FittedBox(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                        'Your Gazzette File is Generated :',style: TextStyle(fontSize: 18),),
+                                    const SizedBox(
+                                      width: 10,
                                     ),
-                                  )
-                                ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        gcontroller.getDownloadfile(
+                                            trnxid: transactionid);
+                                      },
+                                      //              child: const SizedBox(
+                                      //   height: 20,
+                                      //   child: SizedBox(
+                                      //       width: 20, child: CircularProgressIndicator()),
+                                      // ),
+                                      child: SizedBox(
+                                        height: 30,
+                                        child: gcontroller.isdownloadedfile ==
+                                                null
+                                            ? Image.asset(
+                                                'assets/images/download.gif',
+                                              )
+                                            : gcontroller.isdownloadedfile!
+                                                ? Image.asset(
+                                                    'assets/images/check.gif')
+                                                : const SizedBox(
+                                                    width: 20,
+                                                    child:
+                                                        CircularProgressIndicator()),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                               const SizedBox(
                                 height: 10,

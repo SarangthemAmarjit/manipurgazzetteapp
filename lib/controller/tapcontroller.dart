@@ -14,6 +14,7 @@ import 'package:atompaymentdemo/sevices/localnotification.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -83,6 +84,9 @@ class GetxTapController extends GetxController {
   bool _isserverok = true;
   bool get isserverok => _isserverok;
 
+   bool _ispaymentinfosend = true;
+  bool get ispaymentinfosend => _ispaymentinfosend;
+
   //
   String searchtextvalue = '';
 
@@ -145,6 +149,7 @@ class GetxTapController extends GetxController {
 
     await downloadAndSaveGif(
         'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/bg.gif?alt=media&token=d7769401-361c-4ab1-9a2a-cb74fdcb26d5');
+ 
   }
 
   void onwebviewcreated() {
@@ -214,13 +219,28 @@ class GetxTapController extends GetxController {
     }
   }
 
+  resetdata(){
+ _employees.clear();
+      _ispaymentprocessstarted = false;
+  
+    isDataLoading(true);
+    _ischecked = false;
+
+    _billingaddresscontroller.clear();
+    _billingdropdownvalue='';
+    _billingnamecontroller.clear();
+    _billingpincodecontroller.clear();
+      _isdataempty = false;
+     
+    update();
+  }
+
   //getSearchData
 
   Future getsearchdata({required String value}) async {
     searchtextvalue = value;
-    update();
-
-    isDataLoading(true);
+   
+resetdata();
 
     try {
       final queryParameters = {
@@ -235,6 +255,7 @@ class GetxTapController extends GetxController {
         if (users.isEmpty) {
           isDataLoading(false);
           _isdataempty = true;
+          update();
           // ignore: use_build_context_synchronously
           showDialog(
             context: (context),
@@ -402,12 +423,14 @@ class GetxTapController extends GetxController {
 
   //getTabledata
   getEmployeeData() {
+   
     for (int i = 0; i < _allsearchdata.length; i++) {
-      _employees.add(Employee(
+     _employees.add(Employee(
           gazettenumber: _allsearchdata[i].gazetteno,
           title: _allsearchdata[i].title,
           totalpage: _allsearchdata[i].totalpages,
           gazetid: _allsearchdata[i].gazetteId));
+
     }
     _employeeDataSource =
         EmployeeDataSource(employees: _employees, context: context);
@@ -847,6 +870,10 @@ updatepaymentremark({
   required String transactionid,
   required String remark,
 }) async {
+   
+    _isdownloadedfile = null;
+    update();
+
   try {
     final queryParameters = {"transacid": transactionid};
     final response = await http.put(
@@ -866,9 +893,13 @@ updatepaymentremark({
     if (response.statusCode == 200) {
       print('Done updated Successfully');
     } else {
+      _ispaymentinfosend = false;
+      update();
       print('Failed to update data.');
     }
   } catch (e) {
+     _ispaymentinfosend = false;
+      update();
     print(e.toString());
   }
 }
@@ -909,13 +940,15 @@ updatepaymentremark({
   
         
 
-      const filePath = 'storage/emulated/0/Download/downloaded_file.pdf';
+      const filePath = 'storage/emulated/0/Download/gazette_file.pdf';
 
       // Write the file to the document directory
       File file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes).whenComplete(() {
-       NotificationService().showDownloadNotification(payLoad: filePath);
+      await file.writeAsBytes(response.bodyBytes).then((value) {
+        NotificationService().showDownloadNotification(payLoad: value.path);
       });
+      
+      
       print('File downloaded to: $filePath');
  
 
@@ -950,7 +983,14 @@ updatepaymentremark({
   }
 
   getDownloadfile({required String trnxid}) async {
-  PermissionStatus status = await Permission.storage.request();
+
+      final plugin = DeviceInfoPlugin();
+  final android = await plugin.androidInfo;
+
+  final status = android.version.sdkInt < 33
+      ? await Permission.storage.request()
+      : PermissionStatus.granted;
+ 
   if (status.isGranted) {
     print("Storage permission granted");
     Downloadfile(trnxid: trnxid);
