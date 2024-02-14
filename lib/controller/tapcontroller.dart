@@ -220,6 +220,8 @@ class GetxTapController extends GetxController {
   }
 
   resetdata(){
+      _isserverok = true;
+      
  _employees.clear();
       _ispaymentprocessstarted = false;
   
@@ -319,7 +321,7 @@ resetdata();
     required int? deptid,
   }) async {
     isDataLoading(true);
-
+ _employees.clear();
     try {
       final queryParameters = {
         "title": title,
@@ -371,18 +373,22 @@ resetdata();
           );
         }
         _allsearchdata = users;
-
+  
         update();
         log('users$users');
-
+   getEmployeeData();
         isDataLoading(false);
       } else {
         print('Failedrerer to Getdata.');
-        //  _isserverok = false;
+          isDataLoading(false);
+        _isserverok = false;
+        update();
       }
       return null;
     } catch (e) {
-      // _isserverok = false;
+          isDataLoading(false);
+      _isserverok = false;
+      update();
 
       print(e.toString());
     }
@@ -426,7 +432,7 @@ resetdata();
    
     for (int i = 0; i < _allsearchdata.length; i++) {
      _employees.add(Employee(
-          gazettenumber: _allsearchdata[i].gazetteno,
+          gazettenumber: _allsearchdata[i].gazetteId,
           title: _allsearchdata[i].title,
           totalpage: _allsearchdata[i].totalpages,
           gazetid: _allsearchdata[i].gazetteId));

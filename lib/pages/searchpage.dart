@@ -852,7 +852,7 @@ class EmployeeDataSource extends DataGridSource {
       {required this.context, required List<Employee> employees}) {
     dataGridRows = employees
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
-              DataGridCell<String>(
+              DataGridCell<int>(
                   columnName: 'gazettenumber',
                   value: dataGridRow.gazettenumber),
               DataGridCell<String>(
@@ -920,7 +920,7 @@ class Employee {
     required this.totalpage,
     required this.gazetid,
   });
-  final String gazettenumber;
+  final int gazettenumber;
   final String title;
   final int totalpage;
   final int gazetid;
