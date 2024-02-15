@@ -79,7 +79,7 @@ class DashBoardPage extends StatelessWidget {
                     : const DecorationImage(
                         opacity: 0.4,
                         fit: BoxFit.cover,
-                        image: AssetImage('assets/images/bg.png'))),
+                        image: AssetImage('assets/images/bgok.jpg'))),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: SafeArea(
