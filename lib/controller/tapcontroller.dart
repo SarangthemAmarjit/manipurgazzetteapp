@@ -148,7 +148,8 @@ class GetxTapController extends GetxController {
     gettodaydate();
 
     await downloadAndSaveGif(
-        'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/bg.gif?alt=media&token=d7769401-361c-4ab1-9a2a-cb74fdcb26d5');
+      'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/bg.gif?alt=media&token=0817d4d7-463d-47f6-a1e6-41487a639ac9'
+        );
  
   }
 
