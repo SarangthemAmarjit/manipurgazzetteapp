@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:atompaymentdemo/pages/demopage.dart';
 import 'package:atompaymentdemo/pages/successpage.dart';
 import 'package:atompaymentdemo/router/router.dart';
 import 'package:atompaymentdemo/sevices/localnotification.dart';
@@ -10,7 +11,7 @@ void main()async {
   WidgetsFlutterBinding.ensureInitialized();
 
 
-  await NotificationService().initNotification();
+  // await NotificationService().initNotification();
 
   runApp(const MyApp());
 }
@@ -23,8 +24,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _appRouter.config(),
+    return MaterialApp(
+      // routerConfig: _appRouter.config(),
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       builder: EasyLoading.init(),
@@ -32,11 +33,6 @@ class MyApp extends StatelessWidget {
         fontFamily: 'KulimPark',
         useMaterial3: false,
       ),
-      // home: const SuccessPage(
-      //   transactionstatus: 'You Payment is Successful!',
-      //   transactionid: 'GDSKLSLDFR',
-      //   trasactionstatus: 200,
-      // ),
-    );
+      home: const PdfPage());
   }
 }

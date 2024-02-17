@@ -1,5 +1,6 @@
 import 'package:atompaymentdemo/constant/constant.dart';
 import 'package:atompaymentdemo/controller/tapcontroller.dart';
+import 'package:atompaymentdemo/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -160,7 +161,7 @@ class BillingPage extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${controller.gazettedetails.notificationdate.day}-${month[controller.gazettedetails.notificationdate.month-1]}-${controller.gazettedetails.notificationdate.year}    ',
+                                          '${controller.gazettedetails.notificationdate.day}-${month[controller.gazettedetails.notificationdate.month - 1]}-${controller.gazettedetails.notificationdate.year}    ',
                                       style: const TextStyle(
                                         color: Colors.blue,
                                       ),
@@ -173,7 +174,7 @@ class BillingPage extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text:
-                                          '${controller.gazettedetails.publicationdate.day}-${month[controller.gazettedetails.publicationdate.month-1]}-${controller.gazettedetails.publicationdate.year}    ',
+                                          '${controller.gazettedetails.publicationdate.day}-${month[controller.gazettedetails.publicationdate.month - 1]}-${controller.gazettedetails.publicationdate.year}    ',
                                       style: const TextStyle(
                                         color: Colors.blue,
                                       ),
@@ -993,19 +994,19 @@ class BillingPage extends StatelessWidget {
                                 onTap: () {
                                   if (_formKey.currentState!.validate()) {
                                     if (controller.ischecked) {
-                                         controller.sendpaymentinfo(
-                                          gazetteId: controller
-                                              .gazettedetails.gazetteId,
-                                          postalname: postalnamecontroller.text,
-                                          fulladdress:
-                                              postaladdresscontroller.text,
-                                          pincode: postalpincodecontroller.text,
-                                          totalprice: controller
-                                              .gazettedetails.price.toInt()
-                                              ,
-                                          enteredby: postalnamecontroller.text,
-                                          remark: 'Initiated',
-                                        );
+                                      controller.sendpaymentinfo(
+                                        gazetteId:
+                                            controller.gazettedetails.gazetteId,
+                                        postalname: postalnamecontroller.text,
+                                        fulladdress:
+                                            postaladdresscontroller.text,
+                                        pincode: postalpincodecontroller.text,
+                                        totalprice: controller
+                                            .gazettedetails.price
+                                            .toInt(),
+                                        enteredby: postalnamecontroller.text,
+                                        remark: 'Initiated',
+                                      );
                                       controller.initNdpsPayment(
                                         context: context,
                                         responseHashKey:
@@ -1017,7 +1018,6 @@ class BillingPage extends StatelessWidget {
                                         address: postaladdresscontroller.text,
                                         name: postalnamecontroller.text,
                                       );
-                                   
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(const SnackBar(
@@ -1069,6 +1069,42 @@ class BillingPage extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
+
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Info',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,fontSize: 18),
+                                      ),
+                                      const SizedBox(height: 10,),
+                                      Column(
+                                        children: [
+                                          ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: info.length,
+                                              itemBuilder: (context, i) {
+                                                return Align(alignment: Alignment.centerLeft,
+                                                  child: TextButton.icon(
+                                                    onPressed: () {
+                                                      context.router.push(InfoPage(index: i));
+                                                    },
+                                                    icon: const Icon(Icons
+                                                        .arrow_forward_ios_sharp,size: 15),
+                                                    label: Text(info[i]['name']),
+                                                  ),
+                                                );
+                                              }),
+                                              const SizedBox(height: 20,)
+                                        ],
+                                      ),
+                  
+                                    ],
+                                  ))
 
                               //  Center(child: Text('  " No. ARREV-103/1/2021-REV-REVENUE-As applicable to whole of Manipur, Governor of Manipur makes following rules to amend existing Manipur (Payment of Duty by means of e-stamping) Rules 2021 "  ',textAlign: TextAlign.center,style: TextStyle(color: Colors.blue,fontStyle: FontStyle.italic)))
                             ],
