@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:open_file_plus/open_file_plus.dart';
@@ -62,10 +63,10 @@ class NotificationService {
     await notificationsPlugin.cancelAll();
   }
 
-  notificationDetails() {
-    return const NotificationDetails(
+  notificationDetails({required String channelid}) {
+    return  NotificationDetails(
         android: AndroidNotificationDetails(
-            'download_notification', 'Downloads',
+            channelid, 'Downloads',
             importance: Importance.max,
             priority: Priority.high,
             showProgress: false,
@@ -79,12 +80,14 @@ class NotificationService {
   }
 
   Future showDownloadNotification({required String payLoad}) async {
+
+    var splitlist = payLoad.split('/');
     return notificationsPlugin.show(
       0,
-       'gazette_file.pdf',
+       '${splitlist.last}',
       'Download Completed✅',
      
-      notificationDetails(),
+      notificationDetails(channelid: splitlist.last),
       payload: payLoad,
     );
   }

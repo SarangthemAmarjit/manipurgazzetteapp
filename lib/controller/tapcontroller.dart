@@ -11,7 +11,9 @@ import 'package:atompaymentdemo/model/searchmodel.dart';
 import 'package:atompaymentdemo/pages/searchpage.dart';
 import 'package:atompaymentdemo/router/router.gr.dart';
 import 'package:atompaymentdemo/sevices/localnotification.dart';
-
+import 'package:open_file_plus/open_file_plus.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:auto_route/auto_route.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -24,7 +26,9 @@ import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:permission_handler/permission_handler.dart';
+import 'package:printing/printing.dart';
 
 class GetxTapController extends GetxController {
   final BuildContext context;
@@ -46,6 +50,8 @@ class GetxTapController extends GetxController {
 
   String _transacid = '';
   String get transacid => _transacid;
+
+  String transactiondate = '';
 
   final List<String> _alldepartmentlist = [];
   List<String> get alldepartmentlist => _alldepartmentlist;
@@ -84,7 +90,7 @@ class GetxTapController extends GetxController {
   bool _isserverok = true;
   bool get isserverok => _isserverok;
 
-   bool _ispaymentinfosend = true;
+  bool _ispaymentinfosend = true;
   bool get ispaymentinfosend => _ispaymentinfosend;
 
   //
@@ -148,9 +154,7 @@ class GetxTapController extends GetxController {
     gettodaydate();
 
     await downloadAndSaveGif(
-      'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/bg.gif?alt=media&token=0817d4d7-463d-47f6-a1e6-41487a639ac9'
-        );
- 
+        'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/CloudinaryManagementConsole-MediaLibrary_2-ezgif.com-optimize.gif?alt=media&token=8e522364-495d-41c0-a9ce-834b4242a94c');
   }
 
   void onwebviewcreated() {
@@ -220,21 +224,21 @@ class GetxTapController extends GetxController {
     }
   }
 
-  resetdata(){
-      _isserverok = true;
-      
- _employees.clear();
-      _ispaymentprocessstarted = false;
-  
+  resetdata() {
+    _isserverok = true;
+
+    _employees.clear();
+    _ispaymentprocessstarted = false;
+
     isDataLoading(true);
     _ischecked = false;
 
     _billingaddresscontroller.clear();
-    _billingdropdownvalue='';
+    _billingdropdownvalue = '';
     _billingnamecontroller.clear();
     _billingpincodecontroller.clear();
-      _isdataempty = false;
-     
+    _isdataempty = false;
+
     update();
   }
 
@@ -242,8 +246,8 @@ class GetxTapController extends GetxController {
 
   Future getsearchdata({required String value}) async {
     searchtextvalue = value;
-   
-resetdata();
+
+    resetdata();
 
     try {
       final queryParameters = {
@@ -322,7 +326,7 @@ resetdata();
     required int? deptid,
   }) async {
     isDataLoading(true);
- _employees.clear();
+    _employees.clear();
     try {
       final queryParameters = {
         "title": title,
@@ -374,20 +378,20 @@ resetdata();
           );
         }
         _allsearchdata = users;
-  
+
         update();
         log('users$users');
-   getEmployeeData();
+        getEmployeeData();
         isDataLoading(false);
       } else {
         print('Failedrerer to Getdata.');
-          isDataLoading(false);
+        isDataLoading(false);
         _isserverok = false;
         update();
       }
       return null;
     } catch (e) {
-          isDataLoading(false);
+      isDataLoading(false);
       _isserverok = false;
       update();
 
@@ -430,14 +434,12 @@ resetdata();
 
   //getTabledata
   getEmployeeData() {
-   
     for (int i = 0; i < _allsearchdata.length; i++) {
-     _employees.add(Employee(
+      _employees.add(Employee(
           gazettenumber: _allsearchdata[i].gazetteId,
           title: _allsearchdata[i].title,
           totalpage: _allsearchdata[i].totalpages,
           gazetid: _allsearchdata[i].gazetteId));
-
     }
     _employeeDataSource =
         EmployeeDataSource(employees: _employees, context: context);
@@ -669,7 +671,6 @@ resetdata();
       required String name,
       required String amount,
       required String address}) {
-
     _ispaymentprocessstarted = true;
     update();
     _getEncryptedPayUrl(
@@ -804,31 +805,32 @@ resetdata();
     required int totalprice,
     required String enteredby,
     required String remark,
-
   }) async {
     gettransactionid();
     log('1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111');
     try {
       final response = await http.post(
-        Uri.parse('http://10.10.1.139:8099/api/Billings/MakePayment'),   headers: {
-        'Content-Type': 'application/json', // Set the Content-Type header
-      },
-        body: jsonEncode({
-          "gazetteId": gazetteId,
-          "fullname": postalname,
-          "fulladdress": fulladdress,
-          "district": _postaldropdownvalue,
-          "pincode": pincode,
-          "totalprice":totalprice,
-          "namebill": _billingnamecontroller.text,
-          "addressbill": _billingaddresscontroller.text,
-          "districtbill": _billingdropdownvalue,
-          "pincodebill": _billingpincodecontroller.text,
-          "enteredby": enteredby,
-          "remark": remark,
-          "transactionid": _transacid
-        },)
-      );
+          Uri.parse('http://10.10.1.139:8099/api/Billings/MakePayment'),
+          headers: {
+            'Content-Type': 'application/json', // Set the Content-Type header
+          },
+          body: jsonEncode(
+            {
+              "gazetteId": gazetteId,
+              "fullname": postalname,
+              "fulladdress": fulladdress,
+              "district": _postaldropdownvalue,
+              "pincode": pincode,
+              "totalprice": totalprice,
+              "namebill": _billingnamecontroller.text,
+              "addressbill": _billingaddresscontroller.text,
+              "districtbill": _billingdropdownvalue,
+              "pincodebill": _billingpincodecontroller.text,
+              "enteredby": enteredby,
+              "remark": remark,
+              "transactionid": _transacid
+            },
+          ));
 
       if (response.statusCode == 200) {
         log('Done Post Successfully');
@@ -840,7 +842,7 @@ resetdata();
     } catch (e) {
       // _isserverok = false;
 
-      log( 'init log $e');
+      log('init log $e');
     }
   }
 
@@ -873,43 +875,45 @@ resetdata();
   //     print(e.toString());
   //   }
   // }
-updatepaymentremark({
-  required String transactionid,
-  required String remark,
-}) async {
-   
+  updatepaymentremark({
+    required String transactionid,
+    required String remark,
+  }) async {
     _isdownloadedfile = null;
     update();
 
-  try {
-    final queryParameters = {"transacid": transactionid};
-    final response = await http.put(
-      Uri.http(
-        '10.10.1.139:8099', // host and port
-        '/api/Billings/UpdatePayment', // path
-        queryParameters, // query parameters
-      ),
-      headers: {
-        'Content-Type': 'application/json', // Set the Content-Type header
-      },
-      body: jsonEncode({
-        "remark": remark,
-      }),
-    );
+    try {
+      final queryParameters = {"transacid": transactionid};
+      final response = await http.put(
+        Uri.http(
+          '10.10.1.139:8099', // host and port
+          '/api/Billings/UpdatePayment', // path
+          queryParameters, // query parameters
+        ),
+        headers: {
+          'Content-Type': 'application/json', // Set the Content-Type header
+        },
+        body: jsonEncode({
+          "remark": remark,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      print('Done updated Successfully');
-    } else {
+      if (response.statusCode == 200) {
+        print('Done updated Successfully');
+        var date = DateTime.now();
+        transactiondate = DateFormat('do MMM yyyy').format(date);
+        update();
+      } else {
+        _ispaymentinfosend = false;
+        update();
+        print('Failed to update data.');
+      }
+    } catch (e) {
       _ispaymentinfosend = false;
       update();
-      print('Failed to update data.');
+      print(e.toString());
     }
-  } catch (e) {
-     _ispaymentinfosend = false;
-      update();
-    print(e.toString());
   }
-}
 
   /// GENERATE RANDOM TRANSACTION ID
 
@@ -928,36 +932,29 @@ updatepaymentremark({
   }
 
   Downloadfile({required String trnxid}) async {
- 
     _isdownloadedfile = false;
     update();
 
-
     try {
-       final queryParameters = {"transacId": trnxid};
+      final queryParameters = {"transacId": trnxid};
       final response = await http.get(
-           Uri.http(
-        '10.10.1.139:8099', // host and port
-        '/api/gazettes/download', // path
-        queryParameters, // query parameters
-      ),
+        Uri.http(
+          '10.10.1.139:8099', // host and port
+          '/api/gazettes/download', // path
+          queryParameters, // query parameters
+        ),
       );
 
       if (response.statusCode == 200) {
-  
-        
+        const filePath = 'storage/emulated/0/Download/gazette_file.pdf';
 
-      const filePath = 'storage/emulated/0/Download/gazette_file.pdf';
+        // Write the file to the document directory
+        File file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes).then((value) {
+          NotificationService().showDownloadNotification(payLoad: value.path);
+        });
 
-      // Write the file to the document directory
-      File file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes).then((value) {
-        NotificationService().showDownloadNotification(payLoad: value.path);
-      });
-      
-      
-      print('File downloaded to: $filePath');
- 
+        print('File downloaded to: $filePath');
 
         _isdownloadedfile = true;
         // ignore: use_build_context_synchronously
@@ -990,28 +987,185 @@ updatepaymentremark({
   }
 
   getDownloadfile({required String trnxid}) async {
+    final plugin = DeviceInfoPlugin();
+    final android = await plugin.androidInfo;
 
-      final plugin = DeviceInfoPlugin();
-  final android = await plugin.androidInfo;
+    final status = android.version.sdkInt < 33
+        ? await Permission.storage.request()
+        : PermissionStatus.granted;
 
-  final status = android.version.sdkInt < 33
-      ? await Permission.storage.request()
-      : PermissionStatus.granted;
- 
-  if (status.isGranted) {
-    print("Storage permission granted");
-    Downloadfile(trnxid: trnxid);
-  } else if (status.isDenied) {
-    print("Storage permission denied");
-       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text('Error Storage Permission Denied')));
-  } else if (status.isPermanentlyDenied) {
-    print("Storage permission permanently denied");
-           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.red,
-            content: Text('Error Storage Permission Denied permanently')));
-    // Consider showing a dialog or opening the app settings to enable the permission
+    if (status.isGranted) {
+      print("Storage permission granted");
+      Downloadfile(trnxid: trnxid);
+    } else if (status.isDenied) {
+      print("Storage permission denied");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Error Storage Permission Denied')));
+    } else if (status.isPermanentlyDenied) {
+      print("Storage permission permanently denied");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Error Storage Permission Denied permanently')));
+      // Consider showing a dialog or opening the app settings to enable the permission
+    }
   }
-}
+
+  getDownloadReciept() async {
+    final plugin = DeviceInfoPlugin();
+    final android = await plugin.androidInfo;
+
+    final status = android.version.sdkInt < 33
+        ? await Permission.storage.request()
+        : PermissionStatus.granted;
+
+    if (status.isGranted) {
+      print("Storage permission granted");
+
+      final font = await PdfGoogleFonts.nunitoExtraLight();
+      final imageFile =
+          await getImageFileFromAssets('assets/images/reciept.png');
+      final image = pw.MemoryImage(File(imageFile.path).readAsBytesSync());
+      final pdf = pw.Document();
+
+      // Add your desired widget to the PDF
+      pdf.addPage(pw.Page(
+        build: (pw.Context context2) {
+          log('dsdsdsnew');
+          return pw.Center(
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Image(image, height: 150),
+                pw.SizedBox(
+                  height: 30,
+                ),
+                pw.Padding(
+                    padding: pw.EdgeInsets.symmetric(horizontal: 45),
+                    child: pw.Container(
+                        decoration: pw.BoxDecoration(border: pw.Border.all()),
+                        width: MediaQuery.of(context).size.width,padding:pw. EdgeInsets.symmetric(horizontal: 20),
+                        child: pw.Column(
+                          children: [
+                            pw.Text(
+                              'Payment Reciept',
+                              style: pw.TextStyle(
+                                fontSize: 26,
+                                fontWeight: pw.FontWeight.bold,
+                              ),
+                            ),
+                            pw.SizedBox(height: 20),
+                            pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text(
+                                  'Payee Name: ',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                                pw.Text(
+                                  'Amarjit',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 10),
+                            pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text(
+                                  'Amount Paid: ',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                                pw.Text(
+                                  '20',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 10),
+                            pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text(
+                                  'Transaction ID:',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                                pw.Text(
+                                  'FAFSDRGSSF',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 10),
+                            pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text(
+                                  'Payment Method: ',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                                pw.Text(
+                                  'Debit Card',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 10),
+                            pw.Row(
+                              mainAxisAlignment:
+                                  pw.MainAxisAlignment.spaceBetween,
+                              children: [
+                                pw.Text(
+                                  'Transaction Date: ',
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                                pw.Text(
+                                  transactiondate,
+                                  style: const pw.TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 10),
+                          ],
+                        )))
+              ],
+            ),
+          );
+        },
+      ));
+
+      // Save the PDF to a file
+      const filePath = 'storage/emulated/0/Download/paymentreciept.pdf';
+      final file = File(filePath);
+
+      await file.writeAsBytes(await pdf.save()).then((value) {
+        NotificationService().showDownloadNotification(payLoad: value.path);
+      });
+    } else if (status.isDenied) {
+      print("Storage permission denied");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Error Storage Permission Denied')));
+    } else if (status.isPermanentlyDenied) {
+      print("Storage permission permanently denied");
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Error Storage Permission Denied permanently')));
+      // Consider showing a dialog or opening the app settings to enable the permission
+    }
+  }
+
+  Future<File> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load(path);
+
+    final tempFile = File('${(await getTemporaryDirectory()).path}/$path');
+    await tempFile.create(recursive: true);
+    await tempFile.writeAsBytes(byteData.buffer.asUint8List(), flush: true);
+
+    return tempFile;
+  }
 }
