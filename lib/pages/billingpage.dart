@@ -17,6 +17,7 @@ class BillingPage extends StatelessWidget {
   TextEditingController postalpincodecontroller = TextEditingController();
   TextEditingController mobilecontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
+   final _focusNode = FocusNode();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -598,7 +599,7 @@ class BillingPage extends StatelessWidget {
                                                         BorderRadius.circular(
                                                             3)),
                                                 height: 43,
-                                                child: TextFormField(
+                                                child: TextFormField(focusNode: _focusNode,
                                                   validator: (value) {
                                                     if (value == null ||
                                                         value.isEmpty) {
@@ -643,6 +644,7 @@ class BillingPage extends StatelessWidget {
                                             child: Checkbox(
                                               value: controller.ischecked,
                                               onChanged: (bool? value) {
+                                                _focusNode.unfocus();
                                                 controller.setcheckbox(
                                                     value: value!,
                                                     name: postalnamecontroller

@@ -1,13 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:atompaymentdemo/controller/tapcontroller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-
+import 'package:intl/intl.dart';
 
 
 class PdfPage extends StatefulWidget {
@@ -19,24 +17,22 @@ class PdfPage extends StatefulWidget {
 
 class _PdfPageState extends State<PdfPage> {
   Future<void> generatePDF() async {
-log('dfasfas');
-    // Create a new PDF document
+      var date = DateTime.now();
 
+   var   transactiondate = DateFormat('dd/MM/yyyy').add_jm().format(date);
+   log(date.toString());
+      log(transactiondate);
   }
 
   @override
   Widget build(BuildContext context) {
-        GetxTapController gcontroller =
-        Get.put(GetxTapController(context: context));
     return Scaffold(
       appBar: AppBar(
         title: const Text('PDF Generator'),
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed:(){
-            gcontroller.getDownloadReciept();
-          },
+          onPressed: generatePDF,
           child: const Text('Generate PDF'),
         ),
       ),

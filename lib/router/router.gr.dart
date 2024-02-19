@@ -78,6 +78,8 @@ abstract class $AppRouter extends _i7.RootStackRouter {
           transactionstatus: args.transactionstatus,
           transactionid: args.transactionid,
           trasactionstatus: args.trasactionstatus,
+          paymentmethodname: args.paymentmethodname,
+          totalamount: args.totalamount,
         ),
       );
     },
@@ -270,6 +272,8 @@ class SuccessPage extends _i7.PageRouteInfo<SuccessPageArgs> {
     required String transactionstatus,
     required String transactionid,
     required int trasactionstatus,
+    required String paymentmethodname,
+    required String totalamount,
     List<_i7.PageRouteInfo>? children,
   }) : super(
           SuccessPage.name,
@@ -278,6 +282,8 @@ class SuccessPage extends _i7.PageRouteInfo<SuccessPageArgs> {
             transactionstatus: transactionstatus,
             transactionid: transactionid,
             trasactionstatus: trasactionstatus,
+            paymentmethodname: paymentmethodname,
+            totalamount: totalamount,
           ),
           initialChildren: children,
         );
@@ -294,6 +300,8 @@ class SuccessPageArgs {
     required this.transactionstatus,
     required this.transactionid,
     required this.trasactionstatus,
+    required this.paymentmethodname,
+    required this.totalamount,
   });
 
   final _i8.Key? key;
@@ -304,8 +312,12 @@ class SuccessPageArgs {
 
   final int trasactionstatus;
 
+  final String paymentmethodname;
+
+  final String totalamount;
+
   @override
   String toString() {
-    return 'SuccessPageArgs{key: $key, transactionstatus: $transactionstatus, transactionid: $transactionid, trasactionstatus: $trasactionstatus}';
+    return 'SuccessPageArgs{key: $key, transactionstatus: $transactionstatus, transactionid: $transactionid, trasactionstatus: $trasactionstatus, paymentmethodname: $paymentmethodname, totalamount: $totalamount}';
   }
 }

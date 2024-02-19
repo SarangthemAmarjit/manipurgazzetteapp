@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:atompaymentdemo/constant/constant.dart';
 import 'package:atompaymentdemo/controller/tapcontroller.dart';
 import 'package:atompaymentdemo/router/router.gr.dart';
 import 'package:auto_route/auto_route.dart';
@@ -88,7 +89,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     transactionResult:
                         "Transaction Status = cannot open UPI applications",
                     txid: '',
-                    transstatus: 0);
+                    transstatus: 0, paymentname: 'NA', totalamount: '');
 
                 throw 'custom error for UPI Intent';
               }
@@ -116,6 +117,8 @@ class _PaymentPageState extends State<PaymentPage> {
               var transactionResult = "";
               String transactionid = '';
               int? transactionstatus;
+              String paymentmethodname = '';
+              String totalamount='';
 
               if (response.trim().contains("cancelTransaction")) {
                 gcontroller.updatepaymentremark(
@@ -162,6 +165,10 @@ class _PaymentPageState extends State<PaymentPage> {
                           transactionid: transactionid,
                           remark: 'Success');
 
+var paymethod = jsonInput['payInstrument']['payModeSpecificData']['subChannel'][0].toString() ;
+paymentmethodname = paymentmethod[paymethod];
+  totalamount =     jsonInput['payInstrument']['payDetails']['totalAmount'].toStringAsFixed(2) ;
+
                       transactionResult = "Transaction Success";
                       transactionstatus = 200;
                     } else {
@@ -188,7 +195,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   context: context,
                   transactionResult: transactionResult,
                   txid: transactionid,
-                  transstatus: transactionstatus!);
+                  transstatus: transactionstatus!, paymentname: paymentmethodname, totalamount: totalamount);
             }
           },
         )),
@@ -216,12 +223,13 @@ class _PaymentPageState extends State<PaymentPage> {
       {required BuildContext context,
       required String transactionResult,
       required int transstatus,
-      required String txid}) {
+      required String txid,
+      required String paymentname,required String totalamount}) {
     // ignore: use_build_context_synchronously
     context.router.push(SuccessPage(
         transactionstatus: transactionResult,
         transactionid: txid,
-        trasactionstatus: transstatus));
+        trasactionstatus: transstatus, paymentmethodname: paymentname, totalamount: totalamount));
 
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(

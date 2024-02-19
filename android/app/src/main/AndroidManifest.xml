@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="E Gazette"
+        android:label="E-Gazette"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

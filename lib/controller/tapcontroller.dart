@@ -52,6 +52,7 @@ class GetxTapController extends GetxController {
   String get transacid => _transacid;
 
   String transactiondate = '';
+    String transactiontime = '';
 
   final List<String> _alldepartmentlist = [];
   List<String> get alldepartmentlist => _alldepartmentlist;
@@ -621,7 +622,7 @@ class GetxTapController extends GetxController {
   // P A Y M E N T   GATEWAY
 
   // merchant configuration data
-  final String login = "445842"; //mandatory
+  final String login = "317159" ;  //"445842"; //mandatory
   final String password = 'Test@123'; //mandatory
   final String prodid = 'NSE'; //mandatory
   final String requestHashKey = 'KEY123657234'; //mandatory
@@ -901,7 +902,12 @@ class GetxTapController extends GetxController {
       if (response.statusCode == 200) {
         print('Done updated Successfully');
         var date = DateTime.now();
-        transactiondate = DateFormat('do MMM yyyy').format(date);
+
+      transactiondate = DateFormat('dd/MM/yyyy').add_jm().format(date);
+
+      log(transactiondate);
+
+         
         update();
       } else {
         _ispaymentinfosend = false;
@@ -1011,7 +1017,7 @@ class GetxTapController extends GetxController {
     }
   }
 
-  getDownloadReciept() async {
+  getDownloadReciept({required String paymentname,required String amount}) async {
     final plugin = DeviceInfoPlugin();
     final android = await plugin.androidInfo;
 
@@ -1041,10 +1047,10 @@ class GetxTapController extends GetxController {
                   height: 30,
                 ),
                 pw.Padding(
-                    padding: pw.EdgeInsets.symmetric(horizontal: 45),
+                    padding: const pw.EdgeInsets.symmetric(horizontal: 45),
                     child: pw.Container(
                         decoration: pw.BoxDecoration(border: pw.Border.all()),
-                        width: MediaQuery.of(context).size.width,padding:pw. EdgeInsets.symmetric(horizontal: 20),
+                        width: MediaQuery.of(context).size.width,padding:const pw. EdgeInsets.symmetric(horizontal: 20),
                         child: pw.Column(
                           children: [
                             pw.Text(
@@ -1064,7 +1070,7 @@ class GetxTapController extends GetxController {
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
-                                  'Amarjit',
+                                  _billingnamecontroller.text,
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
@@ -1079,7 +1085,7 @@ class GetxTapController extends GetxController {
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
-                                  '20',
+                                  amount,
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
@@ -1094,7 +1100,7 @@ class GetxTapController extends GetxController {
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
-                                  'FAFSDRGSSF',
+                                  _transacid,
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
@@ -1109,7 +1115,7 @@ class GetxTapController extends GetxController {
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
-                                  'Debit Card',
+                                  paymentname,
                                   style: const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
