@@ -5,6 +5,7 @@ import 'package:atompaymentdemo/controller/tapcontroller.dart';
 import 'package:atompaymentdemo/router/router.gr.dart';
 import 'package:atompaymentdemo/widget/datefieldwidgetPublishFrom.dart';
 import 'package:atompaymentdemo/widget/datefieldPublishTill.dart';
+import 'package:atompaymentdemo/widget/noglow.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -698,103 +699,106 @@ class SearchPage extends StatelessWidget {
                                 ? const SizedBox()
                                 : Expanded(
                                     flex: 160,
-                                    child: SfDataGridTheme(
-                                      data: SfDataGridThemeData(
-                                        headerColor: Colors.green[50],
-                                        gridLineColor: Colors.grey,
-                                      ),
-                                      child: Card(
-                                        color: Colors.white,
-                                        elevation: 10,
-                                        child: SfDataGrid(
-                                          allowPullToRefresh: true,
-                        
-                                          // onQueryRowHeight: (details) {
-                                          //   return details
-                                          //       .getIntrinsicRowHeight(details.rowIndex);
-                                          // },
-                        
-                                          horizontalScrollPhysics:
-                                              const NeverScrollableScrollPhysics(),
-                        
-                                          rowHeight: 55,
-                                          gridLinesVisibility:
-                                              GridLinesVisibility.both,
-                                          headerGridLinesVisibility:
-                                              GridLinesVisibility.both,
-                                          source:
-                                              gcontroller.employeeDataSource!,
-                                          columns: <GridColumn>[
-                                            GridColumn(
-                                                maximumWidth: 70,
-                                                columnName: 'gazettenumber',
-                                                label: Container(
-                                                  alignment: Alignment.center,
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'Gazette No',
-                                                    overflow:
-                                                        TextOverflow.visible,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'KulimPark',
+                                    child: ScrollConfiguration(
+                                     behavior: NoGlowScrollBehavior(),
+                                      child: SfDataGridTheme(
+                                        data: SfDataGridThemeData(
+                                          headerColor: Colors.green[50],
+                                          gridLineColor: Colors.grey,
+                                        ),
+                                        child: Card(
+                                          color: Colors.white,
+                                          elevation: 10,
+                                          child: SfDataGrid(
+                                           
+                                                              
+                                            // onQueryRowHeight: (details) {
+                                            //   return details
+                                            //       .getIntrinsicRowHeight(details.rowIndex);
+                                            // },
+                                                              verticalScrollPhysics: const ClampingScrollPhysics(),
+                                            horizontalScrollPhysics:
+                                                const NeverScrollableScrollPhysics(),
+                                                              
+                                            rowHeight: 55,
+                                            gridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            headerGridLinesVisibility:
+                                                GridLinesVisibility.both,
+                                            source:
+                                                gcontroller.employeeDataSource!,
+                                            columns: <GridColumn>[
+                                              GridColumn(
+                                                  maximumWidth: 70,
+                                                  columnName: 'gazettenumber',
+                                                  label: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: const Text(
+                                                      'Gazette No',
+                                                      overflow:
+                                                          TextOverflow.visible,
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily: 'KulimPark',
+                                                      ),
                                                     ),
-                                                  ),
-                                                )),
-                                            GridColumn(
-                                                columnWidthMode: ColumnWidthMode
-                                                    .lastColumnFill,
-                                                columnName: 'title',
-                                                label: Container(
-                                                  alignment: Alignment.center,
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'Title',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: 'KulimPark',
+                                                  )),
+                                              GridColumn(
+                                                  columnWidthMode: ColumnWidthMode
+                                                      .lastColumnFill,
+                                                  columnName: 'title',
+                                                  label: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: const Text(
+                                                      'Title',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: 'KulimPark',
+                                                      ),
                                                     ),
-                                                  ),
-                                                )),
-                                            GridColumn(
-                                                minimumWidth: 60,
-                                                columnWidthMode: ColumnWidthMode
-                                                    .fitByCellValue,
-                                                columnName: 'totalpage',
-                                                label: Container(
-                                                  alignment: Alignment.center,
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'Total Pages',
-                                                    overflow:
-                                                        TextOverflow.visible,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontFamily: 'KulimPark',
+                                                  )),
+                                              GridColumn(
+                                                  minimumWidth: 60,
+                                                  columnWidthMode: ColumnWidthMode
+                                                      .fitByCellValue,
+                                                  columnName: 'totalpage',
+                                                  label: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: const Text(
+                                                      'Total Pages',
+                                                      overflow:
+                                                          TextOverflow.visible,
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontFamily: 'KulimPark',
+                                                      ),
                                                     ),
-                                                  ),
-                                                )),
-                                            GridColumn(
-                                                minimumWidth: 100,
-                                                columnName: 'gazetid',
-                                                label: Container(
-                                                  alignment: Alignment.center,
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'View',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: 'KulimPark',
+                                                  )),
+                                              GridColumn(
+                                                  minimumWidth: 100,
+                                                  columnName: 'gazetid',
+                                                  label: Container(
+                                                    alignment: Alignment.center,
+                                                    padding:
+                                                        const EdgeInsets.all(8.0),
+                                                    child: const Text(
+                                                      'View',
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: 'KulimPark',
+                                                      ),
                                                     ),
-                                                  ),
-                                                ))
-                                          ],
+                                                  ))
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

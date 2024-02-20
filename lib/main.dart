@@ -5,13 +5,14 @@ import 'package:atompaymentdemo/pages/successpage.dart';
 import 'package:atompaymentdemo/router/router.dart';
 import 'package:atompaymentdemo/sevices/localnotification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
 
 
-  await NotificationService().initNotification();
+  // await NotificationService().initNotification();
 
   runApp(const MyApp());
 }
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.white, // Change the color as desired
+    ));
     return MaterialApp.router(
       routerConfig: _appRouter.config(),
       debugShowCheckedModeBanner: false,
