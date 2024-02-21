@@ -7,12 +7,16 @@ import 'package:atompaymentdemo/sevices/localnotification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
 
 
-  // await NotificationService().initNotification();
+  await NotificationService().initNotification();
+    FlutterNativeSplash.preserve(
+      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
 
   runApp(const MyApp());
 }
