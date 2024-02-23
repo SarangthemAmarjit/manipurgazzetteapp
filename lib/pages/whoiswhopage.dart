@@ -45,7 +45,7 @@ class WhoiswhoPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Card(
+                child:  Card(
                   elevation: 10,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -65,7 +65,10 @@ class WhoiswhoPage extends StatelessWidget {
                         SizedBox(
                           height: 50,
                         ),
-                        Column(
+                        ListView.builder(itemCount: whoiswhodata.length,shrinkWrap: true,
+                          
+                          itemBuilder: (context,i){
+                          return          Column(
                           children: [
                             Padding(
                               padding: EdgeInsets.all(8.0),
@@ -73,149 +76,16 @@ class WhoiswhoPage extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('Principal Secretary :'),
-                                  Text('V. Vamlunmang, IAS')
+                                  Text(whoiswhodata[i]['designation']),
+                                  Text(whoiswhodata[i]['name'])
                                 ],
                               ),
                             ),
                             Divider()
                           ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Director :'),
-                                  Text('A. Romita Devi, MCS')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Deputy Director :'),
-                                  Text('Vacant')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Assistant Director :'),
-                                  Text('Doukholet Touthang')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Principal Secretary'),
-                                  Text('V. Vamlunmang, IAS')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Assistant Superintendents :'),
-                                  Text(
-                                      ''' 1. Th. Binodkumar Singh
- 2. Vacant
- 3. Vacant''')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Foreman :'),
-                                  Text('M. Salew')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Foreman (Offset) :'),
-                                  Text('Ksh. Bhawananda Singh')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Foreman :'),
-                                  Text('N. Manibadra (i/c)')
-                                ],
-                              ),
-                            ),
-                            Divider()
-                          ],
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
+                        );
+                        })
+               
                       ],
                     ),
                   ),
