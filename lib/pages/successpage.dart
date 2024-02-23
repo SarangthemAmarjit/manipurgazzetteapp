@@ -9,14 +9,16 @@ class SuccessPage extends StatelessWidget {
   final String transactionstatus;
   final int trasactionstatus;
   final String transactionid;
-    final String paymentmethodname;
-      final String totalamount;
+  final String paymentmethodname;
+  final String totalamount;
 
   const SuccessPage(
       {super.key,
       required this.transactionstatus,
       required this.transactionid,
-      required this.trasactionstatus, required this.paymentmethodname, required this.totalamount});
+      required this.trasactionstatus,
+      required this.paymentmethodname,
+      required this.totalamount});
 
   @override
   Widget build(BuildContext context) {
@@ -70,23 +72,19 @@ class SuccessPage extends StatelessWidget {
                     trasactionstatus == 200
                         ? Column(
                             children: [
-                                    const SizedBox(height: 10,),
-                              ElevatedButton(style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-    RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(18.0),
-      side: const BorderSide(color: Colors.grey)
-    )
-  )),
-                                onPressed: (){
-gcontroller.getDownloadReciept(paymentname: paymentmethodname, amount: totalamount);
-                                }, child: const Text('Get PDF Receipt')),
-                              const SizedBox(height: 20,),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                     
+                    
                               FittedBox(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text(
-                                        'Your Gazzette File is Generated :',style: TextStyle(fontSize: 18),),
+                                      'Your Gazzette File is Generated :',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
                                     const SizedBox(
                                       width: 10,
                                     ),
@@ -120,8 +118,23 @@ gcontroller.getDownloadReciept(paymentname: paymentmethodname, amount: totalamou
                                 ),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 20,
                               ),
+                                       ElevatedButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<
+                                              RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Colors.grey)))),
+                                  onPressed: () {
+                                    gcontroller.getDownloadReciept(
+                                        paymentname: paymentmethodname,
+                                        amount: totalamount);
+                                  },
+                                  child: const Text('Get PDF Receipt')),
                               gcontroller.isdownloadedfile != null &&
                                       gcontroller.isdownloadedfile!
                                   ? ElevatedButton(

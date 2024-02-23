@@ -993,6 +993,10 @@ class GetxTapController extends GetxController {
       print(e.toString());
     }
   }
+  checkdownloadpath()async{
+      String downloadFolderPath = await getDownloadDirectoryPath();
+  log('Download folder path: $downloadFolderPath');
+  }
 
   getDownloadfile({required String trnxid}) async {
     final plugin = DeviceInfoPlugin();
@@ -1023,7 +1027,7 @@ class GetxTapController extends GetxController {
       {required String paymentname, required String amount}) async {
     final plugin = DeviceInfoPlugin();
     final android = await plugin.androidInfo;
-
+log('Android SDK Version :'+ android.version.sdkInt.toString());
     final status = android.version.sdkInt < 33
         ? await Permission.storage.request()
         : PermissionStatus.granted;
@@ -1031,7 +1035,6 @@ class GetxTapController extends GetxController {
     if (status.isGranted) {
       print("Storage permission granted");
 
-      final font = await PdfGoogleFonts.nunitoExtraLight();
       final imageFile =
           await getImageFileFromAssets('assets/images/reciept.png');
       final image = pw.MemoryImage(File(imageFile.path).readAsBytesSync());
@@ -1059,7 +1062,7 @@ class GetxTapController extends GetxController {
                           children: [
                             pw.Text(
                               'Payment Reciept',
-                              style: pw.TextStyle(font: font,
+                              style: pw.TextStyle(
                                 fontSize: 26,
                                 fontWeight: pw.FontWeight.bold,
                               ),
@@ -1071,11 +1074,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Payee Name: ',
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   _billingnamecontroller.text,
-                                  style:  pw.TextStyle(fontSize: 18,font:font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1086,11 +1089,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Amount Paid: ',
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   amount,
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1101,11 +1104,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Transaction ID:',
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   _transacid,
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1116,11 +1119,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Payment Method: ',
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   paymentname,
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1131,11 +1134,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Transaction Date: ',
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   transactiondate,
-                                  style:  pw.TextStyle(fontSize: 18,font :font),
+                                  style:  pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1147,6 +1150,7 @@ class GetxTapController extends GetxController {
           );
         },
       ));
+
 
       // Save the PDF to a file
       const filePath = 'storage/emulated/0/Download/paymentreciept.pdf';
@@ -1169,6 +1173,15 @@ class GetxTapController extends GetxController {
     }
   }
 
+
+Future<String> getDownloadDirectoryPath() async {
+  Directory? externalDir = await getExternalStorageDirectory();
+  if (externalDir != null) {
+    return '${externalDir.path}/Download';
+  } else {
+    throw 'Could not access external storage directory';
+  }
+}
   Future<File> getImageFileFromAssets(String path) async {
     final byteData = await rootBundle.load(path);
 

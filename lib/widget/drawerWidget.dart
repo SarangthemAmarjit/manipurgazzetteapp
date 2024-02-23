@@ -14,7 +14,7 @@ class drawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.white,
-      elevation: 10,
+      elevation: 0,
       child: Column(
         children: [
           Container(

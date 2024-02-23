@@ -57,7 +57,7 @@ class DashBoardPage extends StatelessWidget {
       
       
       
-       AdvancedDrawer( backdropColor: Colors.white,
+       AdvancedDrawer( backdropColor: const Color.fromARGB(255, 219, 252, 248).withOpacity(0.3),
         controller: _advancedDrawerController,
         animationCurve: Curves.easeIn,
 
@@ -118,17 +118,19 @@ class DashBoardPage extends StatelessWidget {
           backgroundColor: Colors.white,
           body: GetBuilder<GetxTapController>(builder: (_) {
             return Container(
-              decoration: BoxDecoration(
-                  image: gcontroller.imagefile != null
-                      ? DecorationImage(
-                          opacity: 0.4,
-                          fit: BoxFit.cover,
-                          image: FileImage(gcontroller.imagefile!),
-                        )
-                      : const DecorationImage(
-                          opacity: 0.4,
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/images/bgok.jpg'))),
+              decoration: BoxDecoration(color:Colors.white),
+
+              
+                  // image: gcontroller.imagefile != null
+                  //     ? DecorationImage(
+                  //         opacity: 0.4,
+                  //         fit: BoxFit.cover,
+                  //         image: FileImage(gcontroller.imagefile!),
+                  //       )
+                  //     : const DecorationImage(
+                  //         opacity: 0.4,
+                  //         fit: BoxFit.cover,
+                  //         image: AssetImage('assets/images/bgok.jpg'))),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: SafeArea(
