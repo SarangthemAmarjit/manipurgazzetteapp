@@ -1059,7 +1059,7 @@ class GetxTapController extends GetxController {
                           children: [
                             pw.Text(
                               'Payment Reciept',
-                              style: pw.TextStyle(
+                              style: pw.TextStyle(font: font,
                                 fontSize: 26,
                                 fontWeight: pw.FontWeight.bold,
                               ),
@@ -1071,11 +1071,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Payee Name: ',
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                                 pw.Text(
                                   _billingnamecontroller.text,
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font:font),
                                 ),
                               ],
                             ),
@@ -1086,11 +1086,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Amount Paid: ',
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                                 pw.Text(
                                   amount,
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                               ],
                             ),
@@ -1101,11 +1101,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Transaction ID:',
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                                 pw.Text(
                                   _transacid,
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                               ],
                             ),
@@ -1116,11 +1116,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Payment Method: ',
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                                 pw.Text(
                                   paymentname,
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                               ],
                             ),
@@ -1131,11 +1131,11 @@ class GetxTapController extends GetxController {
                               children: [
                                 pw.Text(
                                   'Transaction Date: ',
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                                 pw.Text(
                                   transactiondate,
-                                  style: const pw.TextStyle(fontSize: 18),
+                                  style:  pw.TextStyle(fontSize: 18,font :font),
                                 ),
                               ],
                             ),

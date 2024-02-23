@@ -26,6 +26,14 @@ class AppRouter extends $AppRouter {
           path: '/infopage',
           page: InfoPage.page
         ),
+                   AutoRoute(
+          path: '/infopage',
+          page: WhoiswhoPage.page
+        ),
+                    AutoRoute(
+          path: '/infopage',
+          page: AboutServicePage.page
+        ),
 
         AutoRoute(path: '/searchpage', page: SearchPage.page),
         AutoRoute(path: '/billingpage', page: BillingPage.page),

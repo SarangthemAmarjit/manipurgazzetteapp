@@ -8,41 +8,53 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:atompaymentdemo/pages/billingpage.dart' as _i1;
-import 'package:atompaymentdemo/pages/Dashboard.dart' as _i2;
-import 'package:atompaymentdemo/pages/infopage.dart' as _i3;
-import 'package:atompaymentdemo/pages/PaymentPage.dart' as _i4;
-import 'package:atompaymentdemo/pages/searchpage.dart' as _i5;
-import 'package:atompaymentdemo/pages/successpage.dart' as _i6;
-import 'package:auto_route/auto_route.dart' as _i7;
-import 'package:flutter/material.dart' as _i8;
+import 'package:atompaymentdemo/pages/aboutservicvespage.dart' as _i1;
+import 'package:atompaymentdemo/pages/billingpage.dart' as _i2;
+import 'package:atompaymentdemo/pages/Dashboard.dart' as _i3;
+import 'package:atompaymentdemo/pages/infopage.dart' as _i4;
+import 'package:atompaymentdemo/pages/PaymentPage.dart' as _i5;
+import 'package:atompaymentdemo/pages/searchpage.dart' as _i6;
+import 'package:atompaymentdemo/pages/successpage.dart' as _i7;
+import 'package:atompaymentdemo/pages/whoiswhopage.dart' as _i8;
+import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
 
-abstract class $AppRouter extends _i7.RootStackRouter {
+abstract class $AppRouter extends _i9.RootStackRouter {
   $AppRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i7.PageFactory> pagesMap = {
+  final Map<String, _i9.PageFactory> pagesMap = {
+    AboutServicePage.name: (routeData) {
+      final args = routeData.argsAs<AboutServicePageArgs>();
+      return _i9.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i1.AboutServicePage(
+          key: args.key,
+          index: args.index,
+        ),
+      );
+    },
     BillingPage.name: (routeData) {
       final args = routeData.argsAs<BillingPageArgs>(
           orElse: () => const BillingPageArgs());
-      return _i7.AutoRoutePage<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i1.BillingPage(key: args.key),
+        child: _i2.BillingPage(key: args.key),
       );
     },
     DashBoardPage.name: (routeData) {
       final args = routeData.argsAs<DashBoardPageArgs>(
           orElse: () => const DashBoardPageArgs());
-      return _i7.AutoRoutePage<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i2.DashBoardPage(key: args.key),
+        child: _i3.DashBoardPage(key: args.key),
       );
     },
     InfoPage.name: (routeData) {
       final args = routeData.argsAs<InfoPageArgs>();
-      return _i7.AutoRoutePage<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i3.InfoPage(
+        child: _i4.InfoPage(
           key: args.key,
           index: args.index,
         ),
@@ -50,9 +62,9 @@ abstract class $AppRouter extends _i7.RootStackRouter {
     },
     PaymentPage.name: (routeData) {
       final args = routeData.argsAs<PaymentPageArgs>();
-      return _i7.AutoRoutePage<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i4.PaymentPage(
+        child: _i5.PaymentPage(
           args.mode,
           args.payDetails,
           args.responsehashKey,
@@ -64,16 +76,16 @@ abstract class $AppRouter extends _i7.RootStackRouter {
     SearchPage.name: (routeData) {
       final args = routeData.argsAs<SearchPageArgs>(
           orElse: () => const SearchPageArgs());
-      return _i7.AutoRoutePage<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i5.SearchPage(key: args.key),
+        child: _i6.SearchPage(key: args.key),
       );
     },
     SuccessPage.name: (routeData) {
       final args = routeData.argsAs<SuccessPageArgs>();
-      return _i7.AutoRoutePage<dynamic>(
+      return _i9.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i6.SuccessPage(
+        child: _i7.SuccessPage(
           key: args.key,
           transactionstatus: args.transactionstatus,
           transactionid: args.transactionid,
@@ -83,15 +95,63 @@ abstract class $AppRouter extends _i7.RootStackRouter {
         ),
       );
     },
+    WhoiswhoPage.name: (routeData) {
+      final args = routeData.argsAs<WhoiswhoPageArgs>();
+      return _i9.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i8.WhoiswhoPage(
+          key: args.key,
+          index: args.index,
+        ),
+      );
+    },
   };
 }
 
 /// generated route for
-/// [_i1.BillingPage]
-class BillingPage extends _i7.PageRouteInfo<BillingPageArgs> {
+/// [_i1.AboutServicePage]
+class AboutServicePage extends _i9.PageRouteInfo<AboutServicePageArgs> {
+  AboutServicePage({
+    _i10.Key? key,
+    required int index,
+    List<_i9.PageRouteInfo>? children,
+  }) : super(
+          AboutServicePage.name,
+          args: AboutServicePageArgs(
+            key: key,
+            index: index,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AboutServicePage';
+
+  static const _i9.PageInfo<AboutServicePageArgs> page =
+      _i9.PageInfo<AboutServicePageArgs>(name);
+}
+
+class AboutServicePageArgs {
+  const AboutServicePageArgs({
+    this.key,
+    required this.index,
+  });
+
+  final _i10.Key? key;
+
+  final int index;
+
+  @override
+  String toString() {
+    return 'AboutServicePageArgs{key: $key, index: $index}';
+  }
+}
+
+/// generated route for
+/// [_i2.BillingPage]
+class BillingPage extends _i9.PageRouteInfo<BillingPageArgs> {
   BillingPage({
-    _i8.Key? key,
-    List<_i7.PageRouteInfo>? children,
+    _i10.Key? key,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           BillingPage.name,
           args: BillingPageArgs(key: key),
@@ -100,14 +160,14 @@ class BillingPage extends _i7.PageRouteInfo<BillingPageArgs> {
 
   static const String name = 'BillingPage';
 
-  static const _i7.PageInfo<BillingPageArgs> page =
-      _i7.PageInfo<BillingPageArgs>(name);
+  static const _i9.PageInfo<BillingPageArgs> page =
+      _i9.PageInfo<BillingPageArgs>(name);
 }
 
 class BillingPageArgs {
   const BillingPageArgs({this.key});
 
-  final _i8.Key? key;
+  final _i10.Key? key;
 
   @override
   String toString() {
@@ -116,11 +176,11 @@ class BillingPageArgs {
 }
 
 /// generated route for
-/// [_i2.DashBoardPage]
-class DashBoardPage extends _i7.PageRouteInfo<DashBoardPageArgs> {
+/// [_i3.DashBoardPage]
+class DashBoardPage extends _i9.PageRouteInfo<DashBoardPageArgs> {
   DashBoardPage({
-    _i8.Key? key,
-    List<_i7.PageRouteInfo>? children,
+    _i10.Key? key,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           DashBoardPage.name,
           args: DashBoardPageArgs(key: key),
@@ -129,14 +189,14 @@ class DashBoardPage extends _i7.PageRouteInfo<DashBoardPageArgs> {
 
   static const String name = 'DashBoardPage';
 
-  static const _i7.PageInfo<DashBoardPageArgs> page =
-      _i7.PageInfo<DashBoardPageArgs>(name);
+  static const _i9.PageInfo<DashBoardPageArgs> page =
+      _i9.PageInfo<DashBoardPageArgs>(name);
 }
 
 class DashBoardPageArgs {
   const DashBoardPageArgs({this.key});
 
-  final _i8.Key? key;
+  final _i10.Key? key;
 
   @override
   String toString() {
@@ -145,12 +205,12 @@ class DashBoardPageArgs {
 }
 
 /// generated route for
-/// [_i3.InfoPage]
-class InfoPage extends _i7.PageRouteInfo<InfoPageArgs> {
+/// [_i4.InfoPage]
+class InfoPage extends _i9.PageRouteInfo<InfoPageArgs> {
   InfoPage({
-    _i8.Key? key,
+    _i10.Key? key,
     required int index,
-    List<_i7.PageRouteInfo>? children,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           InfoPage.name,
           args: InfoPageArgs(
@@ -162,8 +222,8 @@ class InfoPage extends _i7.PageRouteInfo<InfoPageArgs> {
 
   static const String name = 'InfoPage';
 
-  static const _i7.PageInfo<InfoPageArgs> page =
-      _i7.PageInfo<InfoPageArgs>(name);
+  static const _i9.PageInfo<InfoPageArgs> page =
+      _i9.PageInfo<InfoPageArgs>(name);
 }
 
 class InfoPageArgs {
@@ -172,7 +232,7 @@ class InfoPageArgs {
     required this.index,
   });
 
-  final _i8.Key? key;
+  final _i10.Key? key;
 
   final int index;
 
@@ -183,15 +243,15 @@ class InfoPageArgs {
 }
 
 /// generated route for
-/// [_i4.PaymentPage]
-class PaymentPage extends _i7.PageRouteInfo<PaymentPageArgs> {
+/// [_i5.PaymentPage]
+class PaymentPage extends _i9.PageRouteInfo<PaymentPageArgs> {
   PaymentPage({
     required dynamic mode,
     required dynamic payDetails,
     required dynamic responsehashKey,
     required dynamic responseDecryptionKey,
-    _i8.Key? key,
-    List<_i7.PageRouteInfo>? children,
+    _i10.Key? key,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           PaymentPage.name,
           args: PaymentPageArgs(
@@ -206,8 +266,8 @@ class PaymentPage extends _i7.PageRouteInfo<PaymentPageArgs> {
 
   static const String name = 'PaymentPage';
 
-  static const _i7.PageInfo<PaymentPageArgs> page =
-      _i7.PageInfo<PaymentPageArgs>(name);
+  static const _i9.PageInfo<PaymentPageArgs> page =
+      _i9.PageInfo<PaymentPageArgs>(name);
 }
 
 class PaymentPageArgs {
@@ -227,7 +287,7 @@ class PaymentPageArgs {
 
   final dynamic responseDecryptionKey;
 
-  final _i8.Key? key;
+  final _i10.Key? key;
 
   @override
   String toString() {
@@ -236,11 +296,11 @@ class PaymentPageArgs {
 }
 
 /// generated route for
-/// [_i5.SearchPage]
-class SearchPage extends _i7.PageRouteInfo<SearchPageArgs> {
+/// [_i6.SearchPage]
+class SearchPage extends _i9.PageRouteInfo<SearchPageArgs> {
   SearchPage({
-    _i8.Key? key,
-    List<_i7.PageRouteInfo>? children,
+    _i10.Key? key,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           SearchPage.name,
           args: SearchPageArgs(key: key),
@@ -249,14 +309,14 @@ class SearchPage extends _i7.PageRouteInfo<SearchPageArgs> {
 
   static const String name = 'SearchPage';
 
-  static const _i7.PageInfo<SearchPageArgs> page =
-      _i7.PageInfo<SearchPageArgs>(name);
+  static const _i9.PageInfo<SearchPageArgs> page =
+      _i9.PageInfo<SearchPageArgs>(name);
 }
 
 class SearchPageArgs {
   const SearchPageArgs({this.key});
 
-  final _i8.Key? key;
+  final _i10.Key? key;
 
   @override
   String toString() {
@@ -265,16 +325,16 @@ class SearchPageArgs {
 }
 
 /// generated route for
-/// [_i6.SuccessPage]
-class SuccessPage extends _i7.PageRouteInfo<SuccessPageArgs> {
+/// [_i7.SuccessPage]
+class SuccessPage extends _i9.PageRouteInfo<SuccessPageArgs> {
   SuccessPage({
-    _i8.Key? key,
+    _i10.Key? key,
     required String transactionstatus,
     required String transactionid,
     required int trasactionstatus,
     required String paymentmethodname,
     required String totalamount,
-    List<_i7.PageRouteInfo>? children,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           SuccessPage.name,
           args: SuccessPageArgs(
@@ -290,8 +350,8 @@ class SuccessPage extends _i7.PageRouteInfo<SuccessPageArgs> {
 
   static const String name = 'SuccessPage';
 
-  static const _i7.PageInfo<SuccessPageArgs> page =
-      _i7.PageInfo<SuccessPageArgs>(name);
+  static const _i9.PageInfo<SuccessPageArgs> page =
+      _i9.PageInfo<SuccessPageArgs>(name);
 }
 
 class SuccessPageArgs {
@@ -304,7 +364,7 @@ class SuccessPageArgs {
     required this.totalamount,
   });
 
-  final _i8.Key? key;
+  final _i10.Key? key;
 
   final String transactionstatus;
 
@@ -319,5 +379,43 @@ class SuccessPageArgs {
   @override
   String toString() {
     return 'SuccessPageArgs{key: $key, transactionstatus: $transactionstatus, transactionid: $transactionid, trasactionstatus: $trasactionstatus, paymentmethodname: $paymentmethodname, totalamount: $totalamount}';
+  }
+}
+
+/// generated route for
+/// [_i8.WhoiswhoPage]
+class WhoiswhoPage extends _i9.PageRouteInfo<WhoiswhoPageArgs> {
+  WhoiswhoPage({
+    _i10.Key? key,
+    required int index,
+    List<_i9.PageRouteInfo>? children,
+  }) : super(
+          WhoiswhoPage.name,
+          args: WhoiswhoPageArgs(
+            key: key,
+            index: index,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'WhoiswhoPage';
+
+  static const _i9.PageInfo<WhoiswhoPageArgs> page =
+      _i9.PageInfo<WhoiswhoPageArgs>(name);
+}
+
+class WhoiswhoPageArgs {
+  const WhoiswhoPageArgs({
+    this.key,
+    required this.index,
+  });
+
+  final _i10.Key? key;
+
+  final int index;
+
+  @override
+  String toString() {
+    return 'WhoiswhoPageArgs{key: $key, index: $index}';
   }
 }

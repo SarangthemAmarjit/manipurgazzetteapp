@@ -58,6 +58,8 @@ dependencies:
   pdf: ^3.10.7
   printing: ^5.11.1
   flutter_native_splash: ^2.3.10
+  flutter_advanced_drawer: ^1.3.5
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:
