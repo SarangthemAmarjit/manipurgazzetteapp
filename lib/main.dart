@@ -41,6 +41,6 @@ class MyApp extends StatelessWidget {
         fontFamily: 'KulimPark',
         useMaterial3: false,
       ),);
-      // home: const SuccessPage(transactionstatus: 'Payment Successfull', transactionid: 'ADKSHSKDJ', trasactionstatus: 200,));
+      // home: const SuccessPage(transactionstatus: 'Payment Successfull', transactionid: 'ADKSHSKDJ', trasactionstatus: 200, paymentmethodname: 'Debit', totalamount: '3',));
   }
 }

@@ -92,6 +92,9 @@ class GetxTapController extends GetxController {
   bool _isserverok = true;
   bool get isserverok => _isserverok;
 
+  bool _isfiltersearch = false;
+  bool get isfiltersearch => _isfiltersearch;
+
   bool _ispaymentinfosend = true;
   bool get ispaymentinfosend => _ispaymentinfosend;
 
@@ -103,6 +106,9 @@ class GetxTapController extends GetxController {
 
   String get billingdropdownvalue => _billingdropdownvalue;
   String get postaldropdownvalue => _postaldropdownvalue;
+
+   int?  _gazettid;
+  int ?get gazettid => _gazettid;
 
   bool _isloading = true;
   bool _isdataempty = false;
@@ -139,6 +145,7 @@ class GetxTapController extends GetxController {
   bool get isloading => _isloading;
   bool get isdataempty => _isdataempty;
   bool get ischecked => _ischecked;
+  
   File? get imagefile => _imagefile;
 
   //
@@ -157,8 +164,7 @@ class GetxTapController extends GetxController {
         .whenComplete(() => FlutterNativeSplash.remove());
     gettodaydate();
 
-    await downloadAndSaveGif(
-        'https://firebasestorage.googleapis.com/v0/b/manipur-e-gazette.appspot.com/o/CloudinaryManagementConsole-MediaLibrary_2-ezgif.com-optimize.gif?alt=media&token=8e522364-495d-41c0-a9ce-834b4242a94c');
+   
   }
 
   void onwebviewcreated() {
@@ -230,7 +236,8 @@ class GetxTapController extends GetxController {
 
   resetdata() {
     _isserverok = true;
-
+   _isfiltersearch = false;
+   
     _employees.clear();
     _ispaymentprocessstarted = false;
 
@@ -348,45 +355,24 @@ class GetxTapController extends GetxController {
         var users = allSearchResultDataFromJson(response.body);
         if (users.isEmpty) {
           isDataLoading(false);
-          _isdataempty = true;
+          
+_isfiltersearch = true;
+update();
           // ignore: use_build_context_synchronously
-          showDialog(
-            context: (context),
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Search Result'),
-                content: const Row(
-                  children: [
-                    Icon(
-                      Icons.warning,
-                      color: Colors.red,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('No Record Found'),
-                  ],
-                ),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      context.router
-                          .pop()
-                          .whenComplete(() => context.router.pop());
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
+
+        }else{
+        _isfiltersearch = false;
+        
+        update();
+      
         }
-        _allsearchdata = users;
+          _allsearchdata = users;
 
         update();
         log('users$users');
         getEmployeeData();
         isDataLoading(false);
+
       } else {
         print('Failedrerer to Getdata.');
         isDataLoading(false);
@@ -406,13 +392,19 @@ class GetxTapController extends GetxController {
 //getGaZette Details
 
   Future getGazetteDetails({
-    required int gazetteid,
+    required String titlename,
   }) async {
     isDataLoading(true);
-
+  for (var element in _allsearchdata) {
+                 if( element.title==titlename){
+                  var index=_allsearchdata.indexOf(element);
+_gazettid = _allsearchdata[index].gazetteId;
+update();
+                 }  
+                   }
     try {
       final response = await http.get(
-        Uri.parse('http://10.10.1.139:8099/api/gazettes/$gazetteid'),
+        Uri.parse('http://10.10.1.139:8099/api/gazettes/$_gazettid'),
       );
 
       if (response.statusCode == 200) {
@@ -439,11 +431,13 @@ class GetxTapController extends GetxController {
   //getTabledata
   getEmployeeData() {
     for (int i = 0; i < _allsearchdata.length; i++) {
+       DateTime date = DateTime(_allsearchdata[i].publicationdate.year, _allsearchdata[i].publicationdate.month, _allsearchdata[i].publicationdate.day);
+ 
       _employees.add(Employee(
-          gazettenumber: _allsearchdata[i].gazetteId,
+          // gazettenumber: _allsearchdata[i].gazetteId,
           title: _allsearchdata[i].title,
-          totalpage: _allsearchdata[i].totalpages,
-          gazetid: _allsearchdata[i].gazetteId));
+          // totalpage: _allsearchdata[i].totalpages,
+          publidate: '${date.day}/${date.month}/${date.year}'));
     }
     _employeeDataSource =
         EmployeeDataSource(employees: _employees, context: context);
@@ -977,7 +971,7 @@ class GetxTapController extends GetxController {
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.red,
-            content: Text('Downloaded Fail Newtwork Error')));
+            content: Text('Download Fail Check Network')));
         print('Failedrerer to Getdata.');
         //  _isserverok = false;
       }
@@ -987,7 +981,7 @@ class GetxTapController extends GetxController {
       update();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Downloaded Fail Newtwork Error')));
+          content: Text('Download Fail Newtwork Error')));
       // _isserverok = false;
 
       print(e.toString());
@@ -1002,9 +996,9 @@ class GetxTapController extends GetxController {
     final plugin = DeviceInfoPlugin();
     final android = await plugin.androidInfo;
 
-    final status = android.version.sdkInt < 33
+    final status = android.version.sdkInt < 30
         ? await Permission.storage.request()
-        : PermissionStatus.granted;
+        :  await Permission.manageExternalStorage.request();
 
     if (status.isGranted) {
       print("Storage permission granted");
@@ -1027,10 +1021,10 @@ class GetxTapController extends GetxController {
       {required String paymentname, required String amount}) async {
     final plugin = DeviceInfoPlugin();
     final android = await plugin.androidInfo;
-log('Android SDK Version :'+ android.version.sdkInt.toString());
-    final status = android.version.sdkInt < 33
+log('Android SDK Version :${android.version.sdkInt}');
+  final status = android.version.sdkInt < 30
         ? await Permission.storage.request()
-        : PermissionStatus.granted;
+        :  await Permission.manageExternalStorage.request();
 
     if (status.isGranted) {
       print("Storage permission granted");
@@ -1074,11 +1068,11 @@ log('Android SDK Version :'+ android.version.sdkInt.toString());
                               children: [
                                 pw.Text(
                                   'Payee Name: ',
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   _billingnamecontroller.text,
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1089,11 +1083,11 @@ log('Android SDK Version :'+ android.version.sdkInt.toString());
                               children: [
                                 pw.Text(
                                   'Amount Paid: ',
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   amount,
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1104,11 +1098,11 @@ log('Android SDK Version :'+ android.version.sdkInt.toString());
                               children: [
                                 pw.Text(
                                   'Transaction ID:',
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   _transacid,
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1119,11 +1113,11 @@ log('Android SDK Version :'+ android.version.sdkInt.toString());
                               children: [
                                 pw.Text(
                                   'Payment Method: ',
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   paymentname,
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),
@@ -1134,11 +1128,11 @@ log('Android SDK Version :'+ android.version.sdkInt.toString());
                               children: [
                                 pw.Text(
                                   'Transaction Date: ',
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                                 pw.Text(
                                   transactiondate,
-                                  style:  pw.TextStyle(fontSize: 18),
+                                  style:  const pw.TextStyle(fontSize: 18),
                                 ),
                               ],
                             ),

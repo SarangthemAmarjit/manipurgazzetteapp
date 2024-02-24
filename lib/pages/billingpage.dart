@@ -419,7 +419,7 @@ class BillingPage extends StatelessWidget {
                                                                           context)
                                                                       .size
                                                                       .width,
-                                                                  160)),
+                                                                  250)),
                                                       showSearchBox: true,
                                                       showSelectedItems: true,
                                                     ),

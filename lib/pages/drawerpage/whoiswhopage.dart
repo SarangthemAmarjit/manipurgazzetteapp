@@ -39,39 +39,39 @@ class WhoiswhoPage extends StatelessWidget {
       ),
       body: ScrollConfiguration(
         behavior: NoGlowScrollBehavior(),
-        child: SingleChildScrollView(
-          child: SafeArea(
-              child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child:  Card(
-                  elevation: 10,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 70,
+        child: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child:  Card(
+                elevation: 10,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 70,
+                      ),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Who's Who:",
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Who is Who:',
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 50,
-                        ),
-                        ListView.builder(itemCount: whoiswhodata.length,shrinkWrap: true,
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Expanded(
+                        child: ListView.builder(itemCount: whoiswhodata.length,shrinkWrap: true,
                           
                           itemBuilder: (context,i){
                           return          Column(
                           children: [
                             Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -81,17 +81,17 @@ class WhoiswhoPage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Divider()
+                            const Divider()
                           ],
                         );
-                        })
-               
-                      ],
-                    ),
+                        }),
+                      )
+             
+                    ],
                   ),
-                )),
-          )),
-        ),
+                ),
+              )),
+        )),
       ),
     );
   }

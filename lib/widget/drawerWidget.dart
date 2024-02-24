@@ -79,7 +79,9 @@ class drawerWidget extends StatelessWidget {
                     ListTile(
             leading: const Icon(Icons.contact_emergency,),
             title: const Text("Contact"),
-            onTap: () {},
+            onTap: () {
+                          context.router.push(ContactPage());
+            },
           ),
         ],
       ),

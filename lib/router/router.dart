@@ -13,27 +13,13 @@ class AppRouter extends $AppRouter {
           path: '/',
           page: DashBoardPage.page,
         ),
-        AutoRoute(
-          path: '/paymentpage',
-          page: PaymentPage.page
-        ),
-             AutoRoute(
-          path: '/successpage',
-          page: SuccessPage.page
-        ),
+        AutoRoute(path: '/paymentpage', page: PaymentPage.page),
+        AutoRoute(path: '/successpage', page: SuccessPage.page),
 
-                AutoRoute(
-          path: '/infopage',
-          page: InfoPage.page
-        ),
-                   AutoRoute(
-          path: '/infopage',
-          page: WhoiswhoPage.page
-        ),
-                    AutoRoute(
-          path: '/infopage',
-          page: AboutServicePage.page
-        ),
+        AutoRoute(path: '/infopage', page: InfoPage.page),
+        AutoRoute(path: '/whoiswhoPage', page: WhoiswhoPage.page),
+        AutoRoute(path: '/aboutServicePage', page: AboutServicePage.page),
+          AutoRoute(path: '/contactPage', page: ContactPage.page),
 
         AutoRoute(path: '/searchpage', page: SearchPage.page),
         AutoRoute(path: '/billingpage', page: BillingPage.page),

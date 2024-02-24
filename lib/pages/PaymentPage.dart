@@ -66,139 +66,145 @@ class _PaymentPageState extends State<PaymentPage> {
           toolbarHeight: 2,
         ),
         body: SafeArea(
-            child: InAppWebView(
-          // initialUrl: 'about:blank',
-          key: UniqueKey(),
-          onWebViewCreated: (InAppWebViewController inAppWebViewController) {
-            _controllerCompleter.future.then((value) => _controller = value);
-            _controllerCompleter.complete(inAppWebViewController);
-
-            debugPrint("payDetails from webview $payDetails");
-            _loadHtmlFromAssets(mode);
-          },
-          shouldOverrideUrlLoading: (controller, navigationAction) async {
-            String url = navigationAction.request.url.toString();
-            var uri = navigationAction.request.url!;
-            if (url.startsWith("upi://")) {
-              debugPrint("upi url started loading");
-              try {
-                await launchUrl(uri);
-              } catch (e) {
-                _closeWebView(
-                    context: context,
-                    transactionResult:
-                        "Transaction Status = cannot open UPI applications",
-                    txid: '',
-                    transstatus: 0, paymentname: 'NA', totalamount: '');
-
-                throw 'custom error for UPI Intent';
-              }
-              return NavigationActionPolicy.CANCEL;
-            }
-            return NavigationActionPolicy.ALLOW;
-          },
-
-          onLoadStop: (controller, url) async {
-            debugPrint("onloadstop_url: $url");
-
-            if (url.toString().contains("AIPAYLocalFile")) {
-              debugPrint(" AIPAYLocalFile Now url loaded: $url");
-              await _controller.evaluateJavascript(
-                  source: "${"openPay('" + payDetails}')");
-
-              log('Checking 1 $url');
-            }
-
-            if (url.toString().contains('/mobilesdk/param')) {
-              log('Checking 2');
-              final String response = await _controller.evaluateJavascript(
-                  source: "document.getElementsByTagName('h5')[0].innerHTML");
-              debugPrint("HTML response : $response");
-              var transactionResult = "";
-              String transactionid = '';
-              int? transactionstatus;
-              String paymentmethodname = '';
-              String totalamount='';
-
-              if (response.trim().contains("cancelTransaction")) {
-                gcontroller.updatepaymentremark(
-                    transactionid: gcontroller.transacid,
-                    remark: 'Cancelled');
-                transactionResult = "Transaction Cancelled!";
-                transactionstatus = 100;
-              } else {
-                final split = response.trim().split('|');
-                final Map<int, String> values = {
-                  for (int i = 0; i < split.length; i++) i: split[i]
-                };
-
-                final splitTwo = values[1]!.split('=');
-                const platform = MethodChannel('flutter.dev/NDPSAESLibrary');
-
+            child: DefaultTextStyle(
+              style: TextStyle(
+        fontFamily: Theme.of(context).textTheme.bodyLarge!.fontFamily,
+        // Retrieve fontFamily from the current theme
+      ),
+              child: InAppWebView(
+                        // initialUrl: 'about:blank',
+                        key: UniqueKey(),
+                        onWebViewCreated: (InAppWebViewController inAppWebViewController) {
+              _controllerCompleter.future.then((value) => _controller = value);
+              _controllerCompleter.complete(inAppWebViewController);
+              
+              debugPrint("payDetails from webview $payDetails");
+              _loadHtmlFromAssets(mode);
+                        },
+                        shouldOverrideUrlLoading: (controller, navigationAction) async {
+              String url = navigationAction.request.url.toString();
+              var uri = navigationAction.request.url!;
+              if (url.startsWith("upi://")) {
+                debugPrint("upi url started loading");
                 try {
-                  final String result =
-                      await platform.invokeMethod('NDPSAESInit', {
-                    'AES_Method': 'decrypt',
-                    'text': splitTwo[1].toString(),
-                    'encKey': _responseDecryptionKey
-                  });
-                  var respJsonStr = result.toString();
-                  Map<String, dynamic> jsonInput = jsonDecode(respJsonStr);
-                  debugPrint("read full respone : $jsonInput");
-
-                  //calling validateSignature function from atom_pay_helper file
-                  var checkFinalTransaction =
-                      validateSignature(jsonInput, _responsehashKey);
-
-                  if (checkFinalTransaction) {
-                    if (jsonInput["payInstrument"]["responseDetails"]
-                                ["statusCode"] ==
-                            'OTS0000' ||
-                        jsonInput["payInstrument"]["responseDetails"]
-                                ["statusCode"] ==
-                            'OTS0551') {
-                    
-                      debugPrint("Transaction success");
-                      transactionid = jsonInput['payInstrument']['merchDetails']
-                          ['merchTxnId'];
-                      gcontroller.updatepaymentremark(
-                          transactionid: transactionid,
-                          remark: 'Success');
-
-var paymethod = jsonInput['payInstrument']['payModeSpecificData']['subChannel'][0].toString() ;
-paymentmethodname = paymentmethod[paymethod];
-  totalamount =     jsonInput['payInstrument']['payDetails']['totalAmount'].toStringAsFixed(2) ;
-
-                      transactionResult = "Transaction Success";
-                      transactionstatus = 200;
+                  await launchUrl(uri);
+                } catch (e) {
+                  _closeWebView(
+                      context: context,
+                      transactionResult:
+                          "Transaction Status = cannot open UPI applications",
+                      txid: '',
+                      transstatus: 0, paymentname: 'NA', totalamount: '');
+              
+                  throw 'custom error for UPI Intent';
+                }
+                return NavigationActionPolicy.CANCEL;
+              }
+              return NavigationActionPolicy.ALLOW;
+                        },
+              
+                        onLoadStop: (controller, url) async {
+              debugPrint("onloadstop_url: $url");
+              
+              if (url.toString().contains("AIPAYLocalFile")) {
+                debugPrint(" AIPAYLocalFile Now url loaded: $url");
+                await _controller.evaluateJavascript(
+                    source: "${"openPay('" + payDetails}')");
+              
+                log('Checking 1 $url');
+              }
+              
+              if (url.toString().contains('/mobilesdk/param')) {
+                log('Checking 2');
+                final String response = await _controller.evaluateJavascript(
+                    source: "document.getElementsByTagName('h5')[0].innerHTML");
+                debugPrint("HTML response : $response");
+                var transactionResult = "";
+                String transactionid = '';
+                int? transactionstatus;
+                String paymentmethodname = '';
+                String totalamount='';
+              
+                if (response.trim().contains("cancelTransaction")) {
+                  gcontroller.updatepaymentremark(
+                      transactionid: gcontroller.transacid,
+                      remark: 'Cancelled');
+                  transactionResult = "Transaction Cancelled!";
+                  transactionstatus = 100;
+                } else {
+                  final split = response.trim().split('|');
+                  final Map<int, String> values = {
+                    for (int i = 0; i < split.length; i++) i: split[i]
+                  };
+              
+                  final splitTwo = values[1]!.split('=');
+                  const platform = MethodChannel('flutter.dev/NDPSAESLibrary');
+              
+                  try {
+                    final String result =
+                        await platform.invokeMethod('NDPSAESInit', {
+                      'AES_Method': 'decrypt',
+                      'text': splitTwo[1].toString(),
+                      'encKey': _responseDecryptionKey
+                    });
+                    var respJsonStr = result.toString();
+                    Map<String, dynamic> jsonInput = jsonDecode(respJsonStr);
+                    debugPrint("read full respone : $jsonInput");
+              
+                    //calling validateSignature function from atom_pay_helper file
+                    var checkFinalTransaction =
+                        validateSignature(jsonInput, _responsehashKey);
+              
+                    if (checkFinalTransaction) {
+                      if (jsonInput["payInstrument"]["responseDetails"]
+                                  ["statusCode"] ==
+                              'OTS0000' ||
+                          jsonInput["payInstrument"]["responseDetails"]
+                                  ["statusCode"] ==
+                              'OTS0551') {
+                      
+                        debugPrint("Transaction success");
+                        transactionid = jsonInput['payInstrument']['merchDetails']
+                            ['merchTxnId'];
+                        gcontroller.updatepaymentremark(
+                            transactionid: transactionid,
+                            remark: 'Success');
+              
+              var paymethod = jsonInput['payInstrument']['payModeSpecificData']['subChannel'][0].toString() ;
+              paymentmethodname = paymentmethod[paymethod];
+                totalamount =     jsonInput['payInstrument']['payDetails']['totalAmount'].toStringAsFixed(2) ;
+              
+                        transactionResult = "Transaction Success";
+                        transactionstatus = 200;
+                      } else {
+                        gcontroller.updatepaymentremark(
+                            transactionid: transactionid,
+                            remark: 'Failed');
+                        debugPrint("Transaction failed");
+                        transactionResult = "Transaction Failed";
+                        transactionstatus = 300;
+                      }
                     } else {
                       gcontroller.updatepaymentremark(
-                          transactionid: transactionid,
-                          remark: 'Failed');
-                      debugPrint("Transaction failed");
-                      transactionResult = "Transaction Failed";
-                      transactionstatus = 300;
+                          transactionid: transactionid, remark: 'Failed');
+                      debugPrint("signature mismatched");
+                      transactionResult = "failed";
                     }
-                  } else {
-                    gcontroller.updatepaymentremark(
-                        transactionid: transactionid, remark: 'Failed');
-                    debugPrint("signature mismatched");
-                    transactionResult = "failed";
+                    debugPrint("Transaction Response : $jsonInput");
+                  } on PlatformException catch (e) {
+                    debugPrint("Failed to decrypt: '${e.message}'.");
                   }
-                  debugPrint("Transaction Response : $jsonInput");
-                } on PlatformException catch (e) {
-                  debugPrint("Failed to decrypt: '${e.message}'.");
                 }
+                // ignore: use_build_context_synchronously
+                _closeWebView(
+                    context: context,
+                    transactionResult: transactionResult,
+                    txid: transactionid,
+                    transstatus: transactionstatus!, paymentname: paymentmethodname, totalamount: totalamount);
               }
-              // ignore: use_build_context_synchronously
-              _closeWebView(
-                  context: context,
-                  transactionResult: transactionResult,
-                  txid: transactionid,
-                  transstatus: transactionstatus!, paymentname: paymentmethodname, totalamount: totalamount);
-            }
-          },
-        )),
+                        },
+                      ),
+            )),
       ),
     );
   }
