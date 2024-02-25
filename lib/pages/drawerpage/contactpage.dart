@@ -35,46 +35,79 @@ class ContactPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: Card(
-              elevation: 10,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 231, 241, 253),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                        child: Text(
-                          'CONTACT',
-                          style: TextStyle(
-                              letterSpacing: 2,
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue),
-                        ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 231, 241, 253),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      child: Text(
+                        'CONTACT',
+                        style: TextStyle(
+                            letterSpacing: 2,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue),
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Card(
+                    elevation: 5,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.place,
+                            color: Colors.blue,
+                            size: 35,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Our Address',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Manipur Secretariat North Block, Indo-Myanmar Road, Babupara, Imphal, Manipur',
+                            style: TextStyle(fontSize: 16),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
                     ),
-                    const Card(
-                      elevation: 10,
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                        child: Column(
+                  ),
+                  const SizedBox(height: 20),
+                  Card(
+                    elevation: 5,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: const Column(
                           children: [
                             Icon(
-                              Icons.place,
+                              Icons.call,
                               color: Colors.blue,
                               size: 35,
                             ),
@@ -82,90 +115,54 @@ class ContactPage extends StatelessWidget {
                               height: 10,
                             ),
                             Text(
-                              'Our Address',
+                              'Call Us',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Manipur Secretariat North Block, Indo-Myanmar Road, Babupara, Imphal, Manipur',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
+                            SizedBox(height: 5),
+                            ContactDetail(
+                              name: 'Athokpam Romita Devi',
+                              designation: 'Director, Printing & Stationary',
+                              phoneNumber: '0385-2450202',
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Card(
-                      elevation: 10,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                  ),
+                  const SizedBox(height: 20),
+                  Card(elevation: 5,
+                    child: Padding(
+                                       padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 15),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: const Column(
-                            children: [
-                              Icon(
-                                Icons.call,
-                                color: Colors.blue,
-                                size: 35,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Call Us',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 5),
-                              ContactDetail(
-                                name: 'Athokpam Romita Devi',
-                                designation: 'Director, Printing & Stationary',
-                                phoneNumber: '0385-2450202',
-                              ),
-                            ],
-                          ),
+                      child: SizedBox(   width: MediaQuery.of(context).size.width,
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.call,
+                              color: Colors.blue,
+                              size: 35,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Call Us',
+                              style:
+                                  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 5),
+                            ContactDetail(
+                              name: 'Th. Binodkumar Singh',
+                              designation: 'Assistant Director',
+                              phoneNumber: '0385-2450202',
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    Card(elevation: 10,
-                      child: Padding(
-                                         padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 15),
-                        child: SizedBox(   width: MediaQuery.of(context).size.width,
-                          child: const Column(
-                            children: [
-                              Icon(
-                                Icons.call,
-                                color: Colors.blue,
-                                size: 35,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Call Us',
-                                style:
-                                    TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 5),
-                              ContactDetail(
-                                name: 'Th. Binodkumar Singh',
-                                designation: 'Assistant Director',
-                                phoneNumber: '0385-2450202',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             )),
       )),
