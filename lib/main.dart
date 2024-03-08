@@ -14,7 +14,7 @@ void main()async {
   WidgetsFlutterBinding.ensureInitialized();
 
 
-  await NotificationService().initNotification();
+  // await NotificationService().initNotification();
     FlutterNativeSplash.preserve(
       widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
 

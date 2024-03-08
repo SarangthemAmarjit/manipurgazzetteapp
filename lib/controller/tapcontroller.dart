@@ -92,6 +92,9 @@ class GetxTapController extends GetxController {
   bool _isserverok = true;
   bool get isserverok => _isserverok;
 
+  bool _istextexpanded = false;
+  bool get istextexpanded => _istextexpanded;
+
   bool _isfiltersearch = false;
   bool get isfiltersearch => _isfiltersearch;
 
@@ -232,6 +235,13 @@ class GetxTapController extends GetxController {
         update();
       }
     }
+  }
+
+  checktextexpanded({required bool isexpanded}){
+    log(isexpanded.toString());
+    _istextexpanded = !isexpanded;
+    update();
+    log(_istextexpanded.toString());
   }
 
   resetdata() {

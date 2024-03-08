@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:readmore/readmore.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -657,7 +658,7 @@ class SearchPage extends StatelessWidget {
                                 ),
                       Expanded(
                                         flex: 160,
-                                        child:        gcontroller.isfiltersearch?const Center(child: Text('No Record Found',style: TextStyle(fontSize: 20),),)
+                                        child: gcontroller.isfiltersearch?const Center(child: Text('No Record Found',style: TextStyle(fontSize: 20),),)
                       :   
                                         
                                          ScrollConfiguration(
@@ -671,16 +672,18 @@ class SearchPage extends StatelessWidget {
                                               color: Colors.white,
                                               elevation: 10,
                                               child: SfDataGrid(
-                                                // onQueryRowHeight: (details) {
+                                                // onQueryRowHeight: 
+                                                
+                                                // (details) {
                                                 //   return details
                                                 //       .getIntrinsicRowHeight(details.rowIndex);
                                                 // },
+                                                rowHeight: 80,
                                                 verticalScrollPhysics:
                                                     const ClampingScrollPhysics(),
                                                 horizontalScrollPhysics:
                                                     const NeverScrollableScrollPhysics(),
-rowHeight: 70,
-                                               
+                                             
                                                 gridLinesVisibility:
                                                     GridLinesVisibility.both,
                                                 headerGridLinesVisibility:
@@ -815,31 +818,75 @@ class EmployeeDataSource extends DataGridSource {
         Get.put(GetxTapController(context: context));
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
+      
       return Container(
           alignment: (dataGridCell.columnName == 'gazettenumber' ||
                   dataGridCell.columnName == 'gazetid')
               ? Alignment.center
               : Alignment.centerLeft,
           child: dataGridCell.columnName == 'title'
-              ? TextButton(
-                  onPressed: () {
-                
+              ? Column(crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TextButton(
+                          onPressed: () {
+                        
+                      
+                            gcontroller.getGazetteDetails(
+                                titlename: dataGridCell.value.toString());
+                      
+                            context.router.push(BillingPage());
+                          },
+                          child: Text(textAlign: TextAlign.justify,overflow: TextOverflow.ellipsis,
+                    dataGridCell.value.toString(),maxLines: 3,)
+                    //       ReadMoreText(textAlign: TextAlign.justify,
+                    // dataGridCell.value.toString(),
+                                       
+                                      
+                                     
+                    //                     style: const TextStyle(color: Colors.blue),
+                    //                     colorClickableText: Colors.pink,
+                    //                     trimMode: TrimMode.Line,
+                    //                     trimCollapsedText: '...Show more',
+                    //                     trimExpandedText: ' show less',
+                    //                     callback: (val) {
+                                          
+                    //                     },
+                                  
+                                 
+                                
+                    //                   ),
+                          
+                                  ),
+            dataGridCell.value.toString().length>140?   TextButton(onPressed: (){
+showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                // Return an AlertDialog object
+                return AlertDialog(
+               title: Text(dataGridCell.value.toString(),textAlign: TextAlign.justify,style: const TextStyle(fontSize: 13),),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        // Close the dialog
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                );});
 
-                    gcontroller.getGazetteDetails(
-                        titlename: dataGridCell.value.toString());
 
-                    context.router.push(BillingPage());
-                  },
-                  child: Text(
-                    dataGridCell.value.toString(),
-                    textAlign: TextAlign.justify,maxLines: 3,
-                  ))
+            }, child: const Text('See more',style: TextStyle(color: Colors.red),)):const SizedBox()
+              
+                ],
+              )
+          
               : Align(
                   alignment: Alignment.center,
                   child: Text(
                     dataGridCell.value.toString(),
             
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.visible,
                     style: const TextStyle(
                       fontFamily: 'KulimPark',
                     ),
