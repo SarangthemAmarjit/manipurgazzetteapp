@@ -118,7 +118,7 @@ class DashBoardPage extends StatelessWidget {
           backgroundColor: Colors.white,
           body: GetBuilder<GetxTapController>(builder: (_) {
             return Container(
-              decoration: BoxDecoration(color:Colors.white),
+              decoration: const BoxDecoration(color:Colors.white),
 
               
                   // image: gcontroller.imagefile != null
@@ -235,7 +235,17 @@ class DashBoardPage extends StatelessWidget {
                                         value: value,
                                         searchtext: searchcontroller.text);
                                   },
-                                  child: TextFormField(
+                                  child: TextFormField(onEditingComplete: () {
+                                           gcontroller.validateInput(searchcontroller.text);
+                            if (gcontroller.validationError == null) {
+                              // Form is valid, proceed with your logic
+                              gcontroller.getsearchdata(
+                                  value: searchcontroller.text);
+                              context.router.push(SearchPage());
+         
+                              gcontroller.getDeapartment();
+                            }
+                                  },
                                     controller: searchcontroller,
                                     onChanged: ((value) {
                                       gcontroller.validateInput(value);

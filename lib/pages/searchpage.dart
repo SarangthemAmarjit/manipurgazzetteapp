@@ -678,7 +678,7 @@ class SearchPage extends StatelessWidget {
                                                 //   return details
                                                 //       .getIntrinsicRowHeight(details.rowIndex);
                                                 // },
-                                                rowHeight: 80,
+                                                rowHeight: 82,
                                                 verticalScrollPhysics:
                                                     const ClampingScrollPhysics(),
                                                 horizontalScrollPhysics:
@@ -826,6 +826,7 @@ class EmployeeDataSource extends DataGridSource {
               : Alignment.centerLeft,
           child: dataGridCell.columnName == 'title'
               ? Column(crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   TextButton(
                           onPressed: () {
@@ -857,8 +858,8 @@ class EmployeeDataSource extends DataGridSource {
                     //                   ),
                           
                                   ),
-            dataGridCell.value.toString().length>140?   TextButton(onPressed: (){
-showDialog(
+            dataGridCell.value.toString().length>130?   GestureDetector(onTap: (){
+            showDialog(
               context: context,
               builder: (BuildContext context) {
                 // Return an AlertDialog object
@@ -874,9 +875,12 @@ showDialog(
                     ),
                   ],
                 );});
-
-
-            }, child: const Text('See more',style: TextStyle(color: Colors.red),)):const SizedBox()
+            
+            
+            }, child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('See more',style: TextStyle(color: Colors.red,fontFamily: 'KulimPark'),),
+            )):const SizedBox()
               
                 ],
               )
