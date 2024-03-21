@@ -26,7 +26,8 @@ class BillingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GetxTapController controller = Get.put(GetxTapController(context: context));
-    return Scaffold(
+    return 
+    Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Padding(

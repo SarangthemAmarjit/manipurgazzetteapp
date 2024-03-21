@@ -30,6 +30,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class GetxTapController extends GetxController {
   final BuildContext context;
@@ -48,6 +49,9 @@ class GetxTapController extends GetxController {
 
   String? _errorgazettetype;
   String? get errorgazettetype => _errorgazettetype;
+
+   final DataPagerController dataPagerController = DataPagerController( );
+  
 
   String _transacid = '';
   String get transacid => _transacid;
@@ -112,6 +116,9 @@ class GetxTapController extends GetxController {
 
    int?  _gazettid;
   int ?get gazettid => _gazettid;
+
+      int  _paginationindex = 0;
+  int get paginationindex => _paginationindex;
 
   bool _isloading = true;
   bool _isdataempty = false;
@@ -484,7 +491,22 @@ update();
     }
   }
 
+  updatepage({required int index}){
+        _paginationindex = index;
+    update();
+  }
+  handlepagination(){
+    dataPagerController.selectedPageIndex = _paginationindex;
+    update();
+
+    log( dataPagerController.selectedPageIndex.toString());
+  
+  }
+
   Future<bool> handlePageChange(int newPageIndex) async {
+_paginationindex = newPageIndex;
+update();
+   
     int startIndex = newPageIndex * 15;
     int endIndex = startIndex + 15;
     log('pageindex ${newPageIndex.toString()}');
