@@ -250,7 +250,7 @@ class BillingPage extends StatelessWidget {
                                       children: [
                                         const Text(
                                           'Postal Address',
-                                          style: TextStyle(fontSize: 18),
+                                          style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(
                                           height: 10,
@@ -690,7 +690,7 @@ class BillingPage extends StatelessWidget {
                                     children: [
                                       const Text(
                                         'Billing Address',
-                                        style: TextStyle(fontSize: 18),
+                                        style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(
                                         height: 10,

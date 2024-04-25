@@ -752,11 +752,10 @@ class SearchPage extends StatelessWidget {
                                                   height: _dataPagerHeight,
                                                   child: Center(
                                                     child: SfDataPager(
-                                                  
+                                           
                                                
                                                       controller: gcontroller.dataPagerController,
                                                                                  
-                                                         
                                                      
                                                       lastPageItemVisible: true,
                                                       firstPageItemVisible: true,
